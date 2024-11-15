@@ -44,7 +44,6 @@ export const createRoom = async (
       
     const newId = insertInfo.insertedId.toString();
     const room = await getRoomById(newId); 
-    
     return room;
 }
 
@@ -56,6 +55,11 @@ export const getRoomById = async (id) => {
     room._id = room._id.toString();
     return room;
 };
+
+export const getAllRooms = async() => {
+    const roomCollection = await rooms();
+    return await roomCollection.find({}).toArray();
+}
 
 
 
