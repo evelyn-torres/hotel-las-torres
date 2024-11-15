@@ -4,10 +4,11 @@
   "main": "app.js",
   "type": "module",
   "scripts": {
-    "start": "node app.js"
+    "start": "node app.js",
+    "seed": "node ./tasks/seed.js"
   },
   "keywords": [],
-  "author": "Evelyn Torres | CWID 20006628",
+  "author": "Evelyn Torres | CWID 20006628, Ayushi Gupta | CWID 20006238",
   "license": "ISC",
   "description": "",
   "dependencies": {
@@ -15,6 +16,7 @@
     "express": "^4.21.1",
     "express-handlebars": "^8.0.1",
     "handlebars-helpers": "^0.10.0",
-    "md5": "^2.3.0"
+    "md5": "^2.3.0",
+    "mongodb": "^6.10.0"
   }
 }
