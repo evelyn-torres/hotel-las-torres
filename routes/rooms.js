@@ -1,5 +1,5 @@
 import {Router} from 'express';
-import * as roomData from '../data/roomData.js';
+import * as roomData from '../data/rooms.js';
 
 const router = Router();
 
@@ -9,3 +9,5 @@ router
         const roomList = await roomData.getAllAvailRooms(); //getAllRooms() show all Available rooms
         return res.json(roomList);
     })
+
+export default router;

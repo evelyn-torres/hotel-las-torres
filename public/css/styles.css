@@ -1,0 +1,21 @@
+header{/* Headers will be yhis color and size*/
+  text-align: center;
+  background-color: cornflowerblue;
+  padding: 25px 12px;
+  
+}
+
+h1{ /*this will make sure all the header text will be this color and font/size*/
+  color: rgb(11, 7, 114);
+  font-size: 25px;
+  font-family: 'Times New Roman', Times, serif;
+ 
+}
+
+body {
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  background-color: aliceblue;
+  color:black;
+  margin: 0;
+  padding: 0; 
+}

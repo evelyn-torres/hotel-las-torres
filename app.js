@@ -1,3 +1,20 @@
-import express from 'exoress';
+import express from 'express';
+import exphbs from 'express-handlebars';
+import constructorMethod from './routes/index.js';
+
 const app = express();
-import configRoutes from './routes/index.js';
+
+// Handlebars setup
+const handlebars = exphbs.create({ defaultLayout: 'main' });
+app.engine('handlebars', handlebars.engine);
+app.set('view engine', 'handlebars');
+
+// Middleware for parsing and static files
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+constructorMethod(app);
+
+app.listen(3000, () => {
+    console.log('Server is running on http://localhost:3000');
+});
