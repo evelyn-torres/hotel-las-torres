@@ -4,6 +4,7 @@ import constructorMethod from './routes/index.js';
 
 const app = express();
 
+
 // Handlebars setup
 const handlebars = exphbs.create({ defaultLayout: 'main' });
 app.engine('handlebars', handlebars.engine);
@@ -18,3 +19,13 @@ constructorMethod(app);
 app.listen(3000, () => {
     console.log('Server is running on http://localhost:3000');
 });
+
+
+//TESTING
+// import * as roomFuncs from './data/rooms.js';
+
+// try {
+//     console.log(await roomFuncs.getAllRooms());
+// } catch(e) {
+//     console.log(e)
+// }

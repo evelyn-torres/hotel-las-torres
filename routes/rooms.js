@@ -1,13 +1,18 @@
 import {Router} from 'express';
-import * as roomData from '../data/rooms.js';
-
 const router = Router();
+import {roomData} from '../data/index.js';
+
 
 router
     .route('/')
-    .get(async (req, res)=>{
-        const roomList = await roomData.getAllAvailRooms(); //getAllRooms() show all Available rooms
-        return res.json(roomList);
+    .get(async (req, res) => {
+        try {
+          const roomList = await roomData.getAllRooms();
+        //   res.render('rooms', {rooms: roomList});
+        res.json(roomList);
+        } catch (e) {
+          res.status(500).json({error: e});
+        }
     })
 
 export default router;
