@@ -8,8 +8,8 @@ router
     .get(async (req, res) => {
         try {
           const roomList = await roomData.getAllRooms();
-        //   res.render('rooms', {rooms: roomList});
-        res.json(roomList);
+        res.render('rooms', {rooms: roomList});
+        // res.json(roomList);
         } catch (e) {
           res.status(500).json({error: e});
         }
