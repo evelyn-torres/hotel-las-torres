@@ -3,16 +3,16 @@ import {ObjectId} from 'mongodb';
 import validation from '../helpers.js';
 
 export const createRoom = async (
-    numRooms, 
+    roomName, 
     balcony, 
     bedSizes, 
     pricingPerNight, 
     availability
   ) => {
     //checks for numRooms 
-    if(!numRooms) throw "You must provide the number of rooms";
-    if(!Number.isInteger(numRooms)) throw "Number of rooms must be an integer";
-
+    if(!roomName) throw "You must provide the number of rooms";
+    roomName = validation.checkString(roomName);
+    
     //checks for balcony 
     if(!balcony) throw "You must provide a value for balcony";
     if(typeof balcony !== "boolean") throw "Please indicate True or False for whether the room has a balcony or not.";
@@ -32,7 +32,7 @@ export const createRoom = async (
 
     const roomCollection = await rooms();
     let newRoom = {
-        numRooms: numRooms, 
+        roomName: roomName, 
         balcony: balcony, 
         bedSizes: bedSizes, 
         pricingPerNight: pricingPerNight, 
