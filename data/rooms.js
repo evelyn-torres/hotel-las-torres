@@ -14,7 +14,7 @@ export const createRoom = async (
     roomName = validation.checkString(roomName);
     
     //checks for balcony 
-    if(!balcony) throw "You must provide a value for balcony";
+   // if(!balcony) throw "You must provide a value for balcony";
     if(typeof balcony !== "boolean") throw "Please indicate True or False for whether the room has a balcony or not.";
 
     //checks for bedSizes
