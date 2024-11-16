@@ -1,21 +1,53 @@
 header{/* Headers will be yhis color and size*/
   text-align: center;
-  background-color: cornflowerblue;
+  background-color: rgb(64, 87, 67);
   padding: 25px 12px;
   
 }
 
-h1{ /*this will make sure all the header text will be this color and font/size*/
-  color: rgb(11, 7, 114);
-  font-size: 25px;
+.taskbar{
+  display: flex;
+  align-items: center;
+  background-color: rgba(64, 87, 67, 0.8);
+}
+
+.taskbar a{
+  color: rgb(224, 178, 40); /* Golden text color */
+  text-decoration: none; /* Remove underline */
+  font-size: 18px; /* Font size */
+  margin: 0 10px; /* Spacing between links */
   font-family: 'Times New Roman', Times, serif;
+  align-items: right;
+}
+.taskbar .logo{
+  height: 65px;
+  margin-right: 30px;
+}
+
+
+h1{ /*this will make sure all the header text will be this color and font/size*/
+  color: rgb(224, 178, 40);
+  font-size: 45px;
+  font-family: 'Times New Roman', Times, serif;
+  align-items: center;
  
 }
+h2{
+  color: rgb(238, 238, 238);
+  font-size:30px;
+  font-family: 'Times New roman','Times New Roman', Times, serif;
+  align-items: center;
+}
+
 
 body {
   font-family: Georgia, 'Times New Roman', Times, serif;
-  background-color: aliceblue;
+  background-color: rgb(255, 255, 255);
   color:black;
   margin: 0;
   padding: 0; 
 }
+
+
+
+
