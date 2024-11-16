@@ -1,21 +1,41 @@
 header{/* Headers will be yhis color and size*/
   text-align: center;
-  background-color: cornflowerblue;
+  background-color: rgb(64, 87, 67);
   padding: 25px 12px;
   
 }
 
+.taskbar{
+  display: flex;
+  align-items: center;
+  background-color: rgba(64, 87, 67, 0.8);
+}
+
+.taskbar a{
+  color: rgb(224, 178, 40); /* Golden text color */
+  text-decoration: none; /* Remove underline */
+  font-size: 18px; /* Font size */
+  margin: 0 10px; /* Spacing between links */
+  font-family: 'Times New Roman', Times, serif;
+}
+
+
 h1{ /*this will make sure all the header text will be this color and font/size*/
-  color: rgb(11, 7, 114);
+  color: rgb(224, 178, 40);
   font-size: 25px;
   font-family: 'Times New Roman', Times, serif;
  
 }
 
+
 body {
   font-family: Georgia, 'Times New Roman', Times, serif;
-  background-color: aliceblue;
+  background-color: rgb(255, 255, 255);
   color:black;
   margin: 0;
   padding: 0; 
 }
+
+
+
+
