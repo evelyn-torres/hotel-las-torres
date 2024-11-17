@@ -1,14 +1,12 @@
 import {Router} from 'express';
-import * as adminData from '../data/admin.js';
+import * as bookingFuncs from '../data/booking.js';
 
 const router = Router();
 
 router
     .route('/')
     .get(async (req, res)=>{
-        res.render('admin', {pageTitle: "Employee Login"})
-    }
-)
-
+        res.render('booking', {pageTitle: "Book Now"})
+    })
 
 export default router;

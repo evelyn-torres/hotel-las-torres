@@ -1,7 +1,9 @@
 import adminRoutes from './admin.js';
-import reserveRoutes from './reservations.js';
+import bookingRoutes from './booking.js';
 import roomsRoutes from './rooms.js';
 import landingRoutes from './landing.js';
+import contactRoutes from './contact.js';
+import aboutRoutes from './about.js';
 import path from 'path';
 import { static as staticDir } from 'express';
 
@@ -12,9 +14,10 @@ const constructorMethod = (app) => {
     // Routes setup
     app.use('/', landingRoutes);
     app.use('/admin', adminRoutes);
-    app.use('/reservations', reserveRoutes);
+    app.use('/booking', bookingRoutes);
     app.use('/rooms', roomsRoutes);
-    // app.use('/contact');
+    app.use('/contact', contactRoutes);
+    app.use('/about', aboutRoutes);
 
 
     // 404 Handler
