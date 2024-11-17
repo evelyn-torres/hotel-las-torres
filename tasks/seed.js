@@ -65,5 +65,35 @@ try {
     console.log(e)
 }
 
+//adding room eight
+try {
+    roomEight = await rooms.createRoom("Room 8", false, {"Double": 2}, 100.00, {Tuesday: true})
+} catch(e) {
+    console.log(e)
+}
+
+//adding room nine
+try {
+    roomNine = await rooms.createRoom("Room 9", false, {"Double": 1, "Semi-Double": 2}, 100.00, {Tuesday: true})
+} catch(e) {
+    console.log(e)
+}
+
+//adding room ten
+try {
+    roomTen = await rooms.createRoom("Room 10", false, {"Twin": 1, "Semi-Double": 2}, 100.00, {Tuesday: true})
+} catch(e) {
+    console.log(e)
+}
+
+//adding room eleven
+try {
+    roomEleven = await rooms.createRoom("Room 11", false, {"Double": 3}, 100.00, {Tuesday: true})
+} catch(e) {
+    console.log(e)
+}
+
+
+
 console.log('Done seeding database');
 await closeConnection();

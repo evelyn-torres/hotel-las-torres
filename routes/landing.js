@@ -5,7 +5,7 @@ import * as helpers from '../helpers.js';
 
 router.route('/').get(async (req, res) => {
     try {
-        res.render('home'); // Render the home template
+        res.render('landing'); // Render the landing template
     } catch (error) {
         res.status(500).json({ error: 'Internal server error' });
     }

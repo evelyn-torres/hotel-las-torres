@@ -6,9 +6,9 @@ const router = Router();
 router
     .route('/')
     .get(async (req, res)=>{
-        //const roomList = await admin.getAllAvailRooms(); //getAllRooms() show all Available rooms
-        return res.json();
-    })
+        res.render('admin', {pageTitle: "Employee Login"})
+    }
+    )
 
 
 export default router;
