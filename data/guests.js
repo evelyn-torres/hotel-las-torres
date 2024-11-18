@@ -1,5 +1,4 @@
 import {guests} from '../config/mongoCollections.js';
-// import roomData from './rooms.js';
 import {ObjectId} from 'mongodb';
 import validation from '../helpers.js';
 
@@ -28,7 +27,7 @@ export const createGuest = async(
 ) => {
     //checks for first name
     if (!guestFirstName) throw 'You must provide a first name for the guest';
-    guestFirstName = validation.checkString(guestLastName, "Guest First Name");
+    guestFirstName = validation.checkString(guestFirstName, "Guest First Name");
 
     //checks for last name 
     if(!guestLastName) throw "You must provide a last name for the guest";

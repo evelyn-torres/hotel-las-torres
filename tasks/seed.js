@@ -1,6 +1,7 @@
 import {dbConnection, closeConnection} from '../config/mongoConnection.js';
 import * as rooms from '../data/rooms.js';
 import * as guests from '../data/guests.js'
+import * as reservations from '../data/reservations.js';
 
 const db = await dbConnection();
 await db.dropDatabase();
@@ -17,6 +18,7 @@ let roomNine = undefined;
 let roomTen = undefined; 
 let roomEleven = undefined; 
 let guestOne = undefined; 
+let reservationOne = undefined; 
 
 //adding room one
 
@@ -99,6 +101,15 @@ try {
 //adding a guest
 try {
     guestOne = await guests.createGuest("John", "Doe", 24, "A24294820", 9144093842, "john.doe@gmail.com");
+} catch(e) {
+    console.log(e)
+}
+
+//adding a reservation 
+try {
+    reservationOne = await reservations.createReservation([guestOne._id.toString()], 3, roomEight._id.toString(), "November 21, 2023", 
+    "November 27, 2023", true, true, 600.00)
+    console.log(reservationOne)
 } catch(e) {
     console.log(e)
 }
