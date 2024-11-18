@@ -2,6 +2,7 @@ import {dbConnection, closeConnection} from '../config/mongoConnection.js';
 import * as rooms from '../data/rooms.js';
 import * as guests from '../data/guests.js'
 import * as reservations from '../data/reservations.js';
+import * as comments from '../data/comments.js';
 
 const db = await dbConnection();
 await db.dropDatabase();
@@ -19,6 +20,7 @@ let roomTen = undefined;
 let roomEleven = undefined; 
 let guestOne = undefined; 
 let reservationOne = undefined; 
+let commentOne = undefined; 
 
 //adding room one
 
@@ -107,9 +109,17 @@ try {
 
 //adding a reservation 
 try {
-    reservationOne = await reservations.createReservation([guestOne._id.toString()], 3, roomEight._id.toString(), "November 21, 2023", 
-    "November 27, 2023", true, true, 600.00)
-    console.log(reservationOne)
+    reservationOne = await reservations.createReservation([guestOne._id.toString()], 3, roomEight._id.toString(), new Date('November 15, 2024'), 
+    new Date('November 18, 2023'), true, true, 600.00)
+} catch(e) {
+    console.log(e)
+}
+
+//adding a comment 
+try {
+    commentOne = await comments.createComment(guestOne._id.toString(), roomOne._id.toString(), reservationOne._id.toString(), 
+    "I had a wonderful stay at Hotel Las Torres", 5)
+    console.log(commentOne)
 } catch(e) {
     console.log(e)
 }
