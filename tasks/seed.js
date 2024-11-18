@@ -1,5 +1,6 @@
 import {dbConnection, closeConnection} from '../config/mongoConnection.js';
 import * as rooms from '../data/rooms.js';
+import * as guests from '../data/guests.js'
 
 const db = await dbConnection();
 await db.dropDatabase();
@@ -15,8 +16,10 @@ let roomEight = undefined;
 let roomNine = undefined; 
 let roomTen = undefined; 
 let roomEleven = undefined; 
+let guestOne = undefined; 
 
 //adding room one
+
 try {
     roomOne = await rooms.createRoom("Room 1", false, {"Double": 1, "Semi-Double": 1}, 120.00, {Monday: true});
 } catch(e) {
@@ -93,7 +96,12 @@ try {
     console.log(e)
 }
 
-
+//adding a guest
+try {
+    guestOne = await guests.createGuest("John", "Doe", 24, "A24294820", 9144093842, "john.doe@gmail.com");
+} catch(e) {
+    console.log(e)
+}
 
 console.log('Done seeding database');
 await closeConnection();

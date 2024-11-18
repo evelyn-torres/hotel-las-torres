@@ -2,6 +2,21 @@ import {rooms} from '../config/mongoCollections.js';
 import {ObjectId} from 'mongodb';
 import validation from '../helpers.js';
 
+
+export const getRoomById = async (id) => {
+    id = validation.checkId(id, "room id")
+    const roomCollection = await rooms();
+    const room = await roomCollection.findOne({_id: new ObjectId(id)});
+    if (room === null) throw 'No room with that id';
+    room._id = room._id.toString();
+    return room;
+};
+
+export const getAllRooms = async() => {
+    const roomCollection = await rooms();
+    return await roomCollection.find({}).toArray();
+}
+
 export const createRoom = async (
     roomName, 
     balcony, 
@@ -45,20 +60,6 @@ export const createRoom = async (
     const newId = insertInfo.insertedId.toString();
     const room = await getRoomById(newId); 
     return room;
-}
-
-export const getRoomById = async (id) => {
-    id = validation.checkId(id, "id")
-    const roomCollection = await rooms();
-    const room = await roomCollection.findOne({_id: new ObjectId(id)});
-    if (room === null) throw 'No room with that id';
-    room._id = room._id.toString();
-    return room;
-};
-
-export const getAllRooms = async() => {
-    const roomCollection = await rooms();
-    return await roomCollection.find({}).toArray();
 }
 
 
