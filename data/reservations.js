@@ -41,7 +41,7 @@ export const createReservation = async(
     for (let guestID of guestIDs) {
         guestID = validation.checkId(guestID, "Guest ID");
         await guestData.getGuestById(guestID); // make sure that the guest exists
-        validatedGuestIDs.push(new ObjectId(guestID));
+        validatedGuestIDs.push(guestID);
     }
     guestIDs = validatedGuestIDs;
 
@@ -50,7 +50,6 @@ export const createReservation = async(
     //checks for roomID
     roomID = validation.checkId(roomID, "Room ID");
     const room = await roomData.getRoomById(roomID); //make sure the room exists
-    roomID = new ObjectId(roomID)
 
     //checks for check in date 
 
