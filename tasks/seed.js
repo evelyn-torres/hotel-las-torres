@@ -20,6 +20,7 @@ let roomNine = undefined;
 let roomTen = undefined; 
 let roomEleven = undefined; 
 let guestOne = undefined; 
+let guestTwo = undefined; 
 let reservationOne = undefined; 
 let commentOne = undefined; 
 
@@ -76,6 +77,7 @@ try {
 //adding room eight
 try {
     roomEight = await rooms.createRoom("Room 8", false, {"Double": 2}, 100.00, {Tuesday: true})
+    console.log(roomEight)
 } catch(e) {
     console.log(e)
 }
@@ -104,14 +106,23 @@ try {
 //adding a guest
 try {
     guestOne = await guests.createGuest("John", "Doe", 24, "A24294820", 9144093842, "john.doe@gmail.com");
+    console.log(guestOne)
+} catch(e) {
+    console.log(e)
+}
+
+//adding another guest 
+try {
+    guestTwo = await guests.createGuest("Harry", "Potter", 16, "83J91938", 20184983921, "hp@gryffindor.com");
 } catch(e) {
     console.log(e)
 }
 
 //adding a reservation 
 try {
-    reservationOne = await reservations.createReservation([guestOne._id.toString()], 3, roomEight._id.toString(), new Date('November 15, 2024'), 
+    reservationOne = await reservations.createReservation([guestOne._id.toString(), guestTwo._id.toString()], 3, roomEight._id.toString(), new Date('November 15, 2024'), 
     new Date('November 18, 2023'), true, true, 600.00)
+    console.log(reservationOne)
 } catch(e) {
     console.log(e)
 }

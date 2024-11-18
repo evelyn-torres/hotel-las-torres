@@ -31,17 +31,14 @@ export const createComment = async(
     //checks for guestID
     guestID = validation.checkId(guestID, "Guest ID");
     const guest = await guestData.getGuestById(guestID); //make sure the guest exists
-    guestID = new ObjectId(guestID)
 
     //checks for roomID
     roomID = validation.checkId(roomID, "Room ID");
     const room = await roomData.getRoomById(roomID); //make sure the room exists
-    roomID = new ObjectId(roomID)
 
     //checks for reservationID
     reservationID = validation.checkId(reservationID, "Reservation ID");
     const reservation = await reservationData.getReservationById(reservationID); //make sure the room exists
-    reservationID = new ObjectId(reservationID)
 
     //checks for feedback 
     feedback = validation.checkString(feedback, "Feedback")
