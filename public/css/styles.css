@@ -28,7 +28,7 @@ header{/* Headers will be yhis color and size*/
 h1{ /*this will make sure all the header text will be this color and font/size*/
   color: rgb(224, 178, 40);
   font-size: 45px;
-  font-family: 'Times New Roman', Times, serif;
+  font-family: 'Times New roman','Times New Roman', Times, serif;
   align-items: center;
  
 }
@@ -42,7 +42,7 @@ h2{
 
 body {
   font-family: Georgia, 'Times New Roman', Times, serif;
-  background-color: rgb(255, 255, 255);
+  background-color: rgb(235, 246, 229);
   color:black;
   margin: 0;
   padding: 0; 

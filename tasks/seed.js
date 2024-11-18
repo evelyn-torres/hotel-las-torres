@@ -3,6 +3,7 @@ import * as rooms from '../data/rooms.js';
 import * as guests from '../data/guests.js'
 import * as reservations from '../data/reservations.js';
 import * as comments from '../data/comments.js';
+import * as admin from '../data/admin.js';
 
 const db = await dbConnection();
 await db.dropDatabase();
@@ -123,6 +124,17 @@ try {
 } catch(e) {
     console.log(e)
 }
+
+
+//adding an employee
+console.log('Adding a new employee/admin to databse:');
+try{
+    const admin1 = await admin.createAdmin("Jane", "Dane", "A24294821" ,"adminUser1", "adminPassword1");
+    console.log(admin1)
+}catch(e){
+    console.log(e);
+}
+
 
 console.log('Done seeding database');
 await closeConnection();

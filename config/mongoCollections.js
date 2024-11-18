@@ -16,7 +16,9 @@ const getCollectionFn = (collection) => {
 };
 
 /* Now, you can list your collections here: */
+
 export const rooms = getCollectionFn('rooms');
 export const guests = getCollectionFn('guests');
 export const reservations = getCollectionFn('reservations');
 export const comments = getCollectionFn('comments');
+export const admins = getCollectionFn('admins');

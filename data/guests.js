@@ -47,7 +47,7 @@ export const createGuest = async(
 
     //checks for email 
     if(!email) throw "You must provide an email address";
-    email = validation.checkString(email, "Guest email")
+    email = validation.checkString(email, "Guest email");
 
     const guestCollection = await guests();
     let newGuest = {
