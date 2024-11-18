@@ -19,3 +19,4 @@ const getCollectionFn = (collection) => {
 export const rooms = getCollectionFn('rooms');
 export const guests = getCollectionFn('guests');
 export const reservations = getCollectionFn('reservations');
+export const comments = getCollectionFn('comments');
