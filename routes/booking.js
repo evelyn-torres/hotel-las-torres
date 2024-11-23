@@ -1,19 +1,8 @@
-import {Router} from 'express';
-import * as bookingData from '../data/booking.js';
+import express from "express";
+const router = express.Router();
 
-
-const router = Router();
-
-router
-    .route('/')
-    .get(async (req, res)=>{
-        try{
-            const bookingInfo = await bookingData.getBookingById();
-            res.render('booking', {booking: bookingInfo, pageTitle: "Book your Stay Now!"});
-        }catch(e){
-            res.status(500).json({error:e});
-        }
-        //res.render('booking', {pageTitle: "Book Now"})
-    })
+router.get('/', (req, res) => {
+  res.sendFile('booking.html', { root: 'static' }); // Static folder should contain your HTML file
+});
 
 export default router;

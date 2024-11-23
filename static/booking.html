@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Book Your Stay</title>
+</head>
+<body>
+  <h1>Book Your Stay Today!</h1>
+  <form id="bookingForm">
+    <label for="checkIn">Check-in Date:</label>
+    <input type="date" id="checkIn" name="checkIn" required><br>
+
+    <label for="checkOut">Check-out Date:</label>
+    <input type="date" id="checkOut" name="checkOut" required><br>
+
+    <label for="roomNumber">Room Type:</label>
+    <select id="roomNumber" name="roomNumber" required>
+      <option value="single">Single</option>
+      <option value="double">Double</option>
+      <option value="suite">Suite</option>
+    </select><br>
+
+    <label for="parking">Will you use parking?</label>
+    <input type="checkbox" id="parking" name="parking"><br>
+
+    <label for="guests">Number of Guests:</label>
+    <input type="number" id="guests" name="guests" min="1" required><br>
+
+    <label for="guestInfo">Guest Details:</label>
+    <textarea id="guestInfo" name="guestInfo" placeholder="Enter name, last name, and ID for each guest" required></textarea><br>
+
+    <label for="phone">Phone Number:</label>
+    <input type="tel" id="phone" name="phone" required><br>
+
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email" required><br>
+
+    <button type="submit">Submit</button>
+  </form>
+
+  <p id="error-message" style="color: red; display: none;"></p>
+  <ul id="bookingResults"></ul>
+
+  <script src="booking.js"></script>
+</body>
+</html>
