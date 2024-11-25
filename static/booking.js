@@ -15,6 +15,13 @@ document.getElementById('bookingForm').addEventListener('submit', (event)=>{
       const parking = document.getElementById('parking').checked;
       const guests = document.getElementById('guests').value;
       const guestInfo = document.getElementById('guestInfo').value.trim();
+
+      //guest Info needed
+      const guestFirstName = document.getElementById('guestFirstName').value.trim();
+      const guestLastName = document.getElementById('guestLasttName').value.trim();
+      const govId = document.getElementById('govId').value.trim();
+      const age = document.getElementById('age').value;
+      
       const phone = document.getElementById('phone').value.trim();
       const email = document.getElementById('email').value.trim();
 
@@ -24,7 +31,10 @@ document.getElementById('bookingForm').addEventListener('submit', (event)=>{
         roomNumber,
         parking,
         guests,
-        guestsInfo,
+        guestFirstName,
+        guestLastName,
+        govId,
+        age, 
         phone,
         email,
 
