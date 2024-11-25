@@ -1,4 +1,4 @@
-<section>
+{{!-- <section>
   <h1>Rooms</h1>
   {{#each rooms}}
   <article class="room">
@@ -25,5 +25,31 @@
       </li>
     </ul>
   </article>
-  {{/each}}
+  {{/each}}s
+</section> --}}
+
+<section>
+  <h1>Our Rooms</h1>
+  <div class="rooms-container">
+    {{#each rooms}}
+    <div class="room-card">
+      <img src="{{imageURL}}" alt="{{roomName}}" class="room-image" />
+      <div class="room-details">
+        <h2>{{roomName}}</h2>
+        <p><strong>Balcony:</strong> {{#if balcony}}Yes{{else}}No{{/if}}</p>
+        <p><strong>Pricing Per Night:</strong> ${{pricingPerNight}}</p>
+        <p><strong>Bed Sizes:</strong> 
+          {{#each bedSizes}}
+            {{@key}}: {{this}}<br>
+          {{/each}}
+        </p>
+        <a href="/rooms/{{_id}}" class="book-now-button">Book Now</a>
+      </div>
+    </div>
+    {{/each}}
+  </div>
 </section>
+
+
+
+
