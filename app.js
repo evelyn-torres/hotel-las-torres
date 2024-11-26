@@ -12,7 +12,6 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 
-
 // Handlebars setup
 const handlebars = exphbs.create({ defaultLayout: 'main' });
 app.engine('handlebars', exphbs.engine({
@@ -20,11 +19,16 @@ app.engine('handlebars', exphbs.engine({
     layoutsDir: path.join(__dirname, 'views/layouts'),
     partialsDir: path.join(__dirname, 'views/partials'),
   }));
+
+
+  app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'handlebars');
 
 // Middleware for parsing and static files
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+app.use('/public', express.static(path.join(__dirname, 'static')));
 
 constructorMethod(app);
 
