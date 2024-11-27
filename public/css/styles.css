@@ -1,4 +1,4 @@
-header{/* Headers will be yhis color and size*/
+header{/* Headers will be this color and size*/
   text-align: center;
   background-color: rgb(64, 87, 67);
   padding: 25px 12px;
@@ -100,8 +100,93 @@ body {
   background-color: rgb(224, 178, 40);
 }
 
+.hidden {
+  display: none;
+}
+
+.error {
+  background-color: #fce4e4;
+  border: 1px solid #fcc2c3;
+  float: left;
+  padding: 20px 30px;
+}
+
+#bookingForm {
+  max-width: 600px;
+  margin: 0 auto;
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
+h1 {
+  color: rgb(224, 178, 40);
+  font-size: 45px;
+  font-family: 'Times New Roman', Times, serif;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+#bookingForm label {
+  display: block;
+  font-weight: bold;
+  margin-top: 10px;
+  margin-bottom: 5px;
+  color: rgb(64, 87, 67);
+}
+
+#bookingForm input,
+#bookingForm select,
+#bookingForm textarea {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  color: black;
+}
+
+#bookingForm input:focus,
+#bookingForm select:focus,
+#bookingForm textarea:focus {
+  border-color: rgb(224, 178, 40); 
+  outline: none;
+  box-shadow: 0 0 5px rgba(224, 178, 40, 0.5);
+}
+
+#bookingForm button {
+  background-color: rgb(64, 87, 67); 
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-family: 'Times New Roman', Times, serif;
+}
+
+#bookingForm button:hover {
+  background-color: rgb(224, 178, 40); 
+}
 
 
+.parking-div {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px; 
+}
+
+.parking-div label {
+  margin-right: 10px;
+  color: rgb(64, 87, 67); 
+  font-weight: bold;
+}
 
 
 
