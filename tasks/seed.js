@@ -146,6 +146,15 @@ try{
     console.log(e);
 }
 
+//adding another employee
+console.log('Adding a new employee/admin to databse2:');
+try{
+    const admin2 = await admin.createAdmin("Wes", "Nabo", "WN167059" ,"wnabo", "nabo_password1");
+    console.log(admin2)
+}catch(e){
+    console.log(e);
+}
+
 
 console.log('Done seeding database');
 await closeConnection();
