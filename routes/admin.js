@@ -7,7 +7,7 @@ const router = Router();
 router.route('/')
     .get(async (req, res)=>{
         try{
-            res.render('login', {pageTitle: "Employee Login"})
+            res.render('login', { partial: "dead_server_script", pageTitle: "Employee Login"})
         }catch(e){
             res.status(500).json({ error: 'Internal server error' });
         }
@@ -17,7 +17,7 @@ router.route('/')
         let errors = [];
         try { //check if user/pass combo registers as user or not → user/pass fomrat checked in function
             const admin = await adminData.grabAdminByLogin(adminInput.userInput, adminInput.passInput);
-            res.render("admin",{employee: admin, message: `Welcome ${admin.employeeFirstName} ${admin.employeeLastName}`});
+            res.render("admin",{ partial: "dead_server_script", employee: admin, message: `Welcome ${admin.employeeFirstName} ${admin.employeeLastName}`});
             //maybe change to redirect so it isnt just going into admin page and /login
         } catch (e) {
             errors.push(e);
@@ -25,7 +25,7 @@ router.route('/')
 
         if (errors.length > 0){
            //console.log(errors);
-           return res.render("login", {hasErrors: true, errors: errors});
+           return res.render("login", {hasErrors: true, errors: errors, partial: "dead_server_script"});
         }
     });
 
