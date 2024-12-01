@@ -1,6 +1,6 @@
 import {reservations} from '../config/mongoCollections.js';
 import {ObjectId} from 'mongodb';
-import validation from '../helpers.js';
+import * as validation from '../helpers.js';
 import * as guestData from '../data/guests.js';
 import * as roomData from '../data/rooms.js';
 

@@ -1,13 +1,21 @@
-    <section>
-        <h1>Give us feedback on your stay!</h1>
-        <form method="POST" id="feedback-form" class="feedback-form">
-		    <label for="reservationID">Enter your reservation ID</label>
-            <input type="text" id="reservationID" name="reservationID" required><br>
 
-            <label for="feedback"> Enter your feedback</label>
-            <input type="text" id="feedback-input" class="feedback-input" required><br>
+    <h1>Give us feedback on your stay!</h1>
+    <form id="feedback-form" method="POST" class="feedback-form">
+		<label for="reservationID">Enter your reservation ID</label>
+        <input type="text" id="reservationID" name="reservationID" required><br>
 
-            <button type="submit">Submit</button><br>
+        <label for="feedback"> Enter your feedback</label>
+        <input type="text" id="feedback-input" class="feedback-input" required><br>
 
-	</form>
-    </section>
+        <label for="rating"> Enter your rating for your stay out of 5</label>
+            <select id="rating" name="rating" required>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+            </select><br>
+
+        <button type="submit">Submit</button><br>
+
+</form>

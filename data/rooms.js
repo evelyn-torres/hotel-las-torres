@@ -1,6 +1,6 @@
 import {rooms} from '../config/mongoCollections.js';
 import {ObjectId} from 'mongodb';
-import validation from '../helpers.js';
+import * as validation from '../helpers.js';
 
 
 export const getRoomById = async (id) => {
