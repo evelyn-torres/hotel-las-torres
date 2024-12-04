@@ -1,6 +1,6 @@
 import {comments} from '../config/mongoCollections.js';
 import {ObjectId} from 'mongodb';
-import validation from '../helpers.js';
+import * as validation from '../helpers.js';
 import * as guestData from './guests.js';
 import * as roomData from './rooms.js';
 import * as reservationData from './reservations.js'
@@ -21,7 +21,8 @@ export const getAllComments = async() => {
 }
 
 export const createComment = async(
-    guestID, 
+    firstName, 
+    lastName,
     roomID, 
     reservationID, 
     feedback, 
@@ -29,16 +30,16 @@ export const createComment = async(
 ) => {
     
     //checks for guestID
-    guestID = validation.checkId(guestID, "Guest ID");
-    const guest = await guestData.getGuestById(guestID); //make sure the guest exists
+    // guestID = validation.checkId(guestID, "Guest ID");
+    // const guest = await guestData.getGuestById(guestID); //make sure the guest exists
 
-    //checks for roomID
-    roomID = validation.checkId(roomID, "Room ID");
-    const room = await roomData.getRoomById(roomID); //make sure the room exists
+    // //checks for roomID
+    // roomID = validation.checkId(roomID, "Room ID");
+    // const room = await roomData.getRoomById(roomID); //make sure the room exists
 
     //checks for reservationID
-    reservationID = validation.checkId(reservationID, "Reservation ID");
-    const reservation = await reservationData.getReservationById(reservationID); //make sure the room exists
+    // reservationID = validation.checkId(reservationID, "Reservation ID");
+    // const reservation = await reservationData.getReservationById(reservationID); //make sure the room exists
 
     //checks for feedback 
     feedback = validation.checkString(feedback, "Feedback")
@@ -48,7 +49,8 @@ export const createComment = async(
 
     const commentCollection = await comments();
     let newComment = {
-        guestID: guestID, 
+        firstName: firstName, 
+        lastName: lastName, 
         roomID: roomID, 
         reservationID: reservationID, 
         feedback: feedback, 

@@ -1,6 +1,6 @@
 import {admins} from '../config/mongoCollections.js';
 import {ObjectId} from 'mongodb';
-import validation from '../helpers.js';
+import * as validation from '../helpers.js';
 
 // Function to get an admin by ID
 export const getAdminById = async (id) => {
