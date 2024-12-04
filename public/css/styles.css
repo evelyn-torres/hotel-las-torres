@@ -189,4 +189,15 @@ h1 {
 }
 
 
+.about-us-container {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  height: 50px;
+  padding: 20px;
+}
 
+.about-us-txtbox {
+  max-width: 400px;
+  padding: 20 px;
+}
