@@ -127,16 +127,6 @@ try {
     console.log(e)
 }
 
-//adding a comment 
-try {
-    commentOne = await comments.createComment(guestOne._id.toString(), roomOne._id.toString(), reservationOne._id.toString(), 
-    "I had a wonderful stay at Hotel Las Torres", 5)
-    console.log(commentOne)
-} catch(e) {
-    console.log(e)
-}
-
-
 //adding an employee
 console.log('Adding a new employee/admin to databse:');
 try{

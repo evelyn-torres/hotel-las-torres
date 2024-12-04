@@ -1,7 +1,7 @@
 import {ObjectId} from 'mongodb';
 
 
-const checkId = (id) => {
+export const checkId = (id) => {
   if (!id) throw 'Error: You must provide an id to search for';
   if (typeof id !== 'string') throw 'Error: id must be a string';
   id = id.trim();
@@ -11,7 +11,7 @@ const checkId = (id) => {
     return id;
 }
 
-const checkString = (strVal, varName) => {
+export const checkString = (strVal, varName) => {
   if (!strVal) throw `Error: You must supply a ${varName}!`;
   if (typeof strVal !== 'string') throw `Error: ${varName} must be a string!`;
   strVal = strVal.trim();

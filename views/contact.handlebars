@@ -1,11 +1,17 @@
 
     <h1>Give us feedback on your stay!</h1>
-    <form id="feedback-form" method="POST" class="feedback-form">
+    <form action="/contact" method="POST" id="feedback-form" class="feedback-form">
+        <label for="firstName">First name: </label>
+        <input type="text" id="firstName" name="firstName" required><br>
+
+        <label for="lastName">Last name: </label>
+        <input type="text" id="lastName" name="lastName" required><br>
+
 		<label for="reservationID">Enter your reservation ID</label>
         <input type="text" id="reservationID" name="reservationID" required><br>
 
         <label for="feedback"> Enter your feedback</label>
-        <input type="text" id="feedback-input" class="feedback-input" required><br>
+        <input type="text" name="feedback" id="feedback" class="feedback" value="{{contact.feedback}}"required><br>
 
         <label for="rating"> Enter your rating for your stay out of 5</label>
             <select id="rating" name="rating" required>

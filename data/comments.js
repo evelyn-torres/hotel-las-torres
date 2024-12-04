@@ -21,7 +21,8 @@ export const getAllComments = async() => {
 }
 
 export const createComment = async(
-    guestID, 
+    firstName, 
+    lastName,
     roomID, 
     reservationID, 
     feedback, 
@@ -48,7 +49,8 @@ export const createComment = async(
 
     const commentCollection = await comments();
     let newComment = {
-        guestID: guestID, 
+        firstName: firstName, 
+        lastName: lastName, 
         roomID: roomID, 
         reservationID: reservationID, 
         feedback: feedback, 
