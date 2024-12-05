@@ -263,5 +263,50 @@ h1 {
 .feedback-form button:hover {
   background-color: rgb(224, 178, 40);
 }
+.about-us-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(235, 246, 229, 0.9); /* Soft pastel background */
+  padding: 40px;
+  gap: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  max-width: 900px;
+  margin: 0 auto;
+}
 
+.about-us-txtbox {
+  max-width: 50%;
+  font-family: 'Times New Roman', Georgia, serif;
+  color: rgb(64, 87, 67); /* Match the theme */
+  padding: 20px;
+  border-radius: 8px;
+}
 
+.about-us-txtbox h1 {
+  font-size: 35px;
+  color: rgb(224, 178, 40); /* Golden header color */
+  margin-bottom: 15px;
+}
+
+.about-us-txtbox p {
+  font-size: 18px;
+  line-height: 1.6;
+  text-align: justify;
+}
+
+.about-us-imgbox {
+  max-width: 40%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.about-us-image {
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+  border: 2px solid rgba(224, 178, 40, 0.7); /* Golden border for the cutesy vibe */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
