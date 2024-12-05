@@ -20,12 +20,12 @@ document.getElementById('bookingForm').addEventListener('submit', (event)=>{
     let email = document.getElementById('email').value.trim();
 
       
-    console.log(checkIn)
-    if (!checkIn || !checkOut || !roomNumber || !guests || !guestFirstName || !guestLastName || !age || !govId || !phone || !email) {
-        error.style.display = 'block';
-        error.textContent = 'Please fill out all required fields!';
-        return;
-    }
+    // console.log(checkIn)
+    // if (!checkIn || !checkOut || !roomNumber || !guests || !guestFirstName || !guestLastName || !age || !govId || !phone || !email) {
+    //     error.style.display = 'block';
+    //     error.textContent = 'Please fill out all required fields!';
+    //     return;
+    // }
 
     let bookingDetails = {
         checkIn,
