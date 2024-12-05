@@ -119,11 +119,18 @@ try {
 }
 
 //adding a reservation 
+// try {
+//     reservationOne = await reservations.createReservation([guestOne._id.toString(), guestTwo._id.toString()], 3, roomEight._id.toString(), new Date('November 15, 2024'), 
+//     new Date('November 18, 2023'), true, true, 600.00)
+//     console.log(reservationOne)
+// } catch(e) {
+//     console.log(e)
+// }
+
+//testing for getroomIDbynumber
 try {
-    reservationOne = await reservations.createReservation([guestOne._id.toString(), guestTwo._id.toString()], 3, roomEight._id.toString(), new Date('November 15, 2024'), 
-    new Date('November 18, 2023'), true, true, 600.00)
-    console.log(reservationOne)
-} catch(e) {
+    let roomtest = await rooms.getRoomIdByNumber(5);
+} catch (e) {
     console.log(e)
 }
 

@@ -62,5 +62,12 @@ export const createRoom = async (
     return room;
 }
 
-
+export const getRoomIdByNumber = async(num) => {
+    if (typeof num !== 'number') throw "You must provide a number";
+    let checkRoom = "Room " + num.toString();
+    const roomCollection = await rooms();
+    const room = await roomCollection.findOne({roomName: checkRoom})
+    room._id = room._id.toString();
+    return room._id
+}
 
