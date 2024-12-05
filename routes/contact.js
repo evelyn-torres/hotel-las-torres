@@ -33,7 +33,7 @@ router
             }
             
             //get room ID for mongo
-            // use reservationID '67509f6d7d481acee304189e' for testing
+            // use the reservationID in mongo from seed.js for testing
             let reservation = await reservationData.getReservationById(reservationID)
             if(!reservation) throw 'Error could not find reservation'
 
@@ -43,7 +43,7 @@ router
 
     
         //    return res.status(200).redirect('/contact');
-           return res.status(201).json({success: true, data: newCommentInfo})
+            return res.status(201).json({success: true, data: newCommentInfo})
         } catch (error) {
             console.error(error);
             return res.status(500).json({ error: 'Internal server error' });

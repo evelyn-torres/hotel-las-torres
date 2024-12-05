@@ -19,37 +19,42 @@ export const getAllReservations = async() => {
     return await reservationCollection.find({}).toArray();
 }
 
+
 export const createReservation = async(
-    guestIDs, 
+    guestFirstName,
+    guestLastName, 
+    govID, 
+    age,
+    phone, 
+    email,
     numOfGuests,
     roomID, 
     checkInDate, 
     checkOutDate, 
     parking, 
-    depositPaid, 
     totalCost 
 ) => {
 
     // if(arguments.length !== 8) throw "Please include all inputs"
 
     //checks for guest ID
-    if (!Array.isArray(guestIDs) || guestIDs.length === 0) {
-        throw "guestIDs must be a non-empty array of valid guest IDs";
-    }
+    // if (!Array.isArray(guestIDs) || guestIDs.length === 0) {
+    //     throw "guestIDs must be a non-empty array of valid guest IDs";
+    // }
 
-    const validatedGuestIDs = [];
-    for (let guestID of guestIDs) {
-        guestID = validation.checkId(guestID, "Guest ID");
-        await guestData.getGuestById(guestID); // make sure that the guest exists
-        validatedGuestIDs.push(guestID);
-    }
-    guestIDs = validatedGuestIDs;
+    // const validatedGuestIDs = [];
+    // for (let guestID of guestIDs) {
+    //     guestID = validation.checkId(guestID, "Guest ID");
+    //     await guestData.getGuestById(guestID); // make sure that the guest exists
+    //     validatedGuestIDs.push(guestID);
+    // }
+    // guestIDs = validatedGuestIDs;
 
     //checks for numOfGuests
 
     //checks for roomID
-    roomID = validation.checkId(roomID, "Room ID");
-    const room = await roomData.getRoomById(roomID); //make sure the room exists
+    // roomID = validation.checkId(roomID, "Room ID");
+    // const room = await roomData.getRoomById(roomID); //make sure the room exists
 
     //checks for check in date 
 
@@ -63,14 +68,18 @@ export const createReservation = async(
 
     const reservationCollection = await reservations();
     let newReservation = {
-        guestIDs: guestIDs, 
+        guestFirstName: guestFirstName,
+        guestLastName: guestLastName, 
+        govID: govID, 
+        age: age,
+        phone: phone, 
+        email: email,
         numOfGuests: numOfGuests,
         roomID: roomID, 
         checkInDate: checkInDate, 
         checkOutDate: checkOutDate, 
         parking: parking, 
-        depositPaid: depositPaid, 
-        totalCost: totalCost 
+        totalCost: totalCost  
     };
 
     const insertInfo = await reservationCollection.insertOne(newReservation);
@@ -80,3 +89,5 @@ export const createReservation = async(
     const reservation = await getReservationById(newId); 
     return reservation;
 }
+
+

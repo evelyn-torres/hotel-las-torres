@@ -1,5 +1,5 @@
 <h1>Book Your Stay Today!</h1>
-  <form id="bookingForm">
+  <form action='/booking' method="POST" class="bookingForm" id="bookingForm">
     <label for="checkIn">Check-in Date:</label>
     <input type="date" id="checkIn" name="checkIn" required><br>
 
@@ -26,8 +26,8 @@
         <input type="checkbox" id="parking" name="parking"><br>
     </div>
 
-    <label for="guests">Number of Guests:</label>
-    <input type="number" id="guests" name="guests" min="1" required><br>
+    <label for="numOfGuests">Number of Guests:</label>
+    <input type="number" id="numOfGuests" name="numOfGuests" min="1" required><br>
 
     <label for="guestFirstName">First Name(s):</label>
     <textarea id="guestFirstName" name="guestFirstName" placeholder="Enter First Name(s)" required></textarea><br>
@@ -36,8 +36,8 @@
     <label for="guestLastName">Last Name(s):</label>
     <textarea id="guestLastName" name="guestLastName" placeholder="Enter Last Name(s)" required></textarea><br>
 
-    <label for="govId">Government ID:</label>
-    <textarea id="govId" name="govId" placeholder="Enter your Government ID" required></textarea><br>
+    <label for="govID">Government ID:</label>
+    <textarea id="govID" name="govID" placeholder="Enter your Government ID" required></textarea><br>
 
     <label for="age">Age:</label>
     <input  type="number" id="age" name="age" placeholder="age" min="1" required></number><br>
