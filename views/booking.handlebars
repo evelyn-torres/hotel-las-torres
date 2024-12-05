@@ -1,4 +1,9 @@
 <h1>Book Your Stay Today!</h1>
+    {{#if success}}
+        <div class="success-message">
+            {{successMessage}}
+        </div>
+    {{/if}}
   <form action='/booking' method="POST" class="bookingForm" id="bookingForm">
     <label for="checkIn">Check-in Date:</label>
     <input type="date" id="checkIn" name="checkIn" required><br>

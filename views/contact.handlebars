@@ -1,5 +1,10 @@
 
     <h1>Give us feedback on your stay!</h1>
+    {{#if success}}
+        <div class="success-message">
+            {{successMessage}}
+        </div>
+    {{/if}}
     <form action="/contact" method="POST" id="feedback-form" class="feedback-form">
         <label for="firstName">First name: </label>
         <input type="text" id="firstName" name="firstName" required><br>

@@ -43,10 +43,14 @@ router
 
     
         //    return res.status(200).redirect('/contact');
-            return res.status(201).json({success: true, data: newCommentInfo})
+            return res.status(201).render('contact', {
+            partial: 'contact_script',
+            success: true,
+            successMessage: "Thank you for sharing your feedback! We truly value your input. If you have more to share, feel free to fill out the form again!",
+        });
         } catch (error) {
             console.error(error);
-            return res.status(500).json({ error: 'Internal server error' });
+            return res.status(500).json({ error: 'Internal server error', success: false });
         }
     });
 export default router;

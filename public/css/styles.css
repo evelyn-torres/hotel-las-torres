@@ -310,3 +310,19 @@ h1 {
   border: 2px solid rgba(224, 178, 40, 0.7); /* Golden border for the cutesy vibe */
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
+
+.success-message {
+  margin: 20px 0;
+  padding: 15px;
+  border-radius: 5px;
+  font-size: 1rem;
+  font-weight: bold;
+  text-align: center;
+}
+
+.success-message {
+  background-color: #d4edda; 
+  color: #155724; 
+  border: 1px solid #c3e6cb;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
