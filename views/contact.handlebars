@@ -28,3 +28,13 @@
             </select><br>
         <button type="submit">Submit</button><br>
     </form>
+
+    <h2>Guest Feedback</h2>
+    <div id="comments-section">
+        {{#each comments}}
+            <div class="comment">
+                <p><strong>{{firstName}} {{lastName}}</strong> (Rating: {{rating}})</p>
+                <p>{{feedback}}</p>
+            </div>
+        {{/each}}
+    </div>

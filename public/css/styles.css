@@ -326,3 +326,74 @@ h1 {
   border: 1px solid #c3e6cb;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
+
+#comments-section {
+  max-width: 800px;
+  margin: 40px auto;
+  background-color: white;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
+/* Section Heading */
+#comments-section h2 {
+  text-align: center;
+  color: rgb(64, 87, 67);
+  font-size: 35px;
+  margin-bottom: 20px;
+  font-family: 'Times New Roman', Times, serif;
+}
+
+/* Individual Comment Box */
+.comment {
+  background-color: rgba(224, 178, 40, 0.1); /* Light gold background */
+  border-left: 5px solid rgb(224, 178, 40); /* Accent border */
+  padding: 15px 20px;
+  margin-bottom: 15px;
+  border-radius: 6px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease;
+}
+
+.comment:hover {
+  transform: scale(1.02); /* Slight hover effect */
+}
+
+/* Comment Header */
+.comment p strong {
+  color: rgb(64, 87, 67); /* Dark green for names */
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.comment p {
+  margin: 5px 0;
+  line-height: 1.5;
+  color: black;
+}
+
+/* Rating Styling */
+.comment p span {
+  background-color: rgb(224, 178, 40); /* Gold for rating */
+  color: white;
+  font-size: 14px;
+  font-weight: bold;
+  padding: 2px 6px;
+  border-radius: 4px;
+  margin-left: 5px;
+}
+
+/* Success Message Styling */
+.success-message {
+  max-width: 800px;
+  margin: 20px auto;
+  padding: 15px;
+  background-color: rgba(64, 87, 67, 0.1);
+  border: 2px solid rgb(64, 87, 67);
+  border-radius: 6px;
+  color: rgb(64, 87, 67);
+  font-size: 16px;
+  text-align: center;
+}
