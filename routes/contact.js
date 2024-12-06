@@ -7,7 +7,8 @@ router
     .route('/')
     .get(async (req, res) => {
         try {
-            res.render('contact', { partial: 'contact_script' }); 
+            const commentList = await commentData.getAllComments();
+            res.render('contact', { partial: 'contact_script', comments: commentList}); 
         } catch (error) {
             res.status(500).json({ error: 'Error displaying comments form' });
         }
