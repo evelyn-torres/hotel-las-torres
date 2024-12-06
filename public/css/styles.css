@@ -113,7 +113,10 @@ footer {
   background-color: rgb(224, 178, 40);
 }
 
-.hidden {
+.error-list li {
+  color: #ff0000;
+  
+}.hidden {
   display: none;
 }
 

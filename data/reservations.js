@@ -1,12 +1,12 @@
 import {reservations} from '../config/mongoCollections.js';
 import {ObjectId} from 'mongodb';
-import * as validation from '../helpers.js';
+import validation from '../helpers.js';
 import * as guestData from '../data/guests.js';
 import * as roomData from '../data/rooms.js';
 
 
 export const getReservationById = async (id) => {
-    id = validation.checkId(id, "reservation id")
+    id = validation.checkId(id, "reservationID");
     const reservationCollection = await reservations();
     const reservation = await reservationCollection.findOne({_id: new ObjectId(id)});
     if (reservation === null) throw 'No reservation with that id';
@@ -91,3 +91,4 @@ export const createReservation = async(
 }
 
 
+//console.log(await getAllReservations());

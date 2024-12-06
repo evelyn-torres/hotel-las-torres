@@ -13,7 +13,7 @@ const constructorMethod = (app) => {
 
     // Routes setup
     app.use('/', landingRoutes);
-    app.use('/admin', adminRoutes);
+    app.use('/login', adminRoutes);
     app.use('/booking', bookingRoutes);
     app.use('/rooms', roomsRoutes);
     app.use('/contact', contactRoutes);

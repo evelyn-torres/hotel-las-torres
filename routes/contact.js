@@ -1,7 +1,7 @@
 import express from "express";
 const router = express.Router();
 import {commentData, reservationData}  from "../data/index.js";
-import * as validation from '../helpers.js';
+import validation from '../helpers.js';
 
 router
     .route('/')
@@ -53,8 +53,8 @@ router
             comments: updatedComments
         });
         } catch (error) {
-            console.error(error);
-            return res.status(500).json({ error: 'Internal server error', success: false });
+            //console.error(error);
+            return res.status(500).json({ error: error, info: "Invalid input for review, will change" });
         }
     });
 export default router;

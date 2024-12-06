@@ -1,0 +1,21 @@
+    <section>
+        <h1>{{pageTitle}}</h1>
+        <form method ="POST" id="loginForm">
+            <label for="usernameInput">Username:</label>
+            <input type="text" name="userInput" id="userInput" placeholder="admin+name+ID"/>
+            <br>
+            <label for="passwordInput">Password: </label>
+            <input type="password" name="passInput" id="passInput"/>
+            <br>
+            <button type="submit">Login</button>
+        </form>
+        {{#if hasErrors}}
+        <ul class="error-list">
+            {{#each errors}}
+            <li>
+            {{this}}
+            </li>
+            {{/each}}
+        </ul>
+        {{/if}}
+    </section>
