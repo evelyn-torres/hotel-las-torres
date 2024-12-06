@@ -42,12 +42,15 @@ router
             let newCommentInfo = await commentData.createComment(firstName, lastName, reservation.roomID, reservationID, feedback, rating);
             if (!newCommentInfo) throw `Error could not create new list`;
 
+            const updatedComments = await commentData.getAllComments();
+
     
         //    return res.status(200).redirect('/contact');
             return res.status(201).render('contact', {
             partial: 'contact_script',
             success: true,
             successMessage: "Thank you for sharing your feedback! We truly value your input. If you have more to share, feel free to fill out the form again!",
+            comments: updatedComments
         });
         } catch (error) {
             console.error(error);

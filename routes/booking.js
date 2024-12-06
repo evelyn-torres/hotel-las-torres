@@ -38,10 +38,13 @@ router.route('/').get(async (req, res) => {
       email, numOfGuests, roomID, checkIn, checkOut, parking, totalcost) 
     if (!newBookingInfo) throw `Error could not create new list`;
 
+    let resID = newBookingInfo._id
+    
     return res.status(201).render('booking', {
       partial: 'booking_script',
       success: true,
-      successMessage: "Booking has been made! Thank you for choosing Hotel Las Torres for your stay.",
+      successMessage: `Booking has been made! Your Reservation ID is ${resID}. Thank you for choosing Hotel Las Torres for your stay.`,
+      resID: resID
   });
 
   } catch (error) {
