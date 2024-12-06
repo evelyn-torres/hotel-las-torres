@@ -12,5 +12,4 @@ router.route('/').get(async (req, res) => {
     }
 });
 
-
 export default router;
