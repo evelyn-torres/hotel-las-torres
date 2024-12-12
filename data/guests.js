@@ -1,6 +1,6 @@
 import {guests} from '../config/mongoCollections.js';
 import {ObjectId} from 'mongodb';
-import * as validation from '../helpers.js';
+import validation from '../helpers.js';
 
 
 export const getGuestById = async (id) => {

@@ -11,9 +11,10 @@ router.route('/').get(async (req, res) => {
   }
 })
 .post(async (req,res) => {
+  const newBookingData = req.body;
+  console.log(newBookingData);
+  let errors = [];
   try {
-    const newBookingData = req.body;
-
     let checkIn = newBookingData.checkIn; 
     let checkOut = newBookingData.checkOut; 
     let roomNumber = parseInt(newBookingData.roomNumber);
@@ -29,25 +30,33 @@ router.route('/').get(async (req, res) => {
     let guestFirstName = newBookingData.guestFirstName;
     let guestLastName = newBookingData.guestLastName; 
     let govID = newBookingData.govID;
-    let age = parseInt(newBookingData.age); 
+    let age = newBookingData.age; 
     let phone = newBookingData.phone; 
     let email = newBookingData.email;  
     let totalcost = 0; //setting this as 0 for now 
 
     let newBookingInfo = await reservationData.createReservation(guestFirstName, guestLastName, govID, age, phone,
       email, numOfGuests, roomID, checkIn, checkOut, parking, totalcost) 
-    if (!newBookingInfo) throw `Error could not create new list`;
+    if (!newBookingInfo) throw `Internal Error(R): could not create new booking`;
 
+    let resID = newBookingInfo._id
+    
     return res.status(201).render('booking', {
       partial: 'booking_script',
       success: true,
-      successMessage: "Booking has been made! Thank you for choosing Hotel Las Torres for your stay.",
+      successMessage: `Booking has been made! Your Reservation ID is ${resID}. Thank you for choosing Hotel Las Torres for your stay.`,
+      resID: resID
   });
 
-  } catch (error) {
-    console.error(error);
-    return res.status(500).json({ error: 'Internal server error' });
+  } catch (e) {
+    console.error(e);
+    errors.push(e);
   }
+
+  if (errors.length > 0){
+    //console.log(errors);
+    return res.render("booking", {hasErrors: true, errors: errors, partial: "dead_server_script"});
+ }
 });
 
 export default router;

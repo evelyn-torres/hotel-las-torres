@@ -47,15 +47,22 @@
     <label for="age">Age:</label>
     <input  type="number" id="age" name="age" placeholder="age" min="1" required></number><br>
 
-    <label for="phone">Phone Number:</label>
-    <input type="tel" id="phone" name="phone" required><br>
+    <label for="phone">Phone Number:<br/><small>Format: ###-###-####</small></label>
+    <input type="tel" id="phone" name="phone" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" minlength="10" minlength="10" required><br>
 
     <label for="email">Email:</label>
     <input type="email" id="email" name="email" required><br>
 
     <button type="submit">Submit</button>
   </form>
-
-    <ul id="newBooking"> </ul>
-    <div hidden id="error" class="error" ></div>
+  {{#if hasErrors}}
+    <ul class="error-list">
+        {{#each errors}}
+        <li>
+        {{this}}
+        </li>
+        {{/each}}
+    </ul>
+  {{/if}}
+  <ul id="newBooking"> </ul>
 

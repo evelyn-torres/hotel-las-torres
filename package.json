@@ -8,7 +8,7 @@
     "seed": "node ./tasks/seed.js"
   },
   "keywords": [],
-  "author": "Evelyn Torres | CWID 20006628, Ayushi Gupta | CWID 20006238",
+  "author": "Evelyn Torres | CWID 20006628, Ayushi Gupta | CWID 20006238 | Wesley Nabo 2000636" , 
   "license": "ISC",
   "description": "",
   "dependencies": {

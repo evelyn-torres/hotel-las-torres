@@ -1,13 +1,14 @@
 import express from "express";
 const router = express.Router();
 import {commentData, reservationData}  from "../data/index.js";
-import * as validation from '../helpers.js';
+import validation from '../helpers.js';
 
 router
     .route('/')
     .get(async (req, res) => {
         try {
-            res.render('contact', { partial: 'contact_script' }); 
+            const commentList = await commentData.getAllComments();
+            res.render('contact', { partial: 'contact_script', comments: commentList}); 
         } catch (error) {
             res.status(500).json({ error: 'Error displaying comments form' });
         }
@@ -41,16 +42,19 @@ router
             let newCommentInfo = await commentData.createComment(firstName, lastName, reservation.roomID, reservationID, feedback, rating);
             if (!newCommentInfo) throw `Error could not create new list`;
 
+            const updatedComments = await commentData.getAllComments();
+
     
         //    return res.status(200).redirect('/contact');
             return res.status(201).render('contact', {
             partial: 'contact_script',
             success: true,
             successMessage: "Thank you for sharing your feedback! We truly value your input. If you have more to share, feel free to fill out the form again!",
+            comments: updatedComments
         });
         } catch (error) {
-            console.error(error);
-            return res.status(500).json({ error: 'Internal server error', success: false });
+            //console.error(error);
+            return res.status(500).json({ error: error, info: "Invalid input for review, will change" });
         }
     });
 export default router;

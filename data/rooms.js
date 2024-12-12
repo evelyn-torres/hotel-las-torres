@@ -1,6 +1,6 @@
 import {rooms} from '../config/mongoCollections.js';
 import {ObjectId} from 'mongodb';
-import * as validation from '../helpers.js';
+import validation from '../helpers.js';
 
 
 export const getRoomById = async (id) => {
@@ -26,7 +26,7 @@ export const createRoom = async (
   ) => {
     //checks for numRooms 
     if(!roomName) throw "You must provide the number of rooms";
-    roomName = validation.checkString(roomName);
+    roomName = validation.checkString(roomName, "room name");
     
     //checks for balcony 
    // if(!balcony) throw "You must provide a value for balcony";
