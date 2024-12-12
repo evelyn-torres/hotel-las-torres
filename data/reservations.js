@@ -1,8 +1,9 @@
 import {reservations} from '../config/mongoCollections.js';
+import {rooms} from "../config/mongoCollections.js"
 import {ObjectId} from 'mongodb';
 import validation from '../helpers.js';
 import * as guestData from '../data/guests.js';
-import * as roomData from '../data/rooms.js';
+import {getRoomById}from '../data/rooms.js';
 
 
 export const getReservationById = async (id) => {
@@ -35,6 +36,54 @@ export const createReservation = async(
     totalCost 
 ) => {
 
+    //validate guest booking inputs
+    guestFirstName = validation.checkString(guestFirstName); //name
+    guestLastName = validation.checkString(guestLastName);
+    //TO-DO: validate govID
+    // if (parseInt(age).length !== 2|| !Number.isInteger(parseInt(age))) {//ensure u can only do whole numbers
+    //     throw `Error: Invalid Age input ${age}`;
+    // }  
+    // age = parseInt(age); 
+    if (age < 18) throw "Must be 18 years or older to book a room"
+    phone = phone.slice(0,3)+phone.slice(4,7)+phone.slice(8); //takes the "-" out
+    if (phone.length != 10 || parseInt(phone) < 1111111111 || parseInt(phone) > 9999999999) throw "Error: invalid phone number input";
+    //TO-DO: validate email
+    const chosenRoom = await getRoomById(roomID);
+    let roomCapacity = 0; //room cap: double =2, while twin + semi_double ==1. SO all of that added up is roomCap
+    Object.entries(chosenRoom.bedSizes).forEach(elem => {
+        if (elem[0] === "Double"){
+            roomCapacity +=1;
+        }
+        roomCapacity += elem[1];
+
+    });
+    numOfGuests = parseInt(numOfGuests);
+    if (numOfGuests > roomCapacity) throw "Error: Guest number exceeds room capacity";
+
+    //TO-DO: make seperate check booking function
+    //basically, go from check-in to check out and see if any dates in booked column
+
+    const begin = new Date(checkInDate);
+    const end = new Date(checkOutDate);
+    const daysBooked = end.getDate()-begin.getDate();
+    let curr = begin.valueOf();
+    for (let i = 0; i < daysBooked; i++){
+        if (chosenRoom.availability.booked.includes(new Date(curr).toISOString().slice(0,10))){ //if room is booked, ask to book another range
+            throw `Booking Error: Room is booked on ${new Date(curr).toISOString().slice(0,10)}, please select another date range!`
+            break;
+        }
+        else if(chosenRoom.availability.open.includes(new Date(curr).toISOString().slice(0,10))){ //if room is open, check each date and add to current
+            let selectDate = new Date(curr).toISOString().slice(0,10); //set date to add to booked
+            chosenRoom.availability.open = chosenRoom.availability.open.filter(x => x !== selectDate); //remove from open array
+            chosenRoom.availability.booked.push(selectDate) // add it to booked column
+            if (chosenRoom.availability.open.includes(selectDate) || !chosenRoom.availability.booked.includes(selectDate)) throw `Booking Error: Failure to Book on ${selectDate}`;
+            curr += 86400000;
+        }
+        else{ //date isn't offered, choose another day
+            throw `Booking Error: We currently aren't offering current room on ${new Date(curr)}, please select another date!`
+        }
+    }
+    
     // if(arguments.length !== 8) throw "Please include all inputs"
 
     //checks for guest ID
@@ -42,30 +91,12 @@ export const createReservation = async(
     //     throw "guestIDs must be a non-empty array of valid guest IDs";
     // }
 
-    // const validatedGuestIDs = [];
-    // for (let guestID of guestIDs) {
-    //     guestID = validation.checkId(guestID, "Guest ID");
-    //     await guestData.getGuestById(guestID); // make sure that the guest exists
-    //     validatedGuestIDs.push(guestID);
-    // }
-    // guestIDs = validatedGuestIDs;
-
-    //checks for numOfGuests
-
-    //checks for roomID
-    // roomID = validation.checkId(roomID, "Room ID");
-    // const room = await roomData.getRoomById(roomID); //make sure the room exists
-
-    //checks for check in date 
-
-    //checks for check out date 
-
     //checks for parking 
 
     //checks for deposit paid 
 
     //checks for totalCost 
-
+    console.log('t1', chosenRoom.availability);
     const reservationCollection = await reservations();
     let newReservation = {
         guestFirstName: guestFirstName,
@@ -78,6 +109,7 @@ export const createReservation = async(
         roomID: roomID, 
         checkInDate: checkInDate, 
         checkOutDate: checkOutDate, 
+        daysBooked: daysBooked,
         parking: parking, 
         totalCost: totalCost  
     };
@@ -87,8 +119,14 @@ export const createReservation = async(
       
     const newId = insertInfo.insertedId.toString();
     const reservation = await getReservationById(newId); 
+
+    //update room in db
+    const roomCollection = await rooms();
+    await roomCollection.updateOne({_id: new ObjectId(chosenRoom._id)}, {$set: {availability: chosenRoom.availability}})
+    console.log("newly booked", await getRoomById(roomID));
+
     return reservation;
 }
 
 
-//console.log(await getAllReservations());
+//console.log(await createReservation("Wes","Nabo", "4fr78wf7r8",21,"832-612-6236","wesleynabo@gmail.com",2,"675b0bc6bec1f311dfd54569", "2025-01-07","2025-01-12","on",0));
