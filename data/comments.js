@@ -69,7 +69,7 @@ export const createComment = async(
         reservationID: reservationID, 
         feedback: feedback, 
         rating: rating,
-        createdAt: newDate()
+     //   createdAt: newDate()
     };
 
     const insertInfo = await commentCollection.insertOne(newComment);
