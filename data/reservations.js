@@ -129,4 +129,4 @@ export const createReservation = async(
 }
 
 
-//console.log(await createReservation("Wes","Nabo", "4fr78wf7r8",21,"832-612-6236","wesleynabo@gmail.com",2,"675b0bc6bec1f311dfd54569", "2025-01-07","2025-01-12","on",0));
+console.log(await createReservation("Wes","Nabo", "4fr78wf7r8",21,"832-612-6236","wesleynabo@gmail.com",2,"675b0bc6bec1f311dfd54569", "2025-01-07","2025-01-12","on",0));

@@ -1,15 +1,26 @@
     <section>
         <h1>{{pageTitle}}</h1>
-        <form method ="POST" id="loginForm">
+        
+        {{#if hasErrors}}
+            <div class="error" id="error">
+                {{errors}}
+            </div>
+            
+         {{/if}}
+
+
+        <form  id="loginForm" method ="POST" >
             <label for="userInput">Username:</label>
-            <input type="text" name="userInput" id="userInput" placeholder="admin+name+ID"/>
+            <input type="text" name="userInput" id="userInput" placeholder="admin+name+ID" required/>
+            
             <br>
+
             <label for="passInput">Password: </label>
-            <input type="password" name="passInput" id="passInput"/>
+            <input type="password" name="passInput" id="passInput" required/>
             <br>
             <button type="submit">Login</button>
         </form>
-        {{#if hasErrors}}
+        {{!-- {{#if hasErrors}}
         <ul class="error-list">
             {{#each errors}}
             <li>
@@ -17,5 +28,5 @@
             </li>
             {{/each}}
         </ul>
-        {{/if}}
+        {{/if}} --}}
     </section>
