@@ -20,6 +20,8 @@ export const getAllComments = async() => {
     return await commentCollection.find({}).toArray();
 }
 
+
+
 export const createComment = async(
     firstName, 
     lastName,
@@ -47,6 +49,18 @@ export const createComment = async(
     //checks for rating 
     if(typeof rating !== 'number') throw "Type of rating must be a number"
 
+
+    //need to make sure the reservation id exists in the database to confirm the reservation occured.
+    const reservation = await reservationData.getReservationById(reservationID);
+    if (!reservation) {
+        throw `No reservation found with ID: ${reservationID}`;
+    }
+
+    if (reservation.roomID !== roomID) {
+        throw `Room ID does not match the reservation's room.`;
+    }
+
+
     const commentCollection = await comments();
     let newComment = {
         firstName: firstName, 
@@ -54,7 +68,8 @@ export const createComment = async(
         roomID: roomID, 
         reservationID: reservationID, 
         feedback: feedback, 
-        rating: rating
+        rating: rating,
+     //   createdAt: newDate()
     };
 
     const insertInfo = await commentCollection.insertOne(newComment);
