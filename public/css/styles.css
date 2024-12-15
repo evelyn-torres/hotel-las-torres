@@ -305,11 +305,11 @@ h1 {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: rgba(235, 246, 229, 0.9); /* Soft pastel background */
+  background-color: rgba(235, 246, 229, 0.9); 
   padding: 40px;
   gap: 20px;
   border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   max-width: 900px;
   margin: 0 auto;
 }
@@ -345,7 +345,7 @@ h1 {
   width: 100%;
   height: auto;
   border-radius: 10px;
-  border: 2px solid rgba(224, 178, 40, 0.7); /* Golden border for the cutesy vibe */
+  border: 2px solid rgba(224, 178, 40, 0.7); 
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
@@ -375,7 +375,6 @@ h1 {
   font-family: Georgia, 'Times New Roman', Times, serif;
 }
 
-/* Section Heading */
 #comments-section h2 {
   text-align: center;
   color: rgb(64, 87, 67);
@@ -384,10 +383,9 @@ h1 {
   font-family: 'Times New Roman', Times, serif;
 }
 
-/* Individual Comment Box */
 .comment {
-  background-color: rgba(224, 178, 40, 0.1); /* Light gold background */
-  border-left: 5px solid rgb(224, 178, 40); /* Accent border */
+  background-color: rgba(224, 178, 40, 0.1); 
+  border-left: 5px solid rgb(224, 178, 40); 
   padding: 15px 20px;
   margin-bottom: 15px;
   border-radius: 6px;
@@ -396,12 +394,11 @@ h1 {
 }
 
 .comment:hover {
-  transform: scale(1.02); /* Slight hover effect */
+  transform: scale(1.02); 
 }
 
-/* Comment Header */
 .comment p strong {
-  color: rgb(64, 87, 67); /* Dark green for names */
+  color: rgb(64, 87, 67); 
   font-size: 18px;
   font-weight: bold;
 }
@@ -412,9 +409,8 @@ h1 {
   color: black;
 }
 
-/* Rating Styling */
 .comment p span {
-  background-color: rgb(224, 178, 40); /* Gold for rating */
+  background-color: rgb(224, 178, 40); 
   color: white;
   font-size: 14px;
   font-weight: bold;
@@ -423,7 +419,6 @@ h1 {
   margin-left: 5px;
 }
 
-/* Success Message Styling */
 .success-message {
   max-width: 800px;
   margin: 20px auto;
@@ -457,4 +452,18 @@ h1 {
   border: 1px solid red;
   border-radius: 5px;
   margin-top: 10px;
+}
+
+.image-container {
+  display: flex;
+  justify-content: center; /* Horizontally centers the image */
+  align-items: center; /* Vertically centers the image if container has height */
+  height: 100vh; /* Optional: Set the height of the container to the viewport height */
+}
+
+.image-container img {
+  width: 100%; /* Make the image fit the width of the page */
+  max-width: 100%; /* Prevents the image from exceeding its natural width */
+  height: auto; /* Maintains aspect ratio */
+  display: block; /* Removes any extra space below the image */
 }

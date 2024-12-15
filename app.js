@@ -35,6 +35,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/public', express.static(path.join(__dirname, 'static')));
 app.use('/contact', contactRoutes);
 
+
 constructorMethod(app);
 
 app.listen(3000, () => {
