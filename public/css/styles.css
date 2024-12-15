@@ -400,3 +400,34 @@ h1 {
   font-size: 16px;
   text-align: center;
 }
+
+/* Calendar */
+#calendar {
+  max-width: 1100px;
+  margin: 40px auto;
+}
+
+#calendar .fc-toolbar-title {
+  color: #161515; 
+  font-size: 1.5em; 
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  font-weight: bold; 
+}
+
+
+/* Calendar */
+#room_calendar {
+  max-width: 1100px;
+  margin: 40px auto;
+}
+
+#room_calendar .fc-toolbar-title {
+  color: #161515; 
+  font-size: 1.5em; 
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  font-weight: bold; 
+}

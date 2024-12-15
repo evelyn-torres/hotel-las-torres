@@ -80,7 +80,7 @@ export const createReservation = async(
             curr += 86400000;
         }
         else{ //date isn't offered, choose another day
-            throw `Booking Error: We currently aren't offering current room on ${new Date(curr)}, please select another date!`
+            throw `Booking Error: We currently aren't offering this room on ${new Date(curr).toISOString().slice(0,10)}, please select another date!`
         }
     }
     
@@ -96,7 +96,7 @@ export const createReservation = async(
     //checks for deposit paid 
 
     //checks for totalCost 
-    console.log('t1', chosenRoom.availability);
+    console.log('avail check', chosenRoom.availability);
     const reservationCollection = await reservations();
     let newReservation = {
         guestFirstName: guestFirstName,
@@ -116,7 +116,7 @@ export const createReservation = async(
 
     const insertInfo = await reservationCollection.insertOne(newReservation);
     if (!insertInfo.acknowledged || !insertInfo.insertedId) throw 'Could not add reservation';
-      
+    console.log("reserve input", insertInfo);
     const newId = insertInfo.insertedId.toString();
     const reservation = await getReservationById(newId); 
 

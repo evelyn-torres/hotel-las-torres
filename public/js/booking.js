@@ -52,3 +52,30 @@
   
 //     document.getElementById('bookingForm').reset();
 // })
+
+
+/*booking calendar*/
+document.addEventListener('DOMContentLoaded', function() {
+    var calendarEl = document.getElementById('calendar');
+
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+      initialView: 'dayGridMonth',
+      header: { /**gets an unknown error option but still fine */
+        left: 'prev,next today',
+        center: 'title',
+        right: 'dayGridMonth,timeGridWeek'
+      },
+      events: [
+        {
+        start: '2024-12-24',
+        end: '2024-12-28',
+        overlap: false,
+        display: 'background',
+        color: 'red',
+        },
+      ]
+    });
+    calendar.render();
+});
+
+
