@@ -12,13 +12,13 @@ router.route('/').get(async (req, res) => {
 })
 .post(async (req,res) => {
   const newBookingData = req.body;
-  console.log(newBookingData);
+  console.log("booking_data", newBookingData);
   let errors = [];
   try {
     let checkIn = newBookingData.checkIn; 
     let checkOut = newBookingData.checkOut; 
-    let roomNumber = parseInt(newBookingData.roomNumber);
-    let roomID = await roomData.getRoomIdByNumber(roomNumber) //getRoomID
+    // let roomNumber = parseInt(newBookingData.roomNumber);
+    // let roomID = await roomData.getRoomIdByNumber(roomNumber) //getRoomID
     let parking = newBookingData.parking;
     if (parking === 'on') {
       parking = true; 
@@ -36,13 +36,13 @@ router.route('/').get(async (req, res) => {
     let totalcost = 0; //setting this as 0 for now 
 
     let newBookingInfo = await reservationData.createReservation(guestFirstName, guestLastName, govID, age, phone,
-      email, numOfGuests, roomID, checkIn, checkOut, parking, totalcost) 
+      email, numOfGuests, newBookingData.roomId, checkIn, checkOut, parking, totalcost) 
     if (!newBookingInfo) throw `Internal Error(R): could not create new booking`;
 
     let resID = newBookingInfo._id
     
-    return res.status(201).render('booking', {
-      partial: 'booking_script',
+    return res.status(201).render('roomBooking', {
+      partial: 'rooms',
       success: true,
       successMessage: `Booking has been made! Your Reservation ID is ${resID}. Thank you for choosing Hotel Las Torres for your stay.`,
       resID: resID
@@ -55,7 +55,7 @@ router.route('/').get(async (req, res) => {
 
   if (errors.length > 0){
     //console.log(errors);
-    return res.render("booking", {hasErrors: true, errors: errors, partial: "dead_server_script"});
+    return res.render("roomBooking", {hasErrors: true, errors: errors, partial: "rooms"});
  }
 });
 
