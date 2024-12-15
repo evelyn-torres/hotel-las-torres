@@ -143,11 +143,11 @@ try {
 // }
 
 //testing for getroomIDbynumber
-try {
-    let roomtest = await rooms.getRoomIdByNumber(5);
-} catch (e) {
-    console.log(e)
-}
+// try {
+//     let roomtest = await rooms.getRoomIdByNumber(5);
+// } catch (e) {
+//     console.log(e)
+// }
 
 //adding an employee
 console.log('Adding a new employee/admin to databse:');

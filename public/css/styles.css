@@ -445,39 +445,16 @@ h1 {
   font-weight: bold;
   margin-top: 10px;
   padding: 10px;
-  border: 1px solid red;
   background-color: #ffe6e6;
   border-radius: 5px;
 }
 
-
-
-.error-container {
-  background-color: #ffe5e5;
-  color: #d9534f;
-  border: 1px solid #d9534f;
-  border-radius: 5px;
-  padding: 15px;
-  margin-bottom: 15px;
-  font-size: 14px;
-}
-
-.error-container ul {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-}
-
-.error-container li {
-  margin-bottom: 5px;
-  line-height: 1.5;
-}
-
-
-.error-list li {
-  color: #ff0000;
-  
-}.hidden {
+#errorBox {
   display: none;
+  color: red;
+  background-color: #ffe6e6;
+  padding: 10px;
+  border: 1px solid red;
+  border-radius: 5px;
+  margin-top: 10px;
 }
-

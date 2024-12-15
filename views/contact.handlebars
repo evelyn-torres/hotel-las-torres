@@ -1,40 +1,64 @@
 
-    <h1>Give us feedback on your stay!</h1>
-    {{#if success}}
-        <div class="success-message">
-            {{successMessage}}
-        </div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leave a Comment</title>
+    <link rel="stylesheet" href="/public/css/styles.css">
+</head>
+
+<body>
+
+    {{#if error}}
+    <div class="error">{{error}}</div>
     {{/if}}
-    <form action="/contact" method="POST" id="feedback-form" class="feedback-form">
-        <label for="firstName">First name: </label>
-        <input type="text" id="firstName" name="firstName" required><br>
+    {{#if success}}
+    <div class="success">{{successMessage}}</div>
+    {{/if}}
+
+
+<div class="feedback-form">
+<form id="feedback-form" method="POST" action="/contact">
+    <label for="firstName">First name: </label>
+        <input type="text" id="firstName" name="firstName" required>
+        <br>
 
         <label for="lastName">Last name: </label>
-        <input type="text" id="lastName" name="lastName" required><br>
+        <input type="text" id="lastName" name="lastName" required>
+        <br>
 
-		<label for="reservationID">Enter your reservation ID</label>
-        <input type="text" id="reservationID" name="reservationID" required><br>
+        <label for="reservationID">Enter your reservation ID</label>
+        <input type="text" id="reservationID" name="reservationID" required>
+        <br>
 
-        <label for="feedback"> Enter your feedback</label>
-        <input type="text" name="feedback" id="feedback" class="feedback" value="{{contact.feedback}}"required><br>
+        <label for="feedback">Enter your feedback</label>
+        <input type="text" name="feedback" id="feedback" class="feedback" value="" required>
+        <br>
 
-        <label for="rating"> Enter your rating for your stay out of 5</label>
-            <select id="rating" name="rating" required>
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-            </select><br>
-        <button type="submit">Submit</button><br>
-    </form>
+        <label for="rating">Enter your rating for your stay out of 5</label>
+        <select id="rating" name="rating" required>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+        </select>
+        <br>
+        <button type="submit" id="submitButton" name="submitButton">Submit</button>
+        <br>
+</form>
 
-    <h2>Guest Feedback</h2>
-    <div id="comments-section">
-        {{#each comments}}
-            <div class="comment">
-                <p><strong>{{firstName}} {{lastName}}</strong> (Rating: {{rating}})</p>
-                <p>{{feedback}}</p>
-            </div>
-        {{/each}}
-    </div>
+</div>
+
+<div id="comments-section">
+    <h2>Comments</h2>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="/public/js/feedbackForm.js" type = "module"></script>
+
+
+
+</body>
+</html>
+
