@@ -1,5 +1,32 @@
 // other functions here if necessary
 // uncomment after ajax implementation 
+import { Calendar, FullCalendar } from '@fullcalendar/core';
+import dayGridPlugin from '@fullcalendar/daygrid';
+
+document.addEventListener('DOMContentLoaded', function () {
+    const calendarEl = document.getElementById('calendar');
+
+    const calendar = new Calendar(calendarEl, {
+        plugins: [dayGridPlugin], // Load the dayGrid plugin
+        initialView: 'dayGridMonth',
+        headerToolbar: { // Correct property name
+            left: 'prev,next today',
+            center: 'title',
+            right: 'dayGridMonth,timeGridWeek',
+        },
+        events: [
+            {
+                start: '2024-12-24',
+                end: '2024-12-28',
+                overlap: false,
+                display: 'background',
+                color: 'red',
+            },
+        ],
+    });
+
+    calendar.render();
+});
 
 document.getElementById('bookingForm').addEventListener('submit', (event)=>{
     event.preventDefault();
@@ -78,4 +105,4 @@ document.addEventListener('DOMContentLoaded', function() {
     calendar.render();
 });
 
-
+})
