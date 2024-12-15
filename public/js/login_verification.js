@@ -1,54 +1,89 @@
-document.addEventListener("DOMContentLoaded", function () {   
-    document.getElementById('loginForm').addEventListener("submit", function(event) {
-    try {
-         const err = [];
- 
-         // Get form fields
-         const username = document.getElementById("userInput").value.trim();
-         const password = document.getElementById("passInput").value.trim();
- 
-        // Remove existing error divs (if any)
-         const existingErrorDiv = document.querySelector(".error-container");
-         if (existingErrorDiv) existingErrorDiv.remove();
- 
-         // Validate username
-         if (!username) {
-             err.push("Please enter your username.");
-         }
-         if (typeof username !== 'string' || username.trim().length === 0) {
-             err.push('Please enter a valid username.');
-         }
-         console.log(err);
- 
+// //client-side verification
+
+import axios from 'axios';
+
+// document.addEventListener("DOMContentLoaded", function () {   
+document.getElementById('loginForm').addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const errors = [];
+
+        // Get form fields
+        const username = document.getElementById("userInput").value.trim();
+        const password = document.getElementById("passInput").value.trim();
+
+        // Validate username
+        if (!username || typeof username !== 'string' || username.trim().length === 0) {
+            errors.push("Please enter your username.");
+        }
+        // if (typeof username !== 'string' || username.trim().length === 0) {
+        //     errors.push('Please enter a valid username.');
+        // }
+        console.log(errors);
+
          // Validate password
-         if (!password) {
-             err.push('Please enter your password.');
+         if (!password || password.trim().length === 0) {
+             errors.push('Please enter your password.');
          }
-         if (password.trim().length === 0) {
-             err.push('Please enter a valid password.');
-         }
+        //  if (password.trim().length === 0) {
+        //      errors.push('Please enter a valid password.');
+        //  }
+
  
                 // If there are errors, prevent form submission and display errors
-                if (err.length > 0) {
-                    event.preventDefault(); // Prevent form submission
-                    const errorDiv = document.createElement("div");
-                    errorDiv.className = "error-container";
-                    
-                    const errorList = document.createElement("ul");
-                    err.forEach(e => {
-                        const listItem = document.createElement("li");
-                        listItem.textContent = e;
-                        console.log(listItem);
-                        errorList.appendChild(listItem);
-                    });
-        
-                    errorDiv.appendChild(errorList);
-                    document.getElementById('loginForm').prepend(errorDiv); // Display errors above the form
-                } else {
-                    console.log("Form submitted successfully."); // Debug log
-                }
-            } catch (error) {
-                console.error("An error occurred during form validation:", error);
+        if (errors.length > 0) {
+            console.log(errors);
+            displayErrors(errors);
+            return;
+        }
+        try{
+            const response = await axios.post("/login",{
+                userInput: username,
+                passInput: password,
+            } )
+            if(response.status === 200 ){
+                window.location.href ='/admin/dashboard' ;
+                document.getElementById("loginForm").reset();
+                clearErrors();
+            } else{
+                console.log("hiiiii");
+                const errorData = await response.json();
+                displayErrors(errors);
+              //  document.getElementById('message').innerHTML = `<div class="error">${errorData.error}</div>`;
+                document.getElementById("loginForm").reset();
             }
-        })});
+
+          //  clearErrors();
+        }catch(error){
+            if (error.response && error.response.data && error.response.data.error) {
+                displayErrors([error.response.data.error]);
+            } else {
+                console.log('heyoo');
+                displayErrors(["An unexpected error occurred. Please try again later."]);
+                document.getElementById("loginForm").reset();
+            }
+        }
+        function displayErrors(errors) {
+            let errorDiv = document.querySelector(".error") || document.createElement("div");
+            errorDiv.className = "error";
+            errorDiv.innerHTML = errors.map(err => `<p>${err}</p>`).join("");
+            document.getElementById("loginForm").prepend(errorDiv);
+            document.getElementById("loginForm").reset();
+        }
+    
+        function clearErrors() {
+            const errorDiv = document.querySelector(".error");
+            if (errorDiv) {
+                errorDiv.remove();
+            }
+        }
+
+    });
+
+                    
+
+//             } catch (error) {
+//                 console.error("An error occurred during form validation:", error);
+//             }
+//         })});
         
+

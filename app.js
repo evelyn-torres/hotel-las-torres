@@ -5,6 +5,8 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import {dirname} from 'path';
 import contactRoutes from './routes/contact.js';
+import cookieParser from "cookie-parser";
+import session from "express-session";
 
 
 const app = express();
@@ -21,7 +23,7 @@ const handlebars = exphbs.create({ defaultLayout: 'main' });
 app.engine('handlebars', exphbs.engine({
     defaultLayout: 'main',
     layoutsDir: path.join(__dirname, 'views/layouts'),
-    partialsDir: path.join(__dirname, 'views/partials'),
+    partialsDir: path.join(__dirname, 'views/partials' ),
   }));
 
 
@@ -32,8 +34,34 @@ app.set('view engine', 'handlebars');
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+app.use(cookieParser());
+app.use(
+    session({
+        secret: 'your-secret-key',
+        resave: false,
+        saveUninitialized: true,
+        cookie: { secure: false }, // Set secure to true in production with HTTPS
+    })
+);
+
 app.use('/public', express.static(path.join(__dirname, 'static')));
 app.use('/contact', contactRoutes);
+app.use('/login', (req, res, next) => {
+  const user = req.session.user;
+  if (user && user.toLowerCase() === 'admin') {
+    console.log('in app.js ')
+      return res.redirect('/admin/dashboard'); // Correctly redirect to admin page
+  }
+  next(); 
+});
+app.get('/logout', (req, res)=>{
+  req.session.destroy((err) =>{
+    if (err){
+      return res.status(500).json({error: 'failed to logout'});
+    }
+    res.redirect('/login');
+  })
+})
 
 
 constructorMethod(app);
