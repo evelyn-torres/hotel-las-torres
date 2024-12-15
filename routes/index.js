@@ -18,6 +18,7 @@ const constructorMethod = (app) => {
     app.use('/rooms', roomsRoutes);
     app.use('/contact', contactRoutes);
     app.use('/about', aboutRoutes);
+    app.use('/admin', adminRoutes);
 
 
     // 404 Handler

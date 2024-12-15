@@ -39,6 +39,7 @@ router
                 return res.status(400).json({ error: 'Invalid or missing rating. It must be a number between 1 and 5.'});
             }
             
+            
             //get room ID for mongo
             // use the reservationID in mongo from seed.js for testing
             let reservation = await reservationData.getReservationById(reservationID)

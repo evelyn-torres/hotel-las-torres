@@ -1,15 +1,25 @@
+    
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leave a Comment</title>
+    <link rel="stylesheet" href="/public/css/styles.css">
+</head>
+
+<body>
     <section>
         <h1>{{pageTitle}}</h1>
         
-        {{#if hasErrors}}
+        {{#if error}}
             <div class="error" id="error">
                 {{errors}}
             </div>
             
          {{/if}}
 
-
-        <form  id="loginForm" method ="POST" >
+    <div class = "loginForm"> 
+          <form  id="loginForm" method ="POST" action="/login" >
             <label for="userInput">Username:</label>
             <input type="text" name="userInput" id="userInput" placeholder="Username"/>
             <br>
@@ -19,6 +29,10 @@
             <br>
             <button type="submit">Login</button>
         </form>
+    </div>
+    <div id="message"></div>
+
+      
         {{!-- {{#if hasErrors}}
         <ul class="error-list">
             {{#each errors}}
@@ -27,5 +41,14 @@
             </li>
             {{/each}}
         </ul>
-        {{/if}} --}}
+        {{/if}} --}}    
     </section>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="/public/js/login_verification.js" type = "module"></script>
+
+
+
+</body>
+</html>
+
