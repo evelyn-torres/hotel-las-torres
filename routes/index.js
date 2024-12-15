@@ -18,12 +18,13 @@ const constructorMethod = (app) => {
     app.use('/rooms', roomsRoutes);
     app.use('/contact', contactRoutes);
     app.use('/about', aboutRoutes);
+    app.use('/api', roomsRoutes);
     app.use('/admin', adminRoutes);
 
 
     // 404 Handler
     app.use('*', (req, res) => {
-        res.status(404).json({ error: 'Not found' });
+        res.status(404).json({ error: 'Not found?' });
     });
 };
 
