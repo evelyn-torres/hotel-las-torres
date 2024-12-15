@@ -23,6 +23,7 @@ let guestOne = undefined;
 let guestTwo = undefined; 
 let reservationOne = undefined; 
 let commentOne = undefined; 
+let modifyRes = undefined; 
 
 /* populate set dates object for room availibility */
 function createAvailbyDates(begin, end){
@@ -118,6 +119,22 @@ try {
     console.log(e)
 }
 
+//testing roomUpdate 
+// try {
+//     modifyRes = await rooms.updateRoom(roomEleven._id.toString(), "Room 11", false, {"Double": 3}, 7000.00, createAvailbyDates("2025-01-02", "2025-02-02"))
+//     console.log(modifyRes)
+// } catch(e) {
+//     console.log(e)
+// }
+
+//testing for reservationUpdate
+// try {
+//     let modifyRoom = await rooms.updateRoom(roomEleven._id.toString(), )
+// } catch(e) {
+//     console.log(e)
+// }
+
+
 //adding a guest
 try {
     guestOne = await guests.createGuest("John", "Doe", 24, "A24294820", 9144093842, "john.doe@gmail.com");
@@ -133,14 +150,14 @@ try {
     console.log(e)
 }
 
-//adding a reservation 
-// try {
-//     reservationOne = await reservations.createReservation([guestOne._id.toString(), guestTwo._id.toString()], 3, roomEight._id.toString(), new Date('November 15, 2024'), 
-//     new Date('November 18, 2023'), true, true, 600.00)
-//     console.log(reservationOne)
-// } catch(e) {
-//     console.log(e)
-// }
+// adding a reservation 
+try {
+    reservationOne = await reservations.createReservation([guestOne._id.toString(), guestTwo._id.toString()], 3, roomEight._id.toString(), new Date('November 15, 2024'), 
+    new Date('November 18, 2023'), true, true, 600.00)
+    console.log(reservationOne)
+} catch(e) {
+    console.log(e)
+}
 
 //testing for getroomIDbynumber
 try {
