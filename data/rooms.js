@@ -3,11 +3,15 @@ import {ObjectId} from 'mongodb';
 import validation from '../helpers.js';
 
 
+
 export const getRoomById = async (id) => {
     id = validation.checkId(id, "room id")
     const roomCollection = await rooms();
     const room = await roomCollection.findOne({_id: new ObjectId(id)});
-    if (room === null) throw 'No room with that id';
+    if (room === null) {
+        console.error(`No room with ID ${id}`);
+        throw 'No room with that id';
+    }
     room._id = room._id.toString();
     return room;
 };

@@ -3,14 +3,18 @@ import exphbs from 'express-handlebars';
 import constructorMethod from './routes/index.js';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import {dirname} from 'path';
+import contactRoutes from './routes/contact.js';
 
+
+const app = express();
 
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 
-const app = express();
+
 
 // Handlebars setup
 const handlebars = exphbs.create({ defaultLayout: 'main' });
@@ -29,6 +33,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use('/public', express.static(path.join(__dirname, 'static')));
+app.use('/contact', contactRoutes);
 
 
 constructorMethod(app);
