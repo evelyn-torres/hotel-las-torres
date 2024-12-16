@@ -485,17 +485,64 @@ h1 {
 }
 
 
-/* Calendar */
-#room_calendar {
-  max-width: 1100px;
-  margin: 40px auto;
+/* Styling for the login form */
+/* Styling for the login form */
+.form-container {
+  max-width: 400px;
+  margin: 0 auto;
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  margin-bottom: 50px; /* Adds space below the form to separate it from the footer */
 }
 
-#room_calendar .fc-toolbar-title {
-  color: #161515; 
-  font-size: 1.5em; 
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  font-weight: bold; 
+.form-container h1 {
+  text-align: center;
+  color: rgb(224, 178, 40);
+  font-size: 36px;
+  margin-bottom: 20px;
+}
+
+.form-container label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: bold;
+  color: rgb(64, 87, 67);
+}
+
+.form-container input {
+  width: calc(100% - 10px); /* Adjust width to leave padding inside */
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  color: black;
+}
+
+.form-container input:focus {
+  border-color: rgb(224, 178, 40);
+  outline: none;
+  box-shadow: 0 0 5px rgba(224, 178, 40, 0.5);
+}
+
+.form-container button {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  font-weight: bold;
+  color: white;
+  background-color: rgb(64, 87, 67);
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.form-container button:hover {
+  background-color: rgb(224, 178, 40);
 }
