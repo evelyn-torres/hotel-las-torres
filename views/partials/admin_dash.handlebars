@@ -6,9 +6,43 @@
     <title>Admin Dashboard</title>
 </head>
 <body>
-    
+    <section>
+  <h1>Admin Dashboard</h1>
+  <div class="rooms-container">
+    {{!-- {{#if rooms}} --}}
+      {{#each rooms}}
+      <div class="room-card">
+        <img src="{{imageURL}}" alt="{{roomName}}" class="room-image" />
+        <div class="room-details">
+          <h2>{{roomName}}</h2>
+          <p><strong>Balcony:</strong> {{#if balcony}}Yes{{else}}No{{/if}}</p>
+          <p><strong>Pricing Per Night:</strong> ${{pricingPerNight}}</p>
+          <p><strong>Bed Sizes:</strong> 
+            {{#each bedSizes}}
+              {{@key}}: {{this}}<br>
+            {{/each}}
+          </p>
+          <div class="action-buttons">
+            <a href="/rooms/{{_id}}/bookingRoom" class="book-now-button">Book</a>
+            <a href="/rooms/{{_id}}/edit" class="edit-button">Edit</a>
+            <form action="/rooms/{{_id}}/delete" method="POST">
+                <button type="submit" class="delete-button">Delete</button>
+            </form>
+            <form action="/rooms/{{_id}}/outOfService" method="POST">
+                <button type="submit" class="out-of-service-button">Out of Service</button>
+            </form>
+        </div>
+        </div>
+      </div>
+      {{/each}}
+    {{!-- {{else}}
+      <p>No rooms available.</p>
+    {{/if}} --}}
+  </div>
+</section>
+
 </body>
 </html>
 
 
-<script src="/public/js/admin.js"></script>
+<script src="/js/admin_dash.js" defer></script>

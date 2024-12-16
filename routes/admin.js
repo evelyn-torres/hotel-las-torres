@@ -53,11 +53,16 @@ router.get('/dashboard', async (req,res) => {
             if(!req.session.user || req.session.user.toLowerCase() !== 'admin'){
                 return res.redirect('/login');
             }
-            const rooms = await roomData.getAllRooms(); // Example: Fetching room data
-            console.log('admin/dashboard in admin routes');
+            const roomList = await roomData.getAllRooms(); // Example: Fetching room data
+            roomList.forEach(room => {
+                room._id = room._id.toString();
+            });
+            console.log("test", roomList);
+            //console.log('admin/dashboard in admin routes');
             res.render('admin', {
                 pageTitle: "Admin Dashboard",
                 adminDetails: { name: "Admin Name", role: "Administrator" },
+                rooms: roomList,
                 partial: "admin_dash"
               
             });
