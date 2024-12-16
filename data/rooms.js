@@ -81,6 +81,7 @@ export const removeRoom = async(id) => {
     const deletionInfo = await roomCollection.findOneAndDelete({
       _id: new ObjectId(id)
     });
+    if(!deletionInfo.value) throw `Room with ID ${id} does not exist.`;
     if (!deletionInfo) throw `Could not delete room with id of ${id}`;
     return {...deletionInfo, deleted: true};
 };
