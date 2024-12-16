@@ -5,7 +5,6 @@ import * as guestData from './guests.js';
 import * as roomData from './rooms.js';
 import * as reservationData from './reservations.js'
 
-
 export const getCommentById = async (id) => {
     id = validation.checkId(id, "comment id")
     const commentCollection = await comments();
@@ -19,8 +18,6 @@ export const getAllComments = async() => {
     const commentCollection = await comments();
     return await commentCollection.find({}).toArray();
 }
-
-
 
 export const createComment = async(
     firstName, 
@@ -49,7 +46,6 @@ export const createComment = async(
     //checks for rating 
     if(typeof rating !== 'number') throw "Type of rating must be a number"
 
-
     //need to make sure the reservation id exists in the database to confirm the reservation occured.
     const reservation = await reservationData.getReservationById(reservationID);
     if (!reservation) {
@@ -60,7 +56,6 @@ export const createComment = async(
         throw `Room ID does not match the reservation's room.`;
     }
 
-
     const commentCollection = await comments();
     let newComment = {
         firstName: firstName, 
@@ -69,11 +64,10 @@ export const createComment = async(
         reservationID: reservationID, 
         feedback: feedback, 
         rating: rating,
-     //   createdAt: newDate()
     };
 
     const insertInfo = await commentCollection.insertOne(newComment);
-    if (!insertInfo.acknowledged || !insertInfo.insertedId) throw 'Could not add reservation';
+    if (!insertInfo.acknowledged || !insertInfo.insertedId) throw 'Could not add comment';
       
     const newId = insertInfo.insertedId.toString();
     const comment = await getCommentById(newId); 
