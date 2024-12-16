@@ -34,18 +34,21 @@ document.addEventListener('DOMContentLoaded', () => {
         // Add click event listeners to delete buttons
         document.querySelectorAll('.delete-button').forEach(button => {
             button.addEventListener('click', async (event) => {
+                event.preventDefault();
+
                 const roomId = event.target.getAttribute('data-id');
+                console.log('data-id', data-id)
                 if (confirm('Are you sure you want to delete this room?')) {
                     try {
+                        console.log('in front-end try for delete');
                         const response = await fetch(`/rooms/${roomId}`, {
                             method: 'DELETE',
                         });
-                        if (!response.ok) throw new Error('Failed to delete room');
-                        alert('Room deleted successfully');
+                       
                         fetchRooms(); // Refresh the room list
                     } catch (e) {
-                        console.error('Could not delete room:', e);
-                        alert('Failed to delete room');
+                        throw('Could not delete room:', e);
+                      //  alert('Failed to delete room');
                     }
                 }
             });

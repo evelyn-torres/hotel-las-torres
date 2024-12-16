@@ -127,26 +127,28 @@ router
     .route('/:roomId')
     .delete(async (req, res) => {
      // const {roomId} = req.params;
-     console.log('DELETE req received', req.params.id);
+     console.log('DELETE req received', req.params.roomId);
      try{
 
       const roomId = validation.checkId(req.params.roomId, "room ID");
       await roomData.removeRoom(roomId);
+      console.log('DA ROOM DATA:', roomData);
 
        // await roomData.removeRoom(roomId);
-       // res.status(200).json({ success: true, message: 'Room deleted successfully' });
-        res.redirect('/admin/dashboard');
+     //  res.status(200).json({ success: true, messsage: 'Room deleted successfully' });
+     //res.status(200).json({ success: true, message: 'Room deleted successfully' });;
+     res.redirect('/admin/dashboard');
+
       }catch(error){
         res.status(500).json({ error: error.message || 'Internal Server Error' })
       }
     });
   router
-    .route('/addRoom')
+    .route('/addRoomForm')
     .get((req,res) =>{
-      try{res.render('addRoomForm', {
-    pageTitle: 'Add New Room',
-    partial:"add_room",
-    hasErrors: false,
+      try{res.render('addRoom', {
+      pageTitle: 'Add New Room',
+      hasErrors: false,
   })}catch(e){
       console.error(e);
       res.status(500).json({error: 'Internal Server Error'})
