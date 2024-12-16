@@ -23,6 +23,7 @@ router.route('/')
             
             userInput = validation.checkString(userInput, "Username");
             passInput = validation.checkString(passInput, "Password");
+          
             const admin = await adminData.grabAdminByLogin(userInput, passInput);
             console.log(admin);
             if(!admin){

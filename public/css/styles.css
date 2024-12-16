@@ -546,3 +546,73 @@ h1 {
 .form-container button:hover {
   background-color: rgb(224, 178, 40);
 }
+
+
+.logout-button{
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: rgb(64, 87, 67); /* Match the theme color */
+  color: white;
+  text-decoration: none;
+  border-radius: 4px;
+  font-size: 16px;
+  font-family: 'Times New Roman', Times, serif;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin: 20px auto; /* Center the button */
+  display: block; /* Make it a block element */
+  text-align: center; /* Center the text */
+}
+
+
+
+#rooms-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+  font-size: 18px;
+  text-align: left;
+}
+
+#rooms-table th, #rooms-table td {
+  padding: 12px;
+  border-bottom: 1px solid #ddd;
+}
+
+#rooms-table th {
+  background-color: rgb(64, 87, 67);
+  color: white;
+}
+
+#rooms-table tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.action-buttons button {
+  padding: 5px 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.edit-button {
+  background-color: rgb(224, 178, 40);
+  color: white;
+}
+
+.delete-button {
+  background-color: red;
+  color: white;
+}
+
+.out-of-service-button {
+  background-color: gray;
+  color: white;
+}

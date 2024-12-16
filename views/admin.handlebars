@@ -4,16 +4,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="/public/css/styles.css"> 
 </head>
 <body>
     <h1>Welcome to the Admin Dashboard</h1>
-    <p>Name: {{adminDetails.firstName}}</p>
-    <p>Role: {{adminDetails.role}}</p>
-    <p>You are logged in as an admin.</p>
-
-    <a href="/logout">Logout</a>
+    <table id="rooms-table">
+        <thead>
+            <tr>
+                <th>Room Number</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Room rows will be dynamically added here -->
+        </tbody>
+    </table>
+    
+    <button class="logout-button" onclick="location.href='/logout'">Logout</button>
 </body>
 </html>
 
 
-<script src="/public/js/admin.js"></script>
+<script src="/public/js/admin_dash.js"></script>

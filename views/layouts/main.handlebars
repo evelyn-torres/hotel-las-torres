@@ -12,7 +12,11 @@
 </head>
 <body>
     <header>
-        {{>taskbar}} 
+         {{#if isAdmin}}
+            {{> adminTaskbar}}
+        {{else}}
+            {{> taskbar}}
+        {{/if}}
         {{!-- <nav>
             <li><a href="/"> Home </a></li>
             <li><a href="/rooms">Check Out Our Rooms</a></li>
