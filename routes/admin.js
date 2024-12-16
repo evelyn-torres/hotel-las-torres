@@ -16,7 +16,9 @@ router.route('/')
         }
     })
     .post( async (req,res) => { 
+        console.log('in post but before try');
         try { //check if user/pass combo registers as user or not → user/pass fomrat checked in function
+            console.log('reqbody', req.body);
             let {userInput, passInput} = req.body;
             
             userInput = validation.checkString(userInput, "Username");
@@ -24,12 +26,8 @@ router.route('/')
             const admin = await adminData.grabAdminByLogin(userInput, passInput);
             console.log(admin);
             if(!admin){
-                return res.render('login', { 
-                    partial: "dead_server_script", 
-                    pageTitle: "Employee Login", 
-                    error: 'Invalid username or password' 
-            })
-        }
+                return res.status(401).json({ error: 'Invalid username or password' });
+            }
             req.session.user = 'admin'; //stores the logged in admin in session 
             console.log(admin);
 
@@ -40,6 +38,8 @@ router.route('/')
 
             console.log('in catch statement for post of admin login');
             console.error(e);
+
+
             return res.render('login', { 
                 partial: "dead_server_script", 
                 pageTitle: "Employee Login", 
