@@ -25,74 +25,62 @@ let reservationOne = undefined;
 let commentOne = undefined; 
 let modifyRes = undefined; 
 
-/* populate set dates object for room availibility */
-function createAvailbyDates(begin, end){
-    let dates = {open:[], booked:[]};
-    begin = new Date(begin).valueOf();
-    end = new Date(end).valueOf();
-    let curr = begin;
-    while(curr < end){
-        let temp = new Date(curr).toISOString().slice(0,10);
-        dates.open.push(temp);
-        curr += 86400000; //add a new day to current date for rooms
-    }
-    return dates;
-};
- //createAvailbyDates("2025-01-02", "2025-02-02"); /* CAN CHANGE BASED ON YEAR -→ will use only 2025 for project*/
+
+ //"2025-01-02", "2025-02-02"); /* CAN CHANGE BASED ON YEAR -→ will use only 2025 for project*/
 
 //adding room one
 console.log('Adding rooms:');
 try {
-    roomOne = await rooms.createRoom("Room 1", false, {"Double": 1, "Semi-Double": 1}, 120.00, createAvailbyDates("2025-01-02", "2025-02-02"));
+    roomOne = await rooms.createRoom("Room 1", false, {"Double": 1, "Semi-Double": 1}, 120.00, "2025-01-02", "2025-02-02");
 } catch(e) {
     console.log(e)
 }
 
 //adding room two 
 try {
-    roomTwo = await rooms.createRoom("Room 2", false, {"Twin": 1, "Semi-Double": 3}, 100.00, createAvailbyDates("2025-01-02", "2025-02-02"))
+    roomTwo = await rooms.createRoom("Room 2", false, {"Twin": 1, "Semi-Double": 3}, 100.00, "2025-01-02", "2025-02-02");
 } catch(e) {
     console.log(e)
 }
 
 //adding room three 
 try {
-    roomThree = await rooms.createRoom("Room 3", false, {"Double": 1, "Semi-Double": 2}, 100.00, createAvailbyDates("2025-01-02", "2025-02-02"))
+    roomThree = await rooms.createRoom("Room 3", false, {"Double": 1, "Semi-Double": 2}, 100.00, "2025-01-02", "2025-02-02");
 } catch(e) {
     console.log(e)
 }
 
 //adding room four 
 try {
-    roomFour = await rooms.createRoom("Room 4", false, {"Double": 1}, 100.00, createAvailbyDates("2025-01-02", "2025-02-02"))
+    roomFour = await rooms.createRoom("Room 4", false, {"Double": 1}, 100.00, "2025-01-02", "2025-02-02");
 } catch(e) {
     console.log(e)
 }
 
 //adding room five 
 try {
-    roomFive = await rooms.createRoom("Room 5", false, {"Double": 1}, 100.00, createAvailbyDates("2025-01-02", "2025-02-02"))
+    roomFive = await rooms.createRoom("Room 5", false, {"Double": 1}, 100.00, "2025-01-02", "2025-02-02");
 } catch(e) {
     console.log(e)
 }
 
 //adding room six 
 try {
-    roomSix = await rooms.createRoom("Room 6", false, {"Double": 1, "Semi-Double": 1}, 100.00, createAvailbyDates("2025-01-02", "2025-02-02"))
+    roomSix = await rooms.createRoom("Room 6", false, {"Double": 1, "Semi-Double": 1}, 100.00, "2025-01-02", "2025-02-02");
 } catch(e) {
     console.log(e)
 }
 
 //adding room seven 
 try {
-    roomSeven = await rooms.createRoom("Room 7", false, {"Double": 1, "Semi-Double": 2}, 100.00, createAvailbyDates("2025-01-02", "2025-02-02"))
+    roomSeven = await rooms.createRoom("Room 7", false, {"Double": 1, "Semi-Double": 2}, 100.00, "2025-01-02", "2025-02-02");
 } catch(e) {
     console.log(e)
 }
 
 //adding room eight
 try {
-    roomEight = await rooms.createRoom("Room 8", false, {"Double": 2}, 100.00, createAvailbyDates("2025-01-02", "2025-02-02"))
+    roomEight = await rooms.createRoom("Room 8", false, {"Double": 2}, 100.00, "2025-01-02", "2025-02-02");
     console.log(roomEight)
 } catch(e) {
     console.log(e)
@@ -100,28 +88,28 @@ try {
 
 //adding room nine
 try {
-    roomNine = await rooms.createRoom("Room 9", false, {"Double": 1, "Semi-Double": 2}, 100.00, createAvailbyDates("2025-01-02", "2025-02-02"))
+    roomNine = await rooms.createRoom("Room 9", false, {"Double": 1, "Semi-Double": 2}, 100.00, "2025-01-02", "2025-02-02");
 } catch(e) {
     console.log(e)
 }
 
 //adding room ten
 try {
-    roomTen = await rooms.createRoom("Room 10", false, {"Twin": 1, "Semi-Double": 2}, 100.00, createAvailbyDates("2025-01-02", "2025-02-02"))
+    roomTen = await rooms.createRoom("Room 10", false, {"Twin": 1, "Semi-Double": 2}, 100.00, "2025-01-02", "2025-02-02");
 } catch(e) {
     console.log(e)
 }
 
 //adding room eleven
 try {
-    roomEleven = await rooms.createRoom("Room 11", false, {"Double": 3}, 100.00, createAvailbyDates("2025-01-02", "2025-02-02"))
+    roomEleven = await rooms.createRoom("Room 11", false, {"Double": 3}, 100.00, "2025-01-02", "2025-02-02");
 } catch(e) {
     console.log(e)
 }
 
 //testing roomUpdate 
 // try {
-//     modifyRes = await rooms.updateRoom(roomEleven._id.toString(), "Room 11", false, {"Double": 3}, 7000.00, createAvailbyDates("2025-01-02", "2025-02-02"))
+//     modifyRes = await rooms.updateRoom(roomEleven._id.toString(), "Room 11", false, {"Double": 3}, 7000.00, "2025-01-02", "2025-02-02"))
 //     console.log(modifyRes)
 // } catch(e) {
 //     console.log(e)

@@ -6,8 +6,19 @@
                 {{successMessage}}
             </div>
         {{/if}}
-    <div id='room_calendar' data-room_id="{{roomId}}"></div>
-<form action="/rooms/{{roomId}}/bookingRoom" method="POST" class="bookingForm" id="bookingForm">
+        {{#if hasErrors}}
+      <ul class="error-list">
+          {{#each errors}}
+          <li>
+          {{this}}
+          </li>
+          {{/each}}
+      </ul>
+    {{/if}}
+    <div style="padding: 20px;">
+      <div id='room_calendar' data-room_id="{{roomId}}"></div>
+    </div>
+    <form action="/rooms/{{roomId}}/bookingRoom" method="POST" class="bookingForm" id="bookingForm">
       <input type="hidden" name="roomId" value="{{roomId}}">
       <label for="checkIn">Check-in Date:</label>
       <input type="date" id="checkIn" name="checkIn" required><br>
@@ -48,15 +59,7 @@
       <button type="submit">Book Now</button>
     </form>
 
-    {{#if hasErrors}}
-      <ul class="error-list">
-          {{#each errors}}
-          <li>
-          {{this}}
-          </li>
-          {{/each}}
-      </ul>
-    {{/if}}
+    
     <ul id="newBooking"> </ul>
   </body>
 </html>
