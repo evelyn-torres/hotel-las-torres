@@ -1,3 +1,4 @@
+  <!DOCTYPE html>
   <body>
     <h1>Book Your Stay Today!</h1>
         {{#if success}}
@@ -5,8 +6,17 @@
                 {{successMessage}}
             </div>
         {{/if}}
-    <div id='calendar'></div>
-    <form action='/booking' method="POST" class="bookingForm" id="bookingForm">
+        {{#if hasErrors}}
+            <ul class="error-list">
+                {{#each errors}}
+                <li>
+                {{this}}
+                </li>
+                {{/each}}
+            </ul>
+        {{/if}}
+    <div id='calendar_all'></div>
+    {{!-- <form action='/booking' method="POST" class="bookingForm" id="bookingForm"> --}}
       <label for="checkIn">Check-in Date:</label>
       <input type="date" id="checkIn" name="checkIn" required><br>
 
@@ -56,16 +66,8 @@
       <input type="email" id="email" name="email" required><br>
 
       <button type="submit">Submit</button>
-    </form>
+    {{!-- </form> --}}
 
-    {{#if hasErrors}}
-      <ul class="error-list">
-          {{#each errors}}
-          <li>
-          {{this}}
-          </li>
-          {{/each}}
-      </ul>
-    {{/if}}
     <ul id="newBooking"> </ul>
   </body>
+</html>

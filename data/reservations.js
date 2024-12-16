@@ -64,11 +64,13 @@ export const createReservation = async(
 
     const begin = new Date(checkInDate);
     const end = new Date(checkOutDate);
+    if (end.getTime() - begin.getTime() < 0) throw "Booking Error: Check-Out date must be after Check-In Date.";
+    if (end.getTime()-begin.getTime() > 2678400000) throw "Booking Error: Per our Hotel Policy, You cannot book a room for more than 31 days. Please select another date.";
     const daysBooked = end.getDate()-begin.getDate();
     let curr = begin.valueOf();
     for (let i = 0; i < daysBooked; i++){
         if (chosenRoom.availability.booked.includes(new Date(curr).toISOString().slice(0,10))){ //if room is booked, ask to book another range
-            throw `Booking Error: Room is booked on ${new Date(curr).toISOString().slice(0,10)}, please select another date range!`
+            throw `Booking Error: Room is booked on ${new Date(curr).toISOString().slice(0,10)}, please select another date.`
             break;
         }
         else if(chosenRoom.availability.open.includes(new Date(curr).toISOString().slice(0,10))){ //if room is open, check each date and add to current
@@ -79,7 +81,7 @@ export const createReservation = async(
             curr += 86400000;
         }
         else{ //date isn't offered, choose another day
-            throw `Booking Error: We currently aren't offering this room on ${new Date(curr).toISOString().slice(0,10)}, please select another date!`
+            throw `Booking Error: We currently aren't offering this room on ${new Date(curr).toISOString().slice(0,10)}, please select another date.`
         }
     }
     
@@ -95,7 +97,7 @@ export const createReservation = async(
     //checks for deposit paid 
 
     //checks for totalCost 
-    console.log('avail check', chosenRoom.availability);
+    //console.log('avail check', chosenRoom.availability);
     const reservationCollection = await reservations();
     let newReservation = {
         guestFirstName: guestFirstName,
