@@ -535,8 +535,23 @@ h1 {
   background-color: rgb(224, 178, 40);
 }
 
+.dashboard-actions{
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 20px;
+}
 
-.logout-button{
+.dashboard-actions a {
+  margin-right: 10px;
+  padding: 10px 15px;
+  color: #fff;
+  text-decoration: none;
+  background-color: #007bff;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.dashboard-actions .logout-button{
   display: inline-block;
   padding: 10px 20px;
   background-color: rgb(64, 87, 67); /* Match the theme color */
@@ -551,6 +566,10 @@ h1 {
   margin: 20px auto; /* Center the button */
   display: block; /* Make it a block element */
   text-align: center; /* Center the text */
+}
+
+.dashboard-actions .add-room-button {
+  background-color: #28a745;
 }
 
 .action-buttons {

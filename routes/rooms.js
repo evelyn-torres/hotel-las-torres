@@ -2,6 +2,8 @@ import {Router} from 'express';
 const router = Router();
 import {roomData, reservationData} from '../data/index.js';
 import { rooms } from '../config/mongoCollections.js';
+import validation from '../helpers.js';
+
 
 
 router //show all rooms
@@ -13,7 +15,7 @@ router //show all rooms
             //console.log("testing", roomSel);
             room._id = room._id.toString();
           });
-          //console.log(roomList);
+          console.log(roomList);
           res.render('rooms', {rooms: roomList, pageTitle: "Rooms", partial: 'rooms'});
         } catch (e) {
           res.status(500).json({error: e});
@@ -120,5 +122,64 @@ router
             res.status(500).json({ error: 'Internal server error' });
         }
     });
+
+  router
+    .route('/:roomId')
+    .delete(async (req, res) => {
+     // const {roomId} = req.params;
+     console.log('DELETE req received', req.params.id);
+     try{
+
+      const roomId = validation.checkId(req.params.roomId, "room ID");
+      await roomData.removeRoom(roomId);
+
+       // await roomData.removeRoom(roomId);
+       // res.status(200).json({ success: true, message: 'Room deleted successfully' });
+        res.redirect('/admin/dashboard');
+      }catch(error){
+        res.status(500).json({ error: error.message || 'Internal Server Error' })
+      }
+    });
+  router
+    .route('/addRoom')
+    .get((req,res) =>{
+      try{res.render('addRoomForm', {
+    pageTitle: 'Add New Room',
+    partial:"add_room",
+    hasErrors: false,
+  })}catch(e){
+      console.error(e);
+      res.status(500).json({error: 'Internal Server Error'})
+  }
+    })
+  .post(async (req, res)=>{
+    const newRoomData = req.body;
+    let errors =[];
+    try{
+      const roomName = validation.checkString(newRoomData.roomName, 'Room Name');
+      const balcony = newRoomData.balcony === 'true';
+      const bedSizes = JSON.parse(newRoomData.bedSizes); 
+      const pricingPerNight = parseFloat(newRoomData.pricingPerNight);
+      const availability = JSON.parse(newRoomData.availability); 
+      const newRoom = await roomData.createRoom(roomName, balcony, bedSizes, pricingPerNight, availability);
+
+      res.status(201).render('rooms', {
+        success: true,
+        successMessage: `Room "${newRoom.roomName}" has been successfully added.`,
+        rooms: await roomData.getAllRooms(),
+        pageTitle: 'Rooms',
+        partial: 'rooms',
+      });
+    }catch(e){
+      console.error(e);
+      errors.push(e);
+      res.status(400).render('addRoom', {
+        pageTitle: 'Add a New Room',
+        hasErrors: true,
+        errors: errors,
+        partial: 'rooms',
+      });
+    }
+  })
 
 export default router;
