@@ -39,10 +39,10 @@ document.getElementById("feedback-form").addEventListener("submit", async (event
         const response = await axios.post("/contact", {
                 firstName,
                 lastName,
+                roomID,
                 reservationID: reservationId,
                 feedback,
                 rating,
-            
         })
        // let comments = response.data.comments;
 

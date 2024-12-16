@@ -43,7 +43,8 @@ export const createReservation = async(
     //     throw `Error: Invalid Age input ${age}`;
     // }  
     // age = parseInt(age); 
-    if (age < 18) throw "Must be 18 years or older to book a room"
+    if (age < 18) throw "Must be 18 years or older to book a room";
+    if (age > 120) throw "Please enter a valid age"
     phone = phone.slice(0,3)+phone.slice(4,7)+phone.slice(8); //takes the "-" out
     if (phone.length != 10 || parseInt(phone) < 1111111111 || parseInt(phone) > 9999999999) throw "Error: invalid phone number input";
     //TO-DO: validate email
@@ -54,7 +55,7 @@ export const createReservation = async(
             roomCapacity +=1;
         }
         roomCapacity += elem[1];
-
+        
     });
     numOfGuests = parseInt(numOfGuests);
     if (numOfGuests > roomCapacity) throw "Error: Guest number exceeds room capacity";
@@ -89,6 +90,7 @@ export const createReservation = async(
     // if (!Array.isArray(guestIDs) || guestIDs.length === 0) {
     //     throw "guestIDs must be a non-empty array of valid guest IDs";
     // }
+    govID = validation.checkString(govID)
 
     //checks for parking 
 
