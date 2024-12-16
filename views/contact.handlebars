@@ -8,14 +8,12 @@
 </head>
 
 <body>
-
     {{#if error}}
     <div class="error">{{error}}</div>
     {{/if}}
     {{#if success}}
     <div class="success">{{successMessage}}</div>
     {{/if}}
-
 
 <div class="feedback-form">
 <form id="feedback-form" method="POST" action="/contact">
@@ -52,6 +50,19 @@
 
 <div id="comments-section">
     <h2>Comments</h2>
+    {{#if comments}}
+        {{#each comments}}
+        <div class="comment">
+            <p><strong>{{this.firstName}} {{this.lastName}}</strong></p>
+            <p>{{this.feedback}}</p>
+            <p><span>Rating: {{this.rating}}/5</span></p>
+        </div>
+        {{/each}}
+    {{else}}
+        <p style="text-align: center; font-size: 18px; color: grey;">
+            No comments yet. Be the first to leave one!
+        </p>
+    {{/if}}
 </div>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>

@@ -16,23 +16,26 @@ router
                 'contact', {
                 partial: 'contact_script',
                 error: 'An error occurred while loading the contact page.'
-              });
-            
-                
+              });   
         }
     })
     .post(async (req, res) => {
         try {
-            const { firstName, lastName, reservationID, feedback, rating } = req.body;
-
-            console.log(req.body);
+            // const { firstName, lastName, reservationID, feedback, rating } = req.body;
+            const { firstName, lastName, reservationId, feedback, rating } = req.body;
+            let newFirstName = xss(firstName);
+            let newLastName = xss(lastName);
+            let newResID = xss(reservationId);
+            let newFeedback = xss(feedback);
             // input validation;
-            firstName = validation.checkString(xss(firstName), "First Name");
-            lastName = validation.checkString(xss(lastName), "Last Name"); 
-            reservationID = validation.checkString(xss(reservationID), "Reservation ID")
-            feedback = validation.checkString(xss(feedback), "Feedback");
+
+            console.log("what's happening here")
+            newFirstName = validation.checkString(newFirstName, "First Name");
+            console.log(newFirstName)
+            newLastName = validation.checkString(lastName, "Last Name"); 
+            newResID = validation.checkString(newResID, "Reservation ID")
+            newFeedback = validation.checkString(newFeedback, "Feedback");
     
-            
             if (!rating || typeof rating !== 'number' || rating < 1 || rating > 5) {
                 console.log("in the rating 400");
                 return res.status(400).json({ error: 'Invalid or missing rating. It must be a number between 1 and 5.'});
@@ -40,21 +43,20 @@ router
             
             //get room ID for mongo
             // use the reservationID in mongo from seed.js for testing
-            let reservation = await reservationData.getReservationById(reservationID)
-            
+            let reservation = await reservationData.getReservationById(newResID) 
+            let roomID = reservation.roomID;
+            console.log(roomID)
             if(!reservation){
-            
                 //throw 'Error could not find reservation'
                 return res.status(404).json({error: 'Reservation not found.'});
             } 
-
 
             // Save data to the MongoDB collection
             let newCommentInfo = await commentData.createComment(
                 firstName, 
                 lastName, 
-              //  reservation.roomID, 
-                reservationID, 
+                roomID, 
+                newResID, 
                 feedback, 
                 rating);
 
@@ -63,7 +65,6 @@ router
                }
 
             const updatedComments = await commentData.getAllComments();
-
     
         //    return res.status(200).redirect('/contact');
              res.status(201).render('contact', {
