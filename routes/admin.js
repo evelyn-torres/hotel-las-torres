@@ -2,6 +2,7 @@ import {Router} from 'express';
 import * as adminData from '../data/admin.js';
 import validation from '../helpers.js';
 import {roomData} from '../data/index.js';
+import xss from 'xss';
 
 
 
@@ -21,8 +22,8 @@ router.route('/')
             console.log('reqbody', req.body);
             let {userInput, passInput} = req.body;
             
-            userInput = validation.checkString(userInput, "Username");
-            passInput = validation.checkString(passInput, "Password");
+            userInput = validation.checkString(xss(userInput), "Username");
+            passInput = validation.checkString(xss(passInput), "Password");
           
             const admin = await adminData.grabAdminByLogin(userInput, passInput);
             console.log(admin);

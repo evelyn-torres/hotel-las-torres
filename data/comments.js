@@ -25,7 +25,6 @@ export const getAllComments = async() => {
 export const createComment = async(
     firstName, 
     lastName,
-    roomID, 
     reservationID, 
     feedback, 
     rating
@@ -65,7 +64,6 @@ export const createComment = async(
     let newComment = {
         firstName: firstName, 
         lastName: lastName, 
-        roomID: roomID, 
         reservationID: reservationID, 
         feedback: feedback, 
         rating: rating,

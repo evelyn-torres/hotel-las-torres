@@ -2,7 +2,7 @@ import express from "express";
 const router = express.Router();
 import {commentData, reservationData}  from "../data/index.js";
 import validation from '../helpers.js';
-
+import xss from 'xss';
 router
     .route('/')
     .get(async (req, res) => {
@@ -25,13 +25,12 @@ router
         try {
             const { firstName, lastName, reservationID, feedback, rating } = req.body;
 
-
             console.log(req.body);
             // input validation;
-            firstName = validation.checkString(firstName, "First Name");
-            lastName = validation.checkString(lastName, "Last Name"); 
-            reservationID = validation.checkString(reservationID, "Reservation ID")
-            feedback = validation.checkString(feedback, "Feedback");
+            firstName = validation.checkString(xss(firstName), "First Name");
+            lastName = validation.checkString(xss(lastName), "Last Name"); 
+            reservationID = validation.checkString(xss(reservationID), "Reservation ID")
+            feedback = validation.checkString(xss(feedback), "Feedback");
     
             
             if (!rating || typeof rating !== 'number' || rating < 1 || rating > 5) {

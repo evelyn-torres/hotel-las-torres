@@ -1,7 +1,7 @@
 import express from "express";
 const router = express.Router();
 import { roomData, reservationData } from "../data/index.js";
-
+import xss from 'xss';
 
 router.route('/').get(async (req, res) => {
   try {
@@ -26,13 +26,15 @@ router.route('/').get(async (req, res) => {
     else {
       parking = false; 
     }
-    let numOfGuests = parseInt(newBookingData.numOfGuests);
-    let guestFirstName = newBookingData.guestFirstName;
-    let guestLastName = newBookingData.guestLastName; 
-    let govID = newBookingData.govID;
-    let age = newBookingData.age; 
-    let phone = newBookingData.phone; 
-    let email = newBookingData.email;  
+    let numOfGuests = parseInt(xss(newBookingData.numOfGuests));
+    let guestFirstName = xss(newBookingData.guestFirstName);
+    if(guestFirstName !== "Ayushi")
+      throw "should be Ayushi"
+    let guestLastName = xss(newBookingData.guestLastName); 
+    let govID = xss(newBookingData.govID);
+    let age = xss(newBookingData.age); 
+    let phone = xss(newBookingData.phone); 
+    let email = xss(newBookingData.email);  
     let totalcost = 0; //setting this as 0 for now 
 
     let newBookingInfo = await reservationData.createReservation(guestFirstName, guestLastName, govID, age, phone,
@@ -54,7 +56,6 @@ router.route('/').get(async (req, res) => {
   }
 
   if (errors.length > 0){
-    //console.log(errors);
     return res.render("roomBooking", {hasErrors: true, errors: errors, partial: "rooms"});
  }
 });
