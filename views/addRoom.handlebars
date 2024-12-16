@@ -3,11 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/public/css/styles.css"> 
     <title>Add Room</title>
 </head>
 <body>
     <h1>Add a New Room</h1>
-    <form action="/rooms/add" method="POST">
+    <form action="/rooms/addRoomForm" method="POST">
         <label for="roomName">Room Name:</label>
         <input type="text" id="roomName" name="roomName" required><br>
         
@@ -27,3 +28,4 @@
     </form>
 </body>
 </html>
+

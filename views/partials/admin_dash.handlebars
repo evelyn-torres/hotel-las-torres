@@ -11,9 +11,10 @@
   <div class = "dashboard-actions">
 
    <form action="/logout" method="GET">
-    <button type="submit" class="logout-button">Logout</button>
+     <button type="submit" class="logout-button">Logout</button>
     </form>
-    <a href="/rooms/add" class="add-room-button">Add Room</a>
+
+    <a href="/rooms/addRoomForm" class="add-room-button">Add Room</a>
   </div>
   <div class="rooms-container">
     {{!-- {{#if rooms}} --}}
@@ -32,8 +33,8 @@
           <div class="action-buttons">
             <a href="/rooms/{{_id}}/bookingRoom" class="book-now-button">Book</a>
             <a href="/rooms/{{_id}}/edit" class="edit-button">Edit</a>
-            <form action="/rooms/{{roomId}}?_method=DELETE" method="POST">
-                <button type="submit">Delete Room</button>
+            <form action="/rooms/{{_id}}?_method=DELETE" method="POST">
+                <button type="submit" class="delete-button">Delete</button>
             </form>
             <form action="/rooms/{{_id}}/outOfService" method="POST">
                 <button type="submit" class="out-of-service-button">Out of Service</button>
