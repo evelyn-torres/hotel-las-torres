@@ -48,7 +48,7 @@ router
             console.log(roomID)
             if(!reservation){
                 //throw 'Error could not find reservation'
-                return res.status(404).json({error: 'Reservation not found.'});
+                throw 'Reservation not found.';
             } 
 
             // Save data to the MongoDB collection
@@ -76,7 +76,6 @@ router
         } catch (error) {
             //console.error(error);
             const commentList = await commentData.getAllComments();
-            console.log(commentList);
             console.log("in the 400 in catch");
             res.status(400).render('contact', {
                 partial: 'contact_script',

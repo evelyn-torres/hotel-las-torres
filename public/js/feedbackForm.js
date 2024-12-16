@@ -1,111 +1,14 @@
-// document.getElementById("feedback-form").addEventListener("submit", async (event) =>{
-//     event.preventDefault();
 
-//     const errors=[];
-
-//     const firstName = document.getElementById("firstName").value.trim();
-//     const lastName = document.getElementById("lastName").value.trim();
-//     const reservationId = document.getElementById('reservationID').value.trim();
-//     const feedback = document.getElementById('feedback').value.trim();
-//     const rating = document.getElementById("rating").value;
-
-//     if (!firstName || typeof firstName !== 'string' || firstName.length < 2 || firstName.length > 25 || /\d/.test(firstName)) {
-//         console.log("pass1")
-//         errors.push("First name must be between 2-25 characters, and cannot contain numbers or spaces.");
-//     }
-//     if (!lastName || typeof lastName !== 'string' || lastName.length < 2 || lastName.length > 25 || /\d/.test(lastName)) {
-//         console.log("pass2")
-//         errors.push("Last name must be between 2-25 characters, and cannot contain numbers or spaces.");
-//     }
-//     if (!reservationId){
-//         console.log("pass3")
-//         errors.push('Must provide a valid reservation ID');
-//     }
-
-//     if(!feedback){
-//         console.log("pass4")
-//         errors.push('Must provide feedback');
-//     }
-//     if(!rating ||  isNaN(rating)){
-//         console.log("pass5")
-//         errors.push("Please select a rating.");
-//     }
-
-//     if(errors.length > 0){
-//         console.log("pass6")
-//         console.log(errors);
-//         displayErrors(errors);
-//         return; 
-//     }
-//     try{
-//         console.log("in try")
-//         const response = await axios.post("/contact", {
-//                 firstName,
-//                 lastName,
-//                 roomID,
-//                 reservationID: reservationId,
-//                 feedback,
-//                 rating,
-//         })
-//        // let comments = response.data.comments;
-
-//        if (response.status === 201) {
-//         // Display updated comments if the form submission is successful
-//         const comments = response.data.comments || [];
-//         displayComments(comments);
-
-//         // Reset the form
-//         document.getElementById("feedback-form").reset();
-//         clearErrors();
-//         displaySuccess(response.data.successMessage || "Feedback submitted successfully!");
-//     }
-// } catch (error) {
-//     if (error.response && error.response.data && error.response.data.error) {
-//         displayErrors([error.response.data.error]);
-//     } else {
-//         displayErrors(["An unexpected error occurred. Please try again later."]);
-//     }
-// }
-
-//       function displayErrors(errors) {
-//         let errorDiv = document.querySelector(".error") || document.createElement("div");
-//         errorDiv.className = "error";
-//         errorDiv.innerHTML = errors.map(err => `<p>${err}</p>`).join("");
-//         document.getElementById("feedback-form").prepend(errorDiv);
-//     }
-
-//     function clearErrors() {
-//         const errorDiv = document.querySelector(".error");
-//         if (errorDiv) {
-//             errorDiv.remove();
-//         }
-//     }
-
-//     function displaySuccess(message) {
-//         let successDiv = document.querySelector(".success") || document.createElement("div");
-//         successDiv.className = "success";
-//         successDiv.innerHTML = `<p>${message}</p>`;
-//         document.getElementById("feedback-form").prepend(successDiv);
-
-//         setTimeout(() => {
-//             if (successDiv) successDiv.remove();
-//         }, 5000);
-//     }
-
-//     function displayComments(comments) {
-//         const commentsSection = document.getElementById("comments-section");
-//         if (commentsSection) {
-//             commentsSection.innerHTML = comments.map(comment =>
-//                 `<div class="comment">
-//                     <p><strong>${comment.firstName} ${comment.lastName}</strong></p>
-//                     <p>${comment.feedback}</p>
-//                     <p>Rating: ${comment.rating}</p>
-//                 </div>`
-//             ).join("");
-//         }
-//     }
-// });
-
+function checkString(strVal, varName) {
+    if (!strVal) throw `Error: You must supply a ${varName}!`;
+    if (typeof strVal !== 'string') throw `Error: ${varName} must be a string!`;
+    strVal = strVal.trim();
+    if (strVal.length === 0)
+      throw `Error: ${varName} cannot be an empty string or string with just spaces`;
+    if (!isNaN(strVal))
+      throw `Error: ${strVal} is not a valid value for ${varName} as it only contains digits`;
+    return strVal;
+}
 
 (function($) {
     document.getElementById("feedback-form").addEventListener("submit", async (event) => {
@@ -120,18 +23,48 @@
         let rating = document.getElementById("rating").value;
         rating = parseInt(rating, 10); 
 
-        if (!firstName || typeof firstName !== "string" || firstName.length < 2 || firstName.length > 25 || /\d/.test(firstName)) {
-            errors.push("First name must be between 2-25 characters, and cannot contain numbers or spaces.");
+        //firstName checks 
+        try {
+            firstName = checkString(firstName, "First Name")
+            if (!firstName || firstName.length < 2 || firstName.length > 25 || /\d/.test(firstName)) {
+                throw "First name must be between 2-25 characters, and cannot contain numbers or spaces.";
+            }
+        } catch(e) {
+            errors.push(e)
         }
-        if (!lastName || typeof lastName !== "string" || lastName.length < 2 || lastName.length > 25 || /\d/.test(lastName)) {
-            errors.push("Last name must be between 2-25 characters, and cannot contain numbers or spaces.");
+
+        //last name checks 
+        try {
+            lastName = checkString(lastName, "Last name");
+            if (!lastName || lastName.length < 2 || lastName.length > 25 || /\d/.test(lastName)) {
+                throw "Last name must be between 2-25 characters, and cannot contain numbers or spaces.";
+            }
+        } catch(e) {
+            errors.push(e)
+        }   
+
+        //reservationId checks    
+        try {
+            reservationId = checkString(reservationId, "Reservation ID");
+            if (!reservationId) {
+                throw "Must provide a reservation ID.";
+            }
+        } catch(e) {
+            errors.push(e)
         }
-        if (!reservationId) {
-            errors.push("Must provide a valid reservation ID.");
+
+        //feedback checks 
+        try {
+            feedback = checkString(feedback, "Feedback");
+            if (!feedback) {
+                throw "Must provide feedback.";
+            }
+            if (feedback.length < 10) throw "Feedback must be longer than 10 characters"; 
+            if (feedback.length > 300) throw "Please provide a shorter feedback. Must be shorter than 300 characters."
+        } catch(e) {
+            errors.push(e)
         }
-        if (!feedback) {
-            errors.push("Must provide feedback.");
-        }
+
         if (!rating || isNaN(rating) || rating < 1 || rating > 5) {
             errors.push("Please select a valid rating between 1 and 5.");
         }
@@ -154,18 +87,23 @@
                 method: "POST",
                 url: "/contact",
                 contentType: "application/json",
-                data: JSON.stringify(feedbackData)
-            })
-            .done(function(response) {
-                window.location.href = "/contact";
-            })
-            .fail(function(error) {
-                console.log("HELLOOOO")
-                const errorMessage = error.responseJSON?.message || "Failed to submit feedback. Please try again.";
-                alert("Error: " + errorMessage);
+                data: JSON.stringify(feedbackData),
+                success: function(response) {
+                    if (response.error) {
+                        // If the response has an error, display it in the errors div
+                        displayErrors([response.error]);
+                    } else {
+                        // Optionally, redirect or update the page on success
+                        window.location.href = "/contact";
+                    }
+                },
+                error: function(error) {
+                    // If an error occurs, handle it
+                    const errorMessage = error.responseJSON?.message || "Reservation ID is not valid. Please enter a valid reservation ID";
+                    displayErrors([errorMessage]);
+                }
             });
         } catch (error) {
-            console.log("YEAH")
             alert("An unexpected error occurred: " + error.message);
         }
     });

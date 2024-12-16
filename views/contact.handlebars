@@ -8,9 +8,12 @@
 </head>
 
 <body>
+    <div id="feedback-errors"></div>  <!-- This container will display errors -->
+
     {{#if error}}
-    <div class="error">{{error}}</div>
+    <div class="feedback-error">{{error}}</div>
     {{/if}}
+
     {{#if success}}
     <div class="success">{{successMessage}}</div>
     {{/if}}
