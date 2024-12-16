@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -10,47 +9,44 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="/public/js/map.js"></script>
 </head>
+
 <body>
     <header>
-         {{#if isAdmin}}
+        {{#if isAdmin}}
             {{> adminTaskbar}}
         {{else}}
             {{> taskbar}}
         {{/if}}
-        {{!-- <nav>
-            <li><a href="/"> Home </a></li>
-            <li><a href="/rooms">Check Out Our Rooms</a></li>
-        </nav> --}}
         <h2>Tu Comodidad es nuestra prioridad</h2>
     </header>
+
     <main>
         {{{body}}}
     </main>
+
     {{> (lookup . 'partial') }}
-</body>
-   
-<footer>
-    <div class="footer-container">
-        <div class="footer-info">
-            <div class="footer-left">
-                <p>Contact us:</p>
-                <ul>
-                    <li>Phone: <a href="tel:+57234567890">+57 (234) 567-7206</a></li>
-                    <li>WhatsApp: <a href="tel:+573226867206">+57 (234) 567-7206</a></li>
-                </ul>
+
+    <footer>
+        <div class="footer-container">
+            <div class="footer-info">
+                <div class="footer-left">
+                    <p>Contact us:</p>
+                    <ul>
+                        <li>Phone: <a href="tel:+57234567890">+57 (234) 567-7206</a></li>
+                        <li>WhatsApp: <a href="tel:+573226867206">+57 (234) 567-7206</a></li>
+                    </ul>
+                </div>
+                <div class="footer-right">
+                    <p>Follow us:</p>
+                    <ul>
+                        <li>Instagram: <a href="https://www.instagram.com/hotel_las_torres/" target="_blank">@hotel_las_torres</a></li>
+                        <li>Facebook: <a href="https://facebook.com/hotelprofile" target="_blank">Hotel Profile</a></li>
+                    </ul>
+                </div>
             </div>
-            <div class="footer-right">
-                <p>Follow us:</p>
-                <ul>
-                    <li>Instagram: <a href="https://www.instagram.com/hotel_las_torres/" target="_blank">@hotel_las_torres</a></li>
-                    <li>Facebook: <a href="https://facebook.com/hotelprofile" target="_blank">Hotel Profile</a></li>
-                </ul>
-            </div>
+            <div id="hotel-map"></div>
         </div>
-        <div id="hotel-map"></div>
-    </div>
-</footer>
-
-
+    </footer>
+</body>
 
 </html>
