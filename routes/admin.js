@@ -58,6 +58,7 @@ router.get('/dashboard', async (req,res) => {
             roomList.forEach(room => {
                 room._id = room._id.toString();
             });
+            
             console.log("test", roomList);
             //console.log('admin/dashboard in admin routes');
             res.render('admin', {

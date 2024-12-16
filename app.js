@@ -7,7 +7,7 @@ import {dirname} from 'path';
 import contactRoutes from './routes/contact.js';
 import cookieParser from "cookie-parser";
 import session from "express-session";
-
+import methodOverride from 'method-override';
 
 const app = express();
 
@@ -54,11 +54,16 @@ app.use('/login', (req, res, next) => {
 app.get('/logout', (req, res)=>{
   req.session.destroy((err) =>{
     if (err){
+      console.error('Error destroying session:', err);
       return res.status(500).json({error: 'failed to logout'});
     }
     res.redirect('/login');
   })
 })
+// const roomsRouter = require('./routes/rooms.js');
+// app.use('/rooms', roomsRouter);
+
+app.use(methodOverride('_method'));
 
 
 constructorMethod(app);
