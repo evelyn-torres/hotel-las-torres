@@ -118,6 +118,8 @@ footer a:hover {
   flex-wrap: wrap;
   gap: 20px;
   justify-content: center;
+  margin: 20px auto;
+  max-width: 1200px; 
 }
 
 .room-card {
@@ -125,10 +127,11 @@ footer a:hover {
   border: 1px solid #ddd;
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  width: 300px;
+  width: calc(33% - 40px); 
   overflow: hidden;
   text-align: center;
   transition: transform 0.3s;
+  min-width: 300px; 
 }
 
 .room-card:hover {
@@ -565,54 +568,54 @@ h1 {
   text-align: center; /* Center the text */
 }
 
-
-
-#rooms-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin: 20px 0;
-  font-size: 18px;
-  text-align: left;
-}
-
-#rooms-table th, #rooms-table td {
-  padding: 12px;
-  border-bottom: 1px solid #ddd;
-}
-
-#rooms-table th {
-  background-color: rgb(64, 87, 67);
-  color: white;
-}
-
-#rooms-table tr:nth-child(even) {
-  background-color: #f2f2f2;
-}
-
 .action-buttons {
   display: flex;
-  gap: 10px;
+  flex-wrap: wrap; 
+  justify-content: center;
+  gap: 10px; 
+  margin-top: 15px;
 }
 
+.action-buttons a,
 .action-buttons button {
-  padding: 5px 10px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
+  padding: 8px 12px;
   font-size: 14px;
+  color: white;
+  background-color: rgb(64, 87, 67);
+  text-decoration: none;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.action-buttons a:hover,
+.action-buttons button:hover {
+  background-color: rgb(224, 178, 40);
 }
 
 .edit-button {
-  background-color: rgb(224, 178, 40);
+  background-color: rgb(224, 178, 40); /* Gold color for edit */
   color: white;
 }
 
-.delete-button {
-  background-color: red;
-  color: white;
+.edit-button:hover {
+  background-color: rgb(200, 158, 35); /* Slightly darker on hover */
 }
 
-.out-of-service-button {
-  background-color: gray;
-  color: white;
+.action-buttons .delete-button {
+  background-color: rgb(179, 57, 57);
 }
+
+.action-buttons .delete-button:hover {
+  background-color: rgb(224, 78, 78);
+}
+
+.action-buttons .out-of-service-button {
+  background-color: rgb(102, 102, 153);
+}
+
+.action-buttons .out-of-service-button:hover {
+  background-color: rgb(153, 153, 204);
+}
+
