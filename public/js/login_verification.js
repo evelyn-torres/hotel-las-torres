@@ -41,6 +41,7 @@ document.getElementById('loginForm').addEventListener("submit", async (event) =>
                 passInput: password,
             } )
             if(response.status === 200 ){
+                
                 window.location.href ='/admin/dashboard' ;
                 document.getElementById("loginForm").reset();
                 clearErrors();
