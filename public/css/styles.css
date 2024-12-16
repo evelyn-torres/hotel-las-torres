@@ -470,12 +470,12 @@ h1 {
 
 
 /* Calendar */
-#calendar {
+#room_calendar {
   max-width: 1100px;
   margin: 40px auto;
 }
 
-#calendar .fc-toolbar-title {
+#room_calendar .fc-toolbar-title {
   color: #161515; 
   font-size: 1.5em; 
   position: absolute;
