@@ -37,7 +37,12 @@ export const createReservation = async(
 
     //validate guest booking inputs
     guestFirstName = validation.checkString(guestFirstName); //name
+    if(guestFirstName.length < 2 ) throw "First name must be longer than 2 characters"; 
+    if(guestFirstName.length > 25) throw "First name must be shorter than 25 characters";
+    
     guestLastName = validation.checkString(guestLastName);
+    if(guestLastName.length < 2 ) throw "Last name must be longer than 2 characters"; 
+    if(guestLastName.length > 25) throw "Last name must be shorter than 25 characters";
     //TO-DO: validate govID
     // if (parseInt(age).length !== 2|| !Number.isInteger(parseInt(age))) {//ensure u can only do whole numbers
     //     throw `Error: Invalid Age input ${age}`;
@@ -49,22 +54,37 @@ export const createReservation = async(
     if (phone.length != 10 || parseInt(phone) < 1111111111 || parseInt(phone) > 9999999999) throw "Error: invalid phone number input";
     //TO-DO: validate email
     const chosenRoom = await getRoomById(roomID);
+    console.log(chosenRoom)
     let roomCapacity = 0; //room cap: double =2, while twin + semi_double ==1. SO all of that added up is roomCap
-    Object.entries(chosenRoom.bedSizes).forEach(elem => {
-        if (elem[0] === "Double"){
-            roomCapacity +=1;
+
+    let beds = Object.keys(chosenRoom.bedSizes);
+    let numOfBeds = Object.values(chosenRoom.bedSizes);
+
+    for(let x in beds) {
+        if(beds[x] === "Double") {
+            roomCapacity += numOfBeds[x] * 2; 
         }
-        roomCapacity += elem[1];
-        
-    });
+        if(beds[x] === "Semi-Double") {
+            roomCapacity += numOfBeds[x]; 
+        }
+        if(beds[x] === "Twin") {
+            roomCapacity += numOfBeds[x];
+        }
+    }
+
+    console.log(beds) 
+    console.log(numOfBeds)
+    console.log(roomCapacity)
+
     numOfGuests = parseInt(numOfGuests);
-    if (numOfGuests > roomCapacity) throw "Error: Guest number exceeds room capacity";
+    if (numOfGuests > roomCapacity) throw `Error: Guest number exceeds room capacity. The room capacity is ${roomCapacity}`;
 
     //TO-DO: make seperate check booking function
     //basically, go from check-in to check out and see if any dates in booked column
 
     const begin = new Date(checkInDate);
     const end = new Date(checkOutDate);
+    if(begin > end ) throw "Invalid date range. Please select a proper beginning and end date";
     const daysBooked = end.getDate()-begin.getDate();
     let curr = begin.valueOf();
     for (let i = 0; i < daysBooked; i++){
@@ -84,19 +104,14 @@ export const createReservation = async(
         }
     }
     
-    // if(arguments.length !== 8) throw "Please include all inputs"
-
-    //checks for guest ID
-    // if (!Array.isArray(guestIDs) || guestIDs.length === 0) {
-    //     throw "guestIDs must be a non-empty array of valid guest IDs";
-    // }
+    //checks for govID
     govID = validation.checkString(govID)
-
-    //checks for parking 
-
-    //checks for deposit paid 
+    if(govID.length < 8) throw "Government ID must be at least 8 characters"; 
+    if(govID.length > 20) throw "Government ID must be less than 20 characters";
+    if(govID.includes(" ")) throw "Government ID must not have spaces in between";
 
     //checks for totalCost 
+    
     console.log('avail check', chosenRoom.availability);
     const reservationCollection = await reservations();
     let newReservation = {

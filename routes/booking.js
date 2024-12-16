@@ -28,8 +28,6 @@ router.route('/').get(async (req, res) => {
     }
     let numOfGuests = parseInt(xss(newBookingData.numOfGuests));
     let guestFirstName = xss(newBookingData.guestFirstName);
-    if(guestFirstName !== "Ayushi")
-      throw "should be Ayushi"
     let guestLastName = xss(newBookingData.guestLastName); 
     let govID = xss(newBookingData.govID);
     let age = xss(newBookingData.age); 
