@@ -168,6 +168,13 @@ router
     let errors =[];
     try{
       const bedSizesArray = bedSizes.split(',').map(bed => bed.trim());
+
+    const bedSizesObject = bedSizesArray.reduce((acc, bed) => {
+        acc[bed] = (acc[bed] || 0) + 1;
+        return acc;
+    }, {});
+
+    console.log(bedSizesObject)
       if (!roomName || !pricingPerNight || !bedSizesArray.length || !beginDate || !endDate) {
         throw 'Missing required fields.';
       }
@@ -181,14 +188,11 @@ router
   // }
   const hasBalcony = balcony === 'true';
   const parsedPricing = parseFloat(pricingPerNight);
-
-
-  console.log('in create room:', req.body)
       
   const newRoom = await roomData.createRoom(
       roomName,
       hasBalcony,
-      bedSizesArray,
+      bedSizesObject,
       parsedPricing,
       beginDate,
       endDate
