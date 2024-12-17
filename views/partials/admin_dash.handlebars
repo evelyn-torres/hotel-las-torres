@@ -9,12 +9,15 @@
     <section>
   <h1>Admin Dashboard</h1>
   <div class = "dashboard-actions">
+    <p><a href="/admin/dashboard/createAdmin">Create Admin</a></p>
 
    <form action="/logout" method="GET">
      <button type="submit" class="logout-button">Logout</button>
     </form>
 
     <a href="/rooms/addRoomForm" class="add-room-button">Add Room</a>
+
+   
   </div>
   <div class="rooms-container">
     {{!-- {{#if rooms}} --}}
@@ -39,7 +42,9 @@
             <form action="/rooms/{{_id}}/outOfService" method="POST">
                 <button type="submit" class="out-of-service-button">Out of Service</button>
             </form>
+            
         </div>
+
         </div>
       </div>
       {{/each}}

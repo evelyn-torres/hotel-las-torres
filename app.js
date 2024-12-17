@@ -43,14 +43,24 @@ app.use(
 
 app.use('/public', express.static(path.join(__dirname, 'static')));
 app.use('/contact', contactRoutes);
+
+
 app.use('/login', (req, res, next) => {
   const user = req.session.user;
   if (user && user.toLowerCase() === 'admin') {
-    console.log('in app.js ')
+    // console.log('in app.js ')
       return res.redirect('/admin/dashboard'); // Correctly redirect to admin page
   }
   next(); 
 });
+
+// app.use('/admin/dashboard/createAdmin', (req, res, next) => {
+//   const user = req.session.user; 
+//   console.log(user);
+//   res.redirect()
+//   next();
+// })
+
 app.get('/logout', (req, res)=>{
   req.session.destroy((err) =>{
     if (err){

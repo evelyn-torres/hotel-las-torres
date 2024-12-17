@@ -1,5 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     const roomsTable = document.querySelector('#rooms-table tbody');
+    const addRoomButton = document.querySelector('.add-room-button');
+
 
     async function fetchRooms() {
         try {
@@ -12,7 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             renderRooms(data.rooms);
         } catch (e) {
-            console.error('Could not get rooms:', e);
+            throw new Error('Could not get rooms:', e);
         }
     }
 
@@ -37,10 +39,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 event.preventDefault();
 
                 const roomId = event.target.getAttribute('data-id');
-                console.log('data-id', data-id)
+                // console.log('data-id', data-id)
                 if (confirm('Are you sure you want to delete this room?')) {
                     try {
-                        console.log('in front-end try for delete');
+                        // console.log('in front-end try for delete');
                         const response = await fetch(`/rooms/${roomId}`, {
                             method: 'DELETE',
                         });
@@ -53,7 +55,40 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
         });
+        if(addRoomButton){
+            let errors = [];
+            addRoomButton.addEventListener('click', (event) =>{
+                event.preventDefault();
+                const form = document.querySelector('form[action="rooms/addRoomForm"]');
+                if(!form){
+                    throw ('Error: Add room option is not available right now');
+                }
+                const roomName = document.querySelector('#roomName').value.trim();
+                const pricingPerNight = parseFloat(document.querySelector('#pricingPerNight').value);
+                const balcony = document.querySelector('#balcony').value;
+                const bedSizes = document.querySelector('#bedSizes').value.trim();
+
+                if (!roomName || roomName === '') {
+                    errors.push('Room Name is required.');
+                    return;
+                }
+    
+                if (!pricingPerNight || pricingPerNight < 10) {
+                    errors.push('Pricing Per Night must be at least $10.');
+                    return;
+                }
+    
+                if (!bedSizes.match(/^[a-zA-Z\s]+(,\s*[a-zA-Z\s]+)*$/)) {
+                    errors.push('Invalid bed sizes format. Use comma-separated values (e.g., Queen, Twin).');
+                    return;
+                }
+                form.submit();
+                
+            });
+        }
+        
     }
+
 
     fetchRooms();
 });

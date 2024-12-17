@@ -175,13 +175,13 @@ footer a:hover {
   font-family: Georgia, 'Times New Roman', Times, serif;
 }
 
-h1 {
+/* h1 {
   color: rgb(224, 178, 40);
   font-size: 45px;
   font-family: 'Times New Roman', Times, serif;
   text-align: center;
   margin-bottom: 20px;
-}
+} */
 
 #bookingForm label {
   display: block;
@@ -544,33 +544,46 @@ h1 {
 
 .dashboard-actions a {
   margin-right: 10px;
-  padding: 10px 15px;
+  padding: 12px 18px;
   color: #fff;
   text-decoration: none;
-  background-color: #007bff;
+  background-color: #0077ff;
   border-radius: 5px;
   font-size: 16px;
+  font-family: Arial, sans-serif;
+  font-weight: bold;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
-.dashboard-actions .logout-button{
-  display: inline-block;
-  padding: 10px 20px;
+.dashboard-actions .logout-button {
+  margin-right: 10px;
+  padding: 12px 18px;
   background-color: rgb(64, 87, 67); /* Match the theme color */
   color: white;
   text-decoration: none;
-  border-radius: 4px;
+  border-radius: 5px;
   font-size: 16px;
-  font-family: 'Times New Roman', Times, serif;
+  font-family: Arial, sans-serif;
+  font-weight: bold;
   border: none;
   cursor: pointer;
-  transition: background-color 0.3s ease;
-  margin: 20px auto; /* Center the button */
-  display: block; /* Make it a block element */
-  text-align: center; /* Center the text */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 .dashboard-actions .add-room-button {
-  background-color: #28a745;
+  background-color: #28a745; /* Green color */
+  padding: 12px 18px;
+  color: white;
+  text-align: center;
+  border-radius: 5px;
+  font-size: 16px;
+  font-family: Arial, sans-serif;
+  font-weight: bold;
+  display: block; /* Center in a flex container if needed */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 .action-buttons {
@@ -651,6 +664,52 @@ h1 {
 
 h2#fc-dom-1.fc-toolbar-title{
   color:#1a252f
+}
+
+.center-button {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+.center-button button {
+  padding: 10px 20px;
+  background-color: #007BFF; /* Customize as needed */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  text-decoration: none;
+}
+.center-button button:hover {
+  background-color: #0056b3; /* Darker shade for hover effect */
+}
+.center-button button a {
+  text-decoration: none;
+  color: white;
+}
+
+.center-button {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+.center-button button {
+  padding: 10px 20px;
+  background-color: #007BFF; /* Customize as needed */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  text-decoration: none;
+}
+.center-button button:hover {
+  background-color: #0056b3; /* Darker shade for hover effect */
+}
+.center-button button a {
+  text-decoration: none;
+  color: white;
 }
 
 .modal {
