@@ -61,9 +61,9 @@ router
                 rating);
 
             if (!newCommentInfo) {
-                return res.status(500).json({error: 'Failed to create comment.'});
+                throw 'Failed to create comment.'
                }
-
+               
             const updatedComments = await commentData.getAllComments();
     
         //    return res.status(200).redirect('/contact');
