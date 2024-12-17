@@ -18,7 +18,7 @@ document.getElementById('loginForm').addEventListener("submit", async (event) =>
         // if (typeof username !== 'string' || username.trim().length === 0) {
         //     errors.push('Please enter a valid username.');
         // }
-        console.log(errors);
+        // console.log(errors);
 
          // Validate password
          if (!password || password.trim().length === 0) {

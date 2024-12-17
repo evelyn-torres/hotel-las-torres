@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             renderRooms(data.rooms);
         } catch (e) {
-            console.error('Could not get rooms:', e);
+            throw new Error('Could not get rooms:', e);
         }
     }
 
@@ -39,10 +39,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 event.preventDefault();
 
                 const roomId = event.target.getAttribute('data-id');
-                console.log('data-id', data-id)
+                // console.log('data-id', data-id)
                 if (confirm('Are you sure you want to delete this room?')) {
                     try {
-                        console.log('in front-end try for delete');
+                        // console.log('in front-end try for delete');
                         const response = await fetch(`/rooms/${roomId}`, {
                             method: 'DELETE',
                         });

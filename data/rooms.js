@@ -1,8 +1,21 @@
 import {rooms} from '../config/mongoCollections.js';
 import {ObjectId} from 'mongodb';
 import validation from '../helpers.js';
+//import { createAvailbyDates } from "../data/reservations.js"
 
-
+/* populate set dates object for room availibility */
+function createAvailbyDates(begin, end){
+    let dates = {open:[], booked:[]};
+    begin = new Date(begin).valueOf();
+    end = new Date(end).valueOf();
+    let curr = begin;
+    while(curr < end){
+        let temp = new Date(curr).toISOString().slice(0,10);
+        dates.open.push(temp);
+        curr += 86400000; //add a new day to current date for rooms
+    }
+    return dates;
+};
 
 export const getRoomById = async (id) => {
     id = validation.checkId(id, "room id")
@@ -26,12 +39,23 @@ export const createRoom = async (
     balcony, 
     bedSizes, 
     pricingPerNight, 
-    availability
+    beginDate,
+    endDate,
   ) => {
     //checks for numRooms 
     if(!roomName) throw "You must provide the number of rooms";
     roomName = validation.checkString(roomName, "room name");
+    let roomCollection = await rooms();
+    let allRooms = roomCollection.find({}).toArray();
+    if (allRooms.length > 1){
+        allRooms.forEach(room => {
+            if (room.roomName){
+                throw `Admin Error: ${roomName} already exists in database. Please provide a new room name to use`;
+            }
+        });
+    }
     
+
     //checks for balcony 
    // if(!balcony) throw "You must provide a value for balcony";
     if(typeof balcony !== "boolean") throw "Please indicate True or False for whether the room has a balcony or not.";
@@ -46,16 +70,24 @@ export const createRoom = async (
 
     //checks for availability 
     //requires further checks for inside the object 
+    let todaysDate = new Date();
+    beginDate - validation.checkString(beginDate, "begin date");
+    endDate - validation.checkString(endDate, "end date");
+    let begin = new Date(beginDate);
+    let end = new Date(endDate);
+    if (end.getTime() - begin.getTime() < 0) throw "Admin Error: Check-Out date must be after Check-In Date.";
+    if (begin.getTime() < todaysDate.getTime()) throw "Admin Error: Cannot set room to open before today's date. Please select another date";
+    const availability = createAvailbyDates(begin, end);
     if(!availability) throw "You must provide the availability for the room";
     if(typeof availability !== "object") throw "availability must be an object";
 
-    const roomCollection = await rooms();
     let newRoom = {
         roomName: roomName, 
         balcony: balcony, 
         bedSizes: bedSizes, 
         pricingPerNight: pricingPerNight, 
-        availability: availability
+        availability: availability,
+        status: "ready"
     };
 
     const insertInfo = await roomCollection.insertOne(newRoom);
@@ -86,12 +118,19 @@ export const removeRoom = async(id) => {
     return {...deletionInfo, deleted: true};
 };
 
-export const updateRoom = async(id, roomName, balcony, bedSizes, pricingPerNight, availability) => {
+export const updateRoom = async(id, roomName, balcony, bedSizes, pricingPerNight, beginDate, endDate) => {
     id = validation.checkId(id);
     //checks for numRooms 
     if(!roomName) throw "You must provide the number of rooms";
     roomName = validation.checkString(roomName, "room name");
-        
+    // let roomColl = await rooms();
+    // let allRooms = roomColl.find({}).toArray();
+    // allRooms.forEach(room => {
+    //     if (room.roomName){
+    //         throw `Admin Error: ${roomName} already exists in database. Please provide a new room name to use`;
+    //     }
+    // });   make it so that form is unclickable
+
     //checks for balcony 
     // if(!balcony) throw "You must provide a value for balcony";
     if(typeof balcony !== "boolean") throw "Please indicate True or False for whether the room has a balcony or not.";
@@ -106,6 +145,14 @@ export const updateRoom = async(id, roomName, balcony, bedSizes, pricingPerNight
     
     //checks for availability 
     //requires further checks for inside the object 
+    let todaysDate = new Date();
+    beginDate - validation.checkString(beginDate, "begin date");
+    endDate - validation.checkString(endDate, "end date");
+    let begin = new Date(beginDate);
+    let end = new Date(endDate);
+    if (end.getTime() - begin.getTime() < 0) throw "Admin Error: Check-Out date must be after Check-In Date.";
+    if (begin.getTime() < todaysDate.getTime()) throw "Admin Error: Cannot set room to open before today's date. Please select another date";
+    const availability = createAvailbyDates(begin, end);
     if(!availability) throw "You must provide the availability for the room";
     if(typeof availability !== "object") throw "availability must be an object";
 

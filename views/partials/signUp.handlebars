@@ -1,0 +1,43 @@
+
+<div>
+    <h1>{{pageTitle}}</h1>
+        {{#if success}}
+            <div class="success-message">
+                {{successMessage}}
+            </div>
+        {{/if}}
+        {{#if hasErrors}}
+      <ul class="error-list">
+          {{#each errors}}
+          <li>
+          {{this}}
+          </li>
+          {{/each}}
+      </ul>
+    {{/if}}
+    <form action='/admin/dashboard/createAdmin' method="POST" id="createAdminForm">
+        <label for="employeeFirstName">First name:</label>
+        <input type="text" name="employeeFirstName" id="employeeFirstName" required><br>
+
+        <label for="employeeLastName">Last name: </label>
+        <input type="text" id="employeeLastName" name="employeeLastName" required><br> 
+        
+        <label for="govID">Government Id: </label>
+        <input type="text" id="govID" name="govID" required><br> 
+
+        <label for "userName"> Username: </label>
+        <input type="text" id="userName" name="userName" required><br>
+
+        <label for="password">Password: </label>
+        <input type="password" id="password" name="password" required><br> 
+
+        <label for="confirmPassword">Confirm Password: </label>
+        <input type="password" id="confirmPassword" name="confirmPassword" required><br> 
+
+        <button name="submitButton" id="submitButton" type="submit">Sign Up</button>
+    </form>
+
+    <p><a href="/admin/dashboard">Go back to admin dashboard</a></p>
+</div>
+
+<script src="/public/js/signUpAdmin.js"></script>

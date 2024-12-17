@@ -15,7 +15,7 @@ router //show all rooms
             //console.log("testing", roomSel);
             room._id = room._id.toString();
           });
-          console.log(roomList);
+          // console.log(roomList);
           res.render('rooms', {rooms: roomList, pageTitle: "Rooms", partial: 'rooms'});
         } catch (e) {
           res.status(500).json({error: e});
@@ -28,13 +28,13 @@ router //after click on book now, route to room by roomid
       //console.log("params", req.params);
       const roomId = req.params.roomId;
       try{ //grab specifc room
-        console.log("get passed", roomId);
+        // console.log("get passed", roomId);
         let room = await roomData.getRoomById(roomId);
         res.render('roomBooking', {pageTitle: `Book ${room.roomName}`, hasErrors: false, partial:'rooms', roomId: roomId, roomName: room.roomName});
 
       } catch (e){ //can be used to make sure rooms are not avail after deleting
         console.log(e);
-        console.log("catch1");
+        // console.log("catch1");
         let roomName = "undo2";
         let room = await roomData.getRoomById(roomId);
         if (room && room !== undefined){
@@ -46,7 +46,7 @@ router //after click on book now, route to room by roomid
     .post(async (req,res) => { //after clicking submit on booking room, making booking and check avail
       const roomId = req.params.roomId;
       const newBookingData = req.body;
-      console.log("data from room", newBookingData);
+      // console.log("data from room", newBookingData);
 
       let errors = [];
       try {
@@ -132,12 +132,12 @@ router
     .route('/:roomId')
     .delete(async (req, res) => {
      // const {roomId} = req.params;
-     console.log('DELETE req received', req.params.roomId);
+    //  console.log('DELETE req received', req.params.roomId);
      try{
 
       const roomId = validation.checkId(req.params.roomId, "room ID");
       await roomData.removeRoom(roomId);
-      console.log('DA ROOM DATA:', roomData);
+      // console.log('DA ROOM DATA:', roomData);
 
        // await roomData.removeRoom(roomId);
      //  res.status(200).json({ success: true, messsage: 'Room deleted successfully' });

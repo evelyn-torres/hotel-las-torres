@@ -6,6 +6,20 @@
     <title>Admin Dashboard</title>
     <link rel="stylesheet" href="/public/css/styles.css"> 
 </head>
+        {{#if success}}
+            <div class="success-message">
+                {{successMessage}}
+            </div>
+        {{/if}}
+        {{#if hasErrors}}
+      <ul class="error-list">
+          {{#each errors}}
+          <li>
+          {{this}}
+          </li>
+          {{/each}}
+      </ul>
+    {{/if}}
 {{!-- <body>
     <h1>Welcome to the Admin Dashboard</h1>
     <table id="rooms-table">

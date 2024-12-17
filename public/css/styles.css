@@ -438,7 +438,7 @@ footer a:hover {
 
 /* ERROR STYLING*/
 
-.error {
+.error-list {
   color: red;
   font-weight: bold;
   margin-top: 10px;
@@ -471,21 +471,6 @@ footer a:hover {
   display: block; /* Removes any extra space below the image */
 }
 
-
-/* Calendar */
-#room_calendar {
-  max-width: 1100px;
-  margin: 40px auto;
-}
-
-#room_calendar .fc-toolbar-title {
-  color: #161515; 
-  font-size: 1.5em; 
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  font-weight: bold; 
-}
 
 
 /* Styling for the login form */
@@ -638,3 +623,31 @@ footer a:hover {
   background-color: rgb(153, 153, 204);
 }
 
+/* Calendar */
+#room_calendar, #calendar_all {
+  max-width: 1100px;
+  margin: 40px auto;
+}
+
+#room_calendar, #calendar_all .fc-toolbar-title {
+  color: #161515; 
+  font-size: 1.5em; 
+  position: relative;
+  font-weight: bold; 
+}
+
+#room_calendar {
+  margin-bottom: 20px;
+  transform: translateX(-2%);
+}
+
+#calendar_all .fc-toolbar-title {
+  color: #161515; 
+  font-size: 1.5em; 
+  position: absolute;
+  transform: translateX(300%);
+}
+
+h2#fc-dom-1.fc-toolbar-title{
+  color:#1a252f
+}
