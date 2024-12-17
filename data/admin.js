@@ -77,7 +77,7 @@ export const createAdmin = async (
   // Insert new admin into collection
   const insertInfo = await adminCollection.insertOne(newAdmin);
   if (!insertInfo.acknowledged || !insertInfo.insertedId) {
-    throw new Error("Error: Could not add employee");
+    throw "Error: Could not add employee";
   }
 
   // Retrieve and return the newly created admin
