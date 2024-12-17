@@ -139,9 +139,6 @@ router
       await roomData.removeRoom(roomId);
       // console.log('DA ROOM DATA:', roomData);
 
-       // await roomData.removeRoom(roomId);
-     //  res.status(200).json({ success: true, messsage: 'Room deleted successfully' });
-     //res.status(200).json({ success: true, message: 'Room deleted successfully' });;
      res.redirect('/admin/dashboard');
 
       }catch(error){
@@ -175,60 +172,77 @@ router
       res.status(500).json({error: 'Internal Server Error'})
   }
     })
-    .post(ensureAdmin, async (req, res)=>{
-      const { roomName, pricingPerNight, balcony, bedSizes, beginDate, endDate } = req.body;
-      let errors =[];
-      try{
-        const bedSizesArray = bedSizes.split(',').map(bed => bed.trim());
-        const bedSizesObject = bedSizesArray.reduce((acc, bed) => {
-          acc[bed] = (acc[bed] || 0) + 1;
-          return acc;
-        }, {});
-  
-      console.log(bedSizesObject)
-        if (!roomName || !pricingPerNight || !bedSizesArray.length || !beginDate || !endDate) {
-          throw 'Missing required fields.';
-        }
-
-        let oldRoomList = await roomData.getAllRooms();
-        let oldListLength = oldRoomList.length;
-
-        const hasBalcony = balcony === 'true';
-        const parsedPricing = parseFloat(pricingPerNight);
-        console.log('in create room:', req.body)
-            
-        const newRoom = await roomData.createRoom(
-            roomName,
-            hasBalcony,
-            bedSizesObject,
-            parsedPricing,
-            beginDate,
-            endDate
-          );
-        if (!newRoom) throw "Admin Error: Cannot add room";
-        let newRoomList = await roomData.getAllRooms();
-        if (oldListLength === newRoomList.length){
-          console.log("????")
-        }
-
-        res.redirect('/admin/dashboard');
-        // res.render('addRoom', 
-        //   {rooms: roomList, 
-        //     pageTitle: "Rooms", 
-        //     partial: 'addRoomForm',
-        //     success: true,
-        //     successMessage: `Room "${newRoom.roomName}" has been added successfully!`,});
-
-      }catch(e){
-        console.error(e);
-        errors.push(e);
-        res.status(400).render('addRoom', {
-          pageTitle: 'Add a New Room',
-          hasErrors: true,
-          errors: errors,
-          partial: 'addRoomForm',
-        });
+  .post(ensureAdmin, async (req, res)=>{
+    let { roomName, pricingPerNight, balcony, bedSizes, beginDate, endDate } = req.body;
+    let errors =[];
+    try{
+      const bedSizesArray = bedSizes.split(',').map(bed => bed.trim());
+      for(let x in bedSizesArray) {
+        if(bedSizesArray[x] !== "Double" && bedSizesArray[x] !== "Twin" && bedSizesArray[x] !== "Semi-Double") 
+          throw "Bed type entries must be Double, Twin, or Semi-Double only"
       }
-    });
+      const bedSizesObject = bedSizesArray.reduce((acc, bed) => {
+        acc[bed] = (acc[bed] || 0) + 1;
+        return acc;
+    }, {});
+
+      if (!roomName || !pricingPerNight || !bedSizesArray.length || !beginDate || !endDate) {
+        throw 'Missing required fields.';
+      }
+    const availability = {
+      open: true,
+      booked: false,
+  };
+    roomName = validation.checkString(roomName, "Room Name");
+    const roomCollection = await rooms();
+            const room = await roomCollection.findOne({roomName: roomName});
+
+            if (room) {
+                console.log("Duplicate room name:", room.roomName);
+                throw "Room name already exists";
+            }
+    pricingPerNight = parseInt(pricingPerNight, 10);
+    if(typeof pricingPerNight !== "number") throw "Price must be a number";
+    if(pricingPerNight < 25) throw "Price is too low. Please set it higher than 25";
+    if(pricingPerNight > 1000) throw "Price is too high. Please set it lower than 1000.";
+    
+
+
+  const hasBalcony = balcony === 'true';
+  const parsedPricing = parseFloat(pricingPerNight);
+      
+  const newRoom = await roomData.createRoom(
+      roomName,
+      hasBalcony,
+      bedSizesObject,
+      parsedPricing,
+      beginDate,
+      endDate
+    );
+
+        const roomList = await roomData.getAllRooms();
+
+      res.redirect('/admin/dashboard');
+      res.render('addRoom', 
+        {rooms: roomList, 
+          pageTitle: "Rooms", 
+          partial: 'addRoomForm',
+          success: true,
+          successMessage: `Room "${newRoom.roomName}" has been added successfully!`,});
+         res.redirect('/admin/dashboard');
+
+
+
+    }catch(e){
+      console.error(e);
+      errors.push(e);
+      res.status(400).render('addRoom', {
+        pageTitle: 'Add a New Room',
+        hasErrors: true,
+        errors: errors,
+        partial: 'addRoomForm',
+      });
+    }
+  })
 
 export default router;
