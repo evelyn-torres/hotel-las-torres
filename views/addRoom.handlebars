@@ -9,6 +9,7 @@
 <body>
     <h1>Add a New Room</h1>
     <form action="/rooms/addRoomForm" method="POST">
+        <input type="hidden" name="roomId" value="{{roomId}}">
         <label for="roomName">Room Name:</label>
         <input type="text" id="roomName" name="roomName" required><br>
         
