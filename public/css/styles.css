@@ -175,13 +175,13 @@ footer a:hover {
   font-family: Georgia, 'Times New Roman', Times, serif;
 }
 
-h1 {
+/* h1 {
   color: rgb(224, 178, 40);
   font-size: 45px;
   font-family: 'Times New Roman', Times, serif;
   text-align: center;
   margin-bottom: 20px;
-}
+} */
 
 #bookingForm label {
   display: block;
