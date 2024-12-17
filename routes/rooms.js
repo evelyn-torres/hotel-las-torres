@@ -164,13 +164,13 @@ router
   }
     })
   .post(async (req, res)=>{
-    const { roomName, pricingPerNight, balcony, bedSizes } = req.body;
+    const { roomName, pricingPerNight, balcony, bedSizes, beginDate, endDate } = req.body;
     let errors =[];
     try{
       const bedSizesArray = bedSizes.split(',').map(bed => bed.trim());
-      if (!roomName || !pricingPerNight || !bedSizesArray.length) {
-        throw ('Missing required fields.');
-    }
+      if (!roomName || !pricingPerNight || !bedSizesArray.length || !beginDate || !endDate) {
+        throw 'Missing required fields.';
+      }
     const availability = {
       open: true,
       booked: false,
@@ -180,26 +180,31 @@ router
   //   No: false
   // }
   const hasBalcony = balcony === 'true';
+  const parsedPricing = parseFloat(pricingPerNight);
+
 
   console.log('in create room:', req.body)
       
-      const newRoom = await roomData.createRoom(
-        roomName,
-        hasBalcony,
-        bedSizesArray,
-        parseFloat(pricingPerNight),
-        availability);
+  const newRoom = await roomData.createRoom(
+      roomName,
+      hasBalcony,
+      bedSizesArray,
+      parsedPricing,
+      beginDate,
+      endDate
+    );
+
 
         const roomList = await roomData.getAllRooms();
 
       res.redirect('/admin/dashboard');
-      // res.render('addRoom', 
-      //   {rooms: roomList, 
-      //     pageTitle: "Rooms", 
-      //     partial: 'addRoomForm',
-      //     success: true,
-      //     successMessage: `Room "${newRoom.roomName}" has been added successfully!`,});
-      //    res.redirect('/admin/dashboard');
+      res.render('addRoom', 
+        {rooms: roomList, 
+          pageTitle: "Rooms", 
+          partial: 'addRoomForm',
+          success: true,
+          successMessage: `Room "${newRoom.roomName}" has been added successfully!`,});
+         res.redirect('/admin/dashboard');
 
 
 

@@ -71,12 +71,17 @@ export const createRoom = async (
     //checks for availability 
     //requires further checks for inside the object 
     let todaysDate = new Date();
+   // todaysDate.setHours(0, 0, 0, 0); // Reset today's date to midnight
     beginDate - validation.checkString(beginDate, "begin date");
-    endDate - validation.checkString(endDate, "end date");
+    endDate - validation.checkString(endDate, "end date");  
     let begin = new Date(beginDate);
     let end = new Date(endDate);
-    if (end.getTime() - begin.getTime() < 0) throw "Admin Error: Check-Out date must be after Check-In Date.";
-    if (begin.getTime() < todaysDate.getTime()) throw "Admin Error: Cannot set room to open before today's date. Please select another date";
+
+    //begin.setHours(0, 0, 0, 0); // Reset begin date to midnight
+    //end.setHours(0, 0, 0, 0);   // Reset end date to midnight
+    if (end.getTime() - begin.getTime() < 0) throw "Check-Out date must be after Check-In Date.";
+    console.log(todaysDate.getTime());
+    if (begin.getTime() < todaysDate.getTime()) throw "Cannot set room to open before today's date. Please select another date";
     const availability = createAvailbyDates(begin, end);
     if(!availability) throw "You must provide the availability for the room";
     if(typeof availability !== "object") throw "availability must be an object";

@@ -10,6 +10,15 @@
     <h1>Add a New Room</h1>
      
      <div class="form-container">
+        {{#if hasErrors}}
+            <div class="error-messages">
+                <ul>
+                    {{#each errors}}
+                        <li>{{this}}</li>
+                    {{/each}}
+                </ul>
+            </div>
+        {{/if}}
         <form id ="addRoomForm" action="/rooms/addRoomForm" method="POST">
         
         
@@ -33,11 +42,25 @@
                    aria-describedby="bedSizesHint" 
                    required>
             <small id="bedSizesHint">Separate bed sizes with commas (e.g., Queen, Twin).</small><br>
+
+             <label for="beginDate">Check-In Date:</label>
+            <input type="date" id="beginDate" name="beginDate" required><br>
+
+            <label for="endDate">Check-Out Date:</label>
+            <input type="date" id="endDate" name="endDate" required><br>
+
+            <br>
+
+
       
         <br>
         <button type="submit">Add Room</button>
         
+        
     </form>
+    <div class="center-button">
+            <button><a href="/admin/dashboard">Go back to Admin Dashboard</a></button>
+        </div>
      </div>
     
    
