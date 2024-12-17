@@ -21,7 +21,8 @@
         {{/if}}
         <form id ="addRoomForm" action="/rooms/addRoomForm" method="POST">
 
-            <label for="roomName">Room Name:</label>
+            <input type="hidden" name="roomId" value="{{roomId}}">
+        <label for="roomName">Room Name:</label>
             <input type="text" id="roomName" name="roomName" required><br>
             
             <label for="pricingPerNight">Pricing Per Night:</label>

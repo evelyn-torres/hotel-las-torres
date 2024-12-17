@@ -1,13 +1,9 @@
     <section>
-        <h1>{{pageTitle}}</h1>
-        
-        
+        <h1>{{pageTitle}}</h1>    
             {{#if error}}
-               <div class="error">{{error}}</div>
+               <div class="error-list">{{error}}</div>
             {{/if}}
     
-
-
         <form  id="loginForm" method ="POST" class="form-container" >
             <label for="userInput">Username:</label>
             <input type="text" name="userInput" id="userInput" placeholder="Enter your username...">

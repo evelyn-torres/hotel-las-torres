@@ -1,0 +1,23 @@
+ <script>
+    const closeButton = document.getElementById('closeButton'); // Close button ID
+
+    function openModal() {
+        document.getElementById('editRoomModal').style.display = 'flex';
+        document.body.classList.add('modal-open');
+    }
+
+    function closeModal() {
+        document.getElementById('editRoomModal').style.display = 'none';
+        document.body.classList.remove('modal-open');
+        history.back(); // Go back to the previous page without forcing reload
+        ///window.location.href = '/admin/dashboard'; // Redirect to dashboard
+    }
+  
+    document.addEventListener('DOMContentLoaded', () => {
+        console.log("DOM fully loaded, opening modal...");
+        openModal();
+
+    
+    });
+
+    </script>

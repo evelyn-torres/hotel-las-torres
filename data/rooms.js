@@ -123,8 +123,7 @@ export const removeRoom = async(id) => {
     return {...deletionInfo, deleted: true};
 };
 
-export const updateRoom = async(id, roomName, balcony, bedSizes, pricingPerNight, beginDate, endDate) => {
-    id = validation.checkId(id);
+export const updateRoom = async(id, roomName, balcony, bedSizes, pricingPerNight) => {
     //checks for numRooms 
     if(!roomName) throw "You must provide the number of rooms";
     roomName = validation.checkString(roomName, "room name");
@@ -148,25 +147,28 @@ export const updateRoom = async(id, roomName, balcony, bedSizes, pricingPerNight
     if(!pricingPerNight) throw "You mut provide a value for pricingPerNight"; 
     if(typeof pricingPerNight !== "number") throw "pricingPerNight must be a number";
     
-    //checks for availability 
-    //requires further checks for inside the object 
-    let todaysDate = new Date();
-    beginDate - validation.checkString(beginDate, "begin date");
-    endDate - validation.checkString(endDate, "end date");
-    let begin = new Date(beginDate);
-    let end = new Date(endDate);
-    if (end.getTime() - begin.getTime() < 0) throw "Admin Error: Check-Out date must be after Check-In Date.";
-    if (begin.getTime() < todaysDate.getTime()) throw "Admin Error: Cannot set room to open before today's date. Please select another date";
-    const availability = createAvailbyDates(begin, end);
-    if(!availability) throw "You must provide the availability for the room";
-    if(typeof availability !== "object") throw "availability must be an object";
+    //checks for availability → will keep the availibilty the same, as there could be booking issues
+    let currRoom = await getRoomById(id);
+    //console.log("checking room", currRoom);
+    let currentRoomAvail = currRoom.availability;
+    if (!currentRoomAvail || typeof currentRoomAvail !== "object") throw "Admin Error: Can't fetch availibilty of current room";
+    // let todaysDate = new Date();
+    // beginDate - validation.checkString(beginDate, "begin date");
+    // endDate - validation.checkString(endDate, "end date");
+    // let begin = new Date(beginDate);
+    // let end = new Date(endDate);
+    // if (end.getTime() - begin.getTime() < 0) throw "Admin Error: Check-Out date must be after Check-In Date.";
+    // if (begin.getTime() < todaysDate.getTime()) throw "Admin Error: Cannot set room to open before today's date. Please select another date";
+    // const availability = createAvailbyDates(begin, end);
+    // if(!availability) throw "You must provide the availability for the room";
+    // if(typeof availability !== "object") throw "availability must be an object";
 
     let updatedRoom = {
         roomName: roomName, //not really update-able
-        balcony: balcony,  //not really update-able 
+        balcony: balcony, 
         bedSizes: bedSizes,
         pricingPerNight: pricingPerNight, 
-        availability: availability
+        availability: currentRoomAvail //will keep the same and use another function to gray out completely
     } 
 
     const roomCollection = await rooms();
