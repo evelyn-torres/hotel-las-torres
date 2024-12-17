@@ -130,7 +130,7 @@ router
 
   router
     .route('/:roomId')
-    .delete(async (req, res) => {
+    .delete(ensureAdmin, async (req, res) => {
      // const {roomId} = req.params;
     //  console.log('DELETE req received', req.params.roomId);
      try{
@@ -146,9 +146,21 @@ router
       }
     });
 
+
+    function ensureAdmin(req, res, next) {
+      if (!req.session.user || req.session.user.toLowerCase() !== 'admin') {
+          return res.status(403).render('error', {
+              pageTitle: 'Access Denied',
+              message: 'You do not have permission to perform this action.',
+              partial: "dead_server_script"
+          });
+      }
+      next();
+  }
+
   router
     .route('/addRoomForm')
-    .get((req,res) =>{
+    .get(ensureAdmin, (req,res) =>{
       try{
         res.render('addRoom', {
            pageTitle: 'Add New Room',
@@ -160,7 +172,7 @@ router
       res.status(500).json({error: 'Internal Server Error'})
   }
     })
-  .post(async (req, res)=>{
+  .post(ensureAdmin, async (req, res)=>{
     let { roomName, pricingPerNight, balcony, bedSizes, beginDate, endDate } = req.body;
     let errors =[];
     try{

@@ -8,6 +8,7 @@ import contactRoutes from './routes/contact.js';
 import cookieParser from "cookie-parser";
 import session from "express-session";
 import methodOverride from 'method-override';
+import roomsRoutes from './routes/rooms.js'; 
 
 const app = express();
 
@@ -27,6 +28,7 @@ app.engine('handlebars', exphbs.engine({
   app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'handlebars');
 
+
 // Middleware for parsing and static files
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -45,6 +47,34 @@ app.use('/public', express.static(path.join(__dirname, 'static')));
 app.use('/contact', contactRoutes);
 
 
+// Middleware 1: Log requests
+app.use((req, res, next) => {
+  const currentTime = new Date().toUTCString();
+  const user = req.session.user;
+  const status = user
+    ? `Authenticated ${user.role === "Administrator" ? "Administrator" : "User"}`
+    : "Non-Authenticated";
+  console.log(`[${currentTime}]: ${req.method} ${req.originalUrl} (${status})`);
+  next();
+});
+
+
+
+
+// Middleware 2: Redirect authenticated users from /login
+app.use("/login", (req, res, next) => {
+  const user = req.session.user;
+  if (user) {
+    return res.redirect(
+      user.role.toLowerCase() === "administrator" ? "/administrator" : "/user"
+    );
+  }
+  next();
+});
+
+
+
+
 app.use('/login', (req, res, next) => {
   const user = req.session.user;
   if (user && user.toLowerCase() === 'admin') {
@@ -54,12 +84,8 @@ app.use('/login', (req, res, next) => {
   next(); 
 });
 
-// app.use('/admin/dashboard/createAdmin', (req, res, next) => {
-//   const user = req.session.user; 
-//   console.log(user);
-//   res.redirect()
-//   next();
-// })
+
+
 
 app.get('/logout', (req, res)=>{
   req.session.destroy((err) =>{
@@ -70,24 +96,35 @@ app.get('/logout', (req, res)=>{
     res.redirect('/login');
   })
 })
-// const roomsRouter = require('./routes/rooms.js');
-// app.use('/rooms', roomsRouter);
+
+
+//HELLLOOOOOOOO
+
+
 
 app.use(methodOverride('_method'));
 
 
+
+
+
 constructorMethod(app);
+
+
+app.use((req, res) => {
+  res.status(404).render('error404', {
+    pageTitle: 'Page Not Found',
+    layout: false 
+  });
+});
+
+// Error-handling middleware
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).render("error", { message: "Internal Server Error" });
+});
 
 app.listen(3000, () => {
     console.log('Server is running on http://localhost:3000');
 });
 
-
-//TESTING
-// import * as roomFuncs from './data/rooms.js';
-
-// try {
-//     console.log(await roomFuncs.getAllRooms());
-// } catch(e) {
-//     console.log(e)
-// }
