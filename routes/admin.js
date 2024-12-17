@@ -4,6 +4,8 @@ import validation from '../helpers.js';
 import {roomData} from '../data/index.js';
 import xss from 'xss';
 import { ObjectId } from 'mongodb';
+import {admins} from '../config/mongoCollections.js';
+
 
 
 
@@ -91,7 +93,15 @@ router.route('/dashboard/createAdmin')
             console.log(req.body)
             const roomList = await roomData.getAllRooms(); // Example: Fetching room data
             const { employeeFirstName, employeeLastName, govID, userName, password, confirmPassword } = req.body;
-            console.log(employeeFirstName)
+
+            const adminCollection = await admins();
+            // const adminList = await adminData.getAllAdmin();
+            const user = await adminCollection.findOne({userName: userName.toLowerCase()});
+
+            if (user) {
+                console.log("Duplicate username:", user.userName);
+                throw "Username already exists";
+            }
             let empFirstName = validation.checkString(employeeFirstName, "Employee First Name");
             let empLastName = validation.checkString(employeeLastName, "Employee Last Name"); 
             let empGovID = validation.checkString(govID, "GovernmentID"); 
@@ -115,7 +125,7 @@ router.route('/dashboard/createAdmin')
             if (empPass.includes(" ")) throw "Password cannot contain spaces";
             
             //create new admin 
-            const newAdmin = await adminData.createAdmin(empFirstName, empLastName, empGovID, empUser, empPass); 
+            const newAdmin = await adminData.createAdmin(empFirstName, empLastName, empGovID, empUser.toLowerCase(), empPass); 
             if(!newAdmin) throw "couldn't create admin"
 
             res.render('admin', {
