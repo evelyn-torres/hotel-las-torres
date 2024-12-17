@@ -20,6 +20,7 @@
 
                 <label for="balcony">Balcony:</label>
                 <select id="balcony" name="balcony" required>
+                    <option value="" disabled {{#unless balcony}}selected{{/unless}}>Select an option</option>
                     <option value="true" {{#if (eq balcony true)}}selected{{/if}}>Yes</option>
                     <option value="false" {{#if (eq balcony false)}}selected{{/if}}>No</option>
                 </select><br>

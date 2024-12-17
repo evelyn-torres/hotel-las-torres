@@ -14,9 +14,9 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             renderRooms(data.rooms);
         } catch (e) {
-            throw new Error('Could not get rooms:', e);
+            throw `Could not get rooms: ${e}`;
         }
-    }
+    };
 
     function renderRooms(rooms) {
         roomsTable.innerHTML = '';

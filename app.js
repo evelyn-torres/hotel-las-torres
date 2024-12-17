@@ -61,16 +61,16 @@ app.use((req, res, next) => {
 
 
 
-// Middleware 2: Redirect authenticated users from /login
-app.use("/login", (req, res, next) => {
-  const user = req.session.user;
-  if (user) {
-    return res.redirect(
-      user.role.toLowerCase() === "administrator" ? "/administrator" : "/user"
-    );
-  }
-  next();
-});
+// // Middleware 2: Redirect authenticated users from /login
+// app.use("/login", (req, res, next) => {
+//   const user = req.session.user;
+//   if (user) {
+//     return res.redirect(
+//       user.role.toLowerCase() === "administrator" ? "/administrator" : "/user"
+//     );
+//   }
+//   next();
+// });
 
 
 

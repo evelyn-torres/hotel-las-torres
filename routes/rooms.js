@@ -220,16 +220,16 @@ router
       endDate
     );
 
-        const roomList = await roomData.getAllRooms();
+  const roomList = await roomData.getAllRooms();
 
-      res.redirect('/admin/dashboard');
-      res.render('addRoom', 
-        {rooms: roomList, 
-          pageTitle: "Rooms", 
-          partial: 'addRoomForm',
-          success: true,
-          successMessage: `Room "${newRoom.roomName}" has been added successfully!`,});
-         res.redirect('/admin/dashboard');
+    res.redirect('/admin/dashboard');
+    // res.render('addRoom', 
+    //   {rooms: roomList, 
+    //     pageTitle: "Rooms", 
+    //     partial: 'addRoomForm',
+    //     success: true,
+    //     successMessage: `Room "${newRoom.roomName}" has been added successfully!`,});
+    //    res.redirect('/admin/dashboard');
 
 
 
@@ -243,6 +243,6 @@ router
         partial: 'addRoomForm',
       });
     }
-  })
+  });
 
 export default router;
