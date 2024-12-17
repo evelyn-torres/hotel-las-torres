@@ -76,8 +76,19 @@ router.get('/dashboard', async (req,res) => {
         }
     })
 
+function ensureAdmin(req, res, next) {
+        if (!req.session.user || req.session.user.toLowerCase() !== 'admin') {
+            return res.status(403).render('error', {
+                pageTitle: 'Access Denied',
+                message: 'You do not have permission to perform this action.',
+                partial: "dead_server_script"
+            });
+        }
+        next();
+    }
+
 router.route('/dashboard/createAdmin')
-    .get(async (req, res) => {
+    .get(ensureAdmin, async (req, res) => {
         console.log(req.body)
         try {
             res.render('admin', {
@@ -88,7 +99,7 @@ router.route('/dashboard/createAdmin')
             res.status(500).json({ error: "Sign Up page not displayed" });
         }
     })
-    .post(async (req, res) => {
+    .post(ensureAdmin, async (req, res) => {
         try {
             console.log(req.body)
             const roomList = await roomData.getAllRooms(); // Example: Fetching room data
