@@ -3,19 +3,21 @@
   <h1>Our Rooms</h1>
   <div class="rooms-container">
     {{#each rooms}}
-    <div class="room-card">
-      <div class="room-details">
-        <h2>{{roomName}}</h2>
-        <p><strong>Balcony:</strong> {{#if balcony}}Yes{{else}}No{{/if}}</p>
-        <p><strong>Pricing Per Night:</strong> ${{pricingPerNight}}</p>
-        <p><strong>Bed Sizes:</strong> 
-          {{#each bedSizes}}
-            {{@key}}: {{this}}<br>
-          {{/each}}
-        </p>
-        <a href="/rooms/{{_id}}/bookingRoom" class="book-now-button">Book This Room</a>
-      </div>
-    </div>
+        {{#if (eq status 'ready')}}
+          <div class="room-card">
+            <div class="room-details">
+              <h2>{{roomName}}</h2>
+              <p><strong>Balcony:</strong> {{#if balcony}}Yes{{else}}No{{/if}}</p>
+              <p><strong>Pricing Per Night:</strong> ${{pricingPerNight}}</p>
+              <p><strong>Bed Sizes:</strong> 
+                {{#each bedSizes}}
+                  {{@key}}: {{this}}<br>
+                {{/each}}
+              </p>
+              <a href="/rooms/{{_id}}/bookingRoom" class="book-now-button">Book This Room</a>
+            </div>
+          </div>
+        {{/if}}
     {{/each}}
   </div>
 </section>

@@ -20,7 +20,6 @@
    
   </div>
   <div class="rooms-container">
-    {{!-- {{#if rooms}} --}}
       {{#each rooms}}
       <div class="room-card">
         <img src="{{imageURL}}" alt="{{roomName}}" class="room-image" />
@@ -39,9 +38,14 @@
             <form action="/rooms/{{_id}}?_method=DELETE" method="POST">
                 <button type="submit" class="delete-button">Delete</button>
             </form>
-            <form action="/rooms/{{_id}}/outOfService" method="POST">
-                <button type="submit" class="out-of-service-button">Out of Service</button>
+            <form action="/admin/{{_id}}/toggleStatus" method="POST">
+            <button type="submit">
+                {{#if (eq status 'ready')}}Mark Unavailable{{else}}Mark Available{{/if}}
+            </button>
             </form>
+            {{!-- <form action="/rooms/{{_id}}/outOfService" method="POST">
+                <button type="submit" class="out-of-service-button">Out of Service</button>
+            </form> --}}
             
         </div>
 

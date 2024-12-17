@@ -6,9 +6,6 @@ import xss from 'xss';
 import { ObjectId } from 'mongodb';
 import {admins} from '../config/mongoCollections.js';
 
-
-
-
 const router = Router();
 
 router.route('/')
@@ -188,7 +185,6 @@ router.route('/addRoom')
         }
     });
 
-
 router.route('/editRoom/:roomId')
     .get(async (req,res) => {
         const roomId = req.params.roomId;
@@ -230,4 +226,21 @@ router.route('/editRoom/:roomId')
             res.status(500).send('Error updating room: ' + e);
         }
     });
+
+router.route('/:roomId/toggleStatus')
+    .post(async (req, res) => {
+        const { roomId } = req.params;
+        try {
+            const room = await roomData.getRoomById(roomId);
+            if (!room) throw "Room not found";
+            //rooms will only be availible or unavailible 
+            const newStatus = room.status === "ready" ? "unavailable" : "ready";
+            await roomData.updateRoomStatus(roomId, newStatus);
+            res.redirect('/admin/dashboard');
+        } catch (e) {
+            console.error(e);
+            res.status(500).send("Error toggling room status");
+        }
+    });
+
 export default router;

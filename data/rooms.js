@@ -182,3 +182,14 @@ export const updateRoom = async(id, roomName, balcony, bedSizes, pricingPerNight
     return updateInfo;
     };
     
+export const updateRoomStatus = async (id, newStatus) => {
+    //id = validation.checkId(id, "room ID");
+    const roomCollection = await rooms();
+    const updatedInfo = await roomCollection.findOneAndUpdate(
+        { _id: new ObjectId(id) },
+        { $set: { status: newStatus } },
+        { returnDocument: "after" }
+    );
+    if (!updatedInfo) throw "Failed to update room status";
+    return updatedInfo;
+};

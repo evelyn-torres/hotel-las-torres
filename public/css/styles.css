@@ -751,3 +751,40 @@ body.modal-open {
   pointer-events: none; 
   opacity: 0.5; 
 }
+
+.grayed-out {
+  opacity: 0.5; 
+  background-color: #e0e0e0; 
+}
+
+.status-button {
+  background-color: #44b00a;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.status-button:hover {
+  background-color: #0056b3;
+}
+
+.grayed-out .action-buttons button {
+  opacity: 1; 
+  pointer-events: all; 
+}
+
+.action-buttons button {
+  margin: 5px;
+  padding: 8px 12px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.action-buttons button:hover {
+  background-color: #0056b3;
+}
