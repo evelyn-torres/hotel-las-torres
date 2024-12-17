@@ -96,7 +96,12 @@ router //after click on book now, route to room by roomid
         if (roomName && room !== undefined){
           roomName = room.roomName;
         }
-        return res.render("roomBooking", {pageTitle: `Book ${roomName}`, hasErrors: true, errors: errors, partial: "rooms", roomId: roomId, roomName: roomName});
+        return res.render("roomBooking", 
+          {pageTitle: `Book ${roomName}`, 
+          hasErrors: true, errors: errors, 
+          partial: "rooms", 
+          roomId: roomId, 
+          roomName: roomName});
      }
     });    
 
@@ -143,35 +148,57 @@ router
         res.status(500).json({ error: error.message || 'Internal Server Error' })
       }
     });
+
   router
     .route('/addRoomForm')
     .get((req,res) =>{
-      try{res.render('addRoom', {
-      pageTitle: 'Add New Room',
-      hasErrors: false,
-  })}catch(e){
+      try{
+        res.render('addRoom', {
+           pageTitle: 'Add New Room',
+           hasErrors: false,
+           partial: 'addRoomForm'
+       })
+      }catch(e){
       console.error(e);
       res.status(500).json({error: 'Internal Server Error'})
   }
     })
   .post(async (req, res)=>{
-    const newRoomData = req.body;
+    const { roomName, pricingPerNight, balcony, bedSizes } = req.body;
     let errors =[];
     try{
-      const roomName = validation.checkString(newRoomData.roomName, 'Room Name');
-      const balcony = newRoomData.balcony === 'true';
-      const bedSizes = JSON.parse(newRoomData.bedSizes); 
-      const pricingPerNight = parseFloat(newRoomData.pricingPerNight);
-      const availability = JSON.parse(newRoomData.availability); 
-      const newRoom = await roomData.createRoom(roomName, balcony, bedSizes, pricingPerNight, availability);
+      const bedSizesArray = bedSizes.split(',').map(bed => bed.trim());
+      if (!roomName || !pricingPerNight || !bedSizesArray.length) {
+        throw ('Missing required fields.');
+    }
+    const availability = {
+      open: true,
+      booked: false,
+  };
+  // const balcony ={
+  //   Yes: true,
+  //   No: false
+  // }
+  const hasBalcony = balcony === 'true';
 
-      res.status(201).render('rooms', {
-        success: true,
-        successMessage: `Room "${newRoom.roomName}" has been successfully added.`,
-        rooms: await roomData.getAllRooms(),
-        pageTitle: 'Rooms',
-        partial: 'rooms',
-      });
+  console.log('in create room:', req.body)
+      
+      const newRoom = await roomData.createRoom(
+        roomName,
+        hasBalcony,
+        bedSizesArray,
+        parseFloat(pricingPerNight),
+        availability);
+
+      res.render('addRoom', 
+        {rooms: roomList, 
+          pageTitle: "Rooms", 
+          partial: 'addRoomForm',
+          success: true,
+          successMessage: `Room "${newRoom.roomName}" has been added successfully!`,});
+
+
+
     }catch(e){
       console.error(e);
       errors.push(e);
@@ -179,7 +206,7 @@ router
         pageTitle: 'Add a New Room',
         hasErrors: true,
         errors: errors,
-        partial: 'rooms',
+        partial: 'addRoomForm',
       });
     }
   })
