@@ -20,9 +20,7 @@
             </div>
         {{/if}}
         <form id ="addRoomForm" action="/rooms/addRoomForm" method="POST">
-        
-        
-            
+
             <input type="hidden" name="roomId" value="{{roomId}}">
         <label for="roomName">Room Name:</label>
             <input type="text" id="roomName" name="roomName" required><br>
@@ -38,22 +36,20 @@
             
             <label for="bedSizes">Bed Sizes (comma-separated):</label>
             <input type="text" id="bedSizes" name="bedSizes" 
-                   placeholder="e.g., Queen, Twin" 
-                   pattern="^[a-zA-Z\s]+(,\s*[a-zA-Z\s]+)*$" 
+                   placeholder="e.g., Twin, Double" 
+                   pattern="^[a-zA-Z\s-]+(,\s*[a-zA-Z\s-]+)*$" 
                    aria-describedby="bedSizesHint" 
                    required>
-            <small id="bedSizesHint">Separate bed sizes with commas (e.g., Queen, Twin).</small><br>
+            <small id="bedSizesHint">Separate bed sizes with commas (e.g., Twin, Double).</small><br>
 
-             <label for="beginDate">Check-In Date:</label>
+             <label for="beginDate">Begin Availability:</label>
             <input type="date" id="beginDate" name="beginDate" required><br>
 
-            <label for="endDate">Check-Out Date:</label>
+            <label for="endDate">End Availability:</label>
             <input type="date" id="endDate" name="endDate" required><br>
 
             <br>
 
-
-      
         <br>
         <button type="submit">Add Room</button>
         
