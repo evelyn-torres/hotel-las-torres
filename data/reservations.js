@@ -106,7 +106,7 @@ export const createReservation = async(
     }
     
     //checks for govID
-    govID = validation.checkString(govID)
+    govID = validation.checkGovId(govID)
     if(govID.length < 8) throw "Government ID must be at least 8 characters"; 
     if(govID.length > 20) throw "Government ID must be less than 20 characters";
     if(govID.includes(" ")) throw "Government ID must not have spaces in between";

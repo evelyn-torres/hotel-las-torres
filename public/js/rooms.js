@@ -22,16 +22,16 @@
         console.log("test passed", responseMessage);
         
         const events = [
-            ...responseMessage.open.map(date => ({
+            ...(Array.isArray(responseMessage.open) ? responseMessage.open.map(date => ({
                 start: date,
                 display: 'background',
-                color: 'green'
-            })),
-            ...responseMessage.booked.map(date => ({
+                color: 'green',
+            })) : []),
+            ...(Array.isArray(responseMessage.booked) ? responseMessage.booked.map(date => ({
                 start: date,
                 display: 'background',
-                color: 'red'
-            }))
+                color: 'red',
+            })) : [])
         ];
         
         var calendar = new FullCalendar.Calendar(roomCalendar[0], {

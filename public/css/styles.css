@@ -788,3 +788,70 @@ body.modal-open {
 .action-buttons button:hover {
   background-color: #0056b3;
 }
+
+.tourism-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+  margin: 20px auto;
+  max-width: 1200px; 
+}
+.tourism-card {
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: calc(33% - 40px); 
+  overflow: hidden;
+  text-align: center;
+  transition: transform 0.3s;
+  min-width: 300px; 
+}
+
+.tourism-card:hover {
+  transform: scale(1.05);
+}
+
+.tourism-card img {
+  width: 100%;
+  border-radius: 8px;
+  margin-bottom: 12px;
+}
+.tourism-card p {
+  color: #7f8c8d;
+  font-size: 1em;
+  margin-bottom: 12px;
+}
+.tourism-card ul {
+  list-style: none;
+  padding: 1px;
+  margin: 10px;
+  text-align: left;
+}
+
+.tourism-card ul li {
+  margin: 6px 0;
+  font-size: 0.9em;
+}
+
+.tourism-card a {
+  color: #3498db;
+  text-decoration: none;
+}
+
+.tourism-card a:hover {
+  text-decoration: underline;
+}
+
+.translate-dropdown {
+  position: absolute;
+  top: 10px; /* Distance from the top of the page */
+  right: 10px; /* Distance from the right of the page */
+  z-index: 1000; /* Ensures it stays above other elements */
+}
+
+#google_translate_element {
+  margin-left: 20px;
+  display: right;
+}

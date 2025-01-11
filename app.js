@@ -5,6 +5,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import {dirname} from 'path';
 import contactRoutes from './routes/contact.js';
+import tourismRoutes from './routes/tourism.js';
 import cookieParser from "cookie-parser";
 import session from "express-session";
 import methodOverride from 'method-override';
@@ -45,6 +46,7 @@ app.use(
 
 app.use('/public', express.static(path.join(__dirname, 'static')));
 app.use('/contact', contactRoutes);
+app.use('/tourism', tourismRoutes);
 
 
 // Middleware 1: Log requests
