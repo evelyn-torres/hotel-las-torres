@@ -788,3 +788,34 @@ body.modal-open {
 .action-buttons button:hover {
   background-color: #0056b3;
 }
+
+.tourism-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+  margin: 20px auto;
+  max-width: 1200px; 
+}
+.tourism-card {
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: calc(33% - 40px); 
+  overflow: hidden;
+  text-align: center;
+  transition: transform 0.3s;
+  min-width: 300px; 
+}
+
+.tourism-card:hover {
+  transform: scale(1.05);
+}
+
+.tourism-image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-bottom: 1px solid #ddd;
+}

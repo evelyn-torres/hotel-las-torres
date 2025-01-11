@@ -1,6 +1,6 @@
-import {dbConnection, closeConnection} from '../config/mongoConnection.js';
+import { dbConnection, closeConnection } from '../config/mongoConnection.js';
 import * as rooms from '../data/rooms.js';
-import * as guests from '../data/guests.js'
+import * as guests from '../data/guests.js';
 import * as reservations from '../data/reservations.js';
 import * as comments from '../data/comments.js';
 import * as admin from '../data/admin.js';
@@ -8,170 +8,144 @@ import * as admin from '../data/admin.js';
 const db = await dbConnection();
 await db.dropDatabase();
 
-let roomOne = undefined; 
-let roomTwo = undefined; 
-let roomThree = undefined; 
-let roomFour = undefined; 
-let roomFive = undefined; 
-let roomSix = undefined; 
-let roomSeven = undefined; 
-let roomEight = undefined; 
-let roomNine = undefined; 
-let roomTen = undefined; 
-let roomEleven = undefined; 
-let guestOne = undefined; 
-let guestTwo = undefined; 
-let reservationOne = undefined; 
-let commentOne = undefined; 
-let modifyRes = undefined; 
+let roomOne, roomTwo, roomThree, roomFour, roomFive;
+let roomSix, roomSeven, roomEight, roomNine, roomTen, roomEleven;
+let guestOne, guestTwo, reservationOne;
 
+// Get today's date and calculate a future date for `closeDate`
+const today = new Date();
+//Date = today.toISOString().split('T')[0]; // Today's date in YYYY-MM-DD format
+const openDate = new Date(today);
 
- //"2025-01-02", "2025-02-02"); /* CAN CHANGE BASED ON YEAR -→ will use only 2025 for project*/
-
-//adding room one
+const futureDate = new Date(today);
+futureDate.setDate(today.getDate() + 30); // Set closeDate 30 days from today
+const closeDate = new Date(today);
+//const closeDate = futureDate.toISOString().split('T')[0];
+closeDate.setDate(closeDate.getDate() + 30); // Set closeDate 30 days from today
 console.log('Adding rooms:');
 try {
-    roomOne = await rooms.createRoom("Room 1", false, {"Double": 1, "Semi-Double": 1}, 120.00, "2025-01-02", "2025-02-02");
-} catch(e) {
-    console.log(e)
+  roomOne = await rooms.createRoom("Room 1", false, { "Double": 1, "Semi-Double": 1 }, 120.00, openDate, closeDate);
+  console.log(roomOne);
+} catch (e) {
+  console.error(e);
 }
 
-//adding room two 
 try {
-    roomTwo = await rooms.createRoom("Room 2", false, {"Twin": 1, "Semi-Double": 3}, 100.00, "2025-01-02", "2025-02-02");
-} catch(e) {
-    console.log(e)
+  roomTwo = await rooms.createRoom("Room 2", false, { "Twin": 1, "Semi-Double": 3 }, 100.00, openDate, closeDate);
+  console.log(roomTwo);
+} catch (e) {
+  console.error(e);
 }
 
-//adding room three 
 try {
-    roomThree = await rooms.createRoom("Room 3", false, {"Double": 1, "Semi-Double": 2}, 100.00, "2025-01-02", "2025-02-02");
-} catch(e) {
-    console.log(e)
+  roomThree = await rooms.createRoom("Room 3", false, { "Double": 1, "Semi-Double": 2 }, 100.00, openDate, closeDate);
+  console.log(roomThree);
+} catch (e) {
+  console.error(e);
 }
 
-//adding room four 
 try {
-    roomFour = await rooms.createRoom("Room 4", false, {"Double": 1}, 100.00, "2025-01-02", "2025-02-02");
-} catch(e) {
-    console.log(e)
+  roomFour = await rooms.createRoom("Room 4", false, { "Double": 1 }, 100.00, openDate, closeDate);
+  console.log(roomFour);
+} catch (e) {
+  console.error(e);
 }
 
-//adding room five 
 try {
-    roomFive = await rooms.createRoom("Room 5", false, {"Double": 1}, 100.00, "2025-01-02", "2025-02-02");
-} catch(e) {
-    console.log(e)
+  roomFive = await rooms.createRoom("Room 5", false, { "Double": 1 }, 100.00, openDate, closeDate);
+  console.log(roomFive);
+} catch (e) {
+  console.error(e);
 }
 
-//adding room six 
 try {
-    roomSix = await rooms.createRoom("Room 6", false, {"Double": 1, "Semi-Double": 1}, 100.00, "2025-01-02", "2025-02-02");
-} catch(e) {
-    console.log(e)
+  roomSix = await rooms.createRoom("Room 6", false, { "Double": 1, "Semi-Double": 1 }, 100.00, openDate, closeDate);
+  console.log(roomSix);
+} catch (e) {
+  console.error(e);
 }
 
-//adding room seven 
 try {
-    roomSeven = await rooms.createRoom("Room 7", false, {"Double": 1, "Semi-Double": 2}, 100.00, "2025-01-02", "2025-02-02");
-} catch(e) {
-    console.log(e)
+  roomSeven = await rooms.createRoom("Room 7", false, { "Double": 1, "Semi-Double": 2 }, 100.00, openDate, closeDate);
+  console.log(roomSeven);
+} catch (e) {
+  console.error(e);
 }
 
-//adding room eight
 try {
-    roomEight = await rooms.createRoom("Room 8", false, {"Double": 2}, 100.00, "2025-01-02", "2025-02-02");
-    console.log(roomEight)
-} catch(e) {
-    console.log(e)
+  roomEight = await rooms.createRoom("Room 8", false, { "Double": 2 }, 100.00, openDate, closeDate);
+  console.log(roomEight);
+} catch (e) {
+  console.error(e);
 }
 
-//adding room nine
 try {
-    roomNine = await rooms.createRoom("Room 9", false, {"Double": 1, "Semi-Double": 2}, 100.00, "2025-01-02", "2025-02-02");
-} catch(e) {
-    console.log(e)
+  roomNine = await rooms.createRoom("Room 9", false, { "Double": 1, "Semi-Double": 2 }, 100.00, openDate, closeDate);
+  console.log(roomNine);
+} catch (e) {
+  console.error(e);
 }
 
-//adding room ten
 try {
-    roomTen = await rooms.createRoom("Room 10", false, {"Twin": 1, "Semi-Double": 2}, 100.00, "2025-01-02", "2025-02-02");
-} catch(e) {
-    console.log(e)
+  roomTen = await rooms.createRoom("Room 10", false, { "Twin": 1, "Semi-Double": 2 }, 100.00, openDate, closeDate);
+  console.log(roomTen);
+} catch (e) {
+  console.error(e);
 }
 
-//adding room eleven
 try {
-    roomEleven = await rooms.createRoom("Room 11", false, {"Double": 3}, 100.00, "2025-01-02", "2025-02-02");
-} catch(e) {
-    console.log(e)
+  roomEleven = await rooms.createRoom("Room 11", false, { "Double": 3 }, 100.00, openDate, closeDate);
+  console.log(roomEleven);
+} catch (e) {
+  console.error(e);
 }
 
-//testing roomUpdate 
-// try {
-//     modifyRes = await rooms.updateRoom(roomEleven._id.toString(), "Room 11", false, {"Double": 3}, 7000.00, "2025-01-02", "2025-02-02"))
-//     console.log(modifyRes)
-// } catch(e) {
-//     console.log(e)
-// }
-
-//testing for reservationUpdate
-// try {
-//     let modifyRoom = await rooms.updateRoom(roomEleven._id.toString(), )
-// } catch(e) {
-//     console.log(e)
-// }
-
-
-//adding a guest
+console.log('Adding guests:');
 try {
-    guestOne = await guests.createGuest("John", "Doe", 24, "A24294820", 9144093842, "john.doe@gmail.com");
-    console.log(guestOne)
-} catch(e) {
-    console.log(e)
+  guestOne = await guests.createGuest("John", "Doe", 24, "A24294820", 9144093842, "john.doe@gmail.com");
+  console.log(guestOne);
+} catch (e) {
+  console.error(e);
 }
 
-//adding another guest 
 try {
-    guestTwo = await guests.createGuest("Harry", "Potter", 16, "83J91938", 20184983921, "hp@gryffindor.com");
-} catch(e) {
-    console.log(e)
+  guestTwo = await guests.createGuest("Harry", "Potter", 16, "83J91938", 20184983921, "hp@gryffindor.com");
+  console.log(guestTwo);
+} catch (e) {
+  console.error(e);
 }
 
-// adding a reservation 
+console.log('Adding reservations:');
 try {
-    reservationOne = await reservations.createReservation([guestOne._id.toString(), guestTwo._id.toString()], 3, roomEight._id.toString(), new Date('November 15, 2024'), 
-    new Date('November 18, 2023'), true, true, 600.00)
-    console.log(reservationOne)
-} catch(e) {
-    console.log(e)
+  reservationOne = await reservations.createReservation(
+    [guestOne._id.toString(), guestTwo._id.toString()],
+    3,
+    roomEight._id.toString(),
+    new Date(today), // Reservation start date as today
+    new Date(futureDate), // Reservation end date 30 days from today
+    true,
+    true,
+    600.00
+  );
+  console.log(reservationOne);
+} catch (e) {
+  console.error(e);
 }
 
-//testing for getroomIDbynumber
-// try {
-//     let roomtest = await rooms.getRoomIdByNumber(5);
-// } catch (e) {
-//     console.log(e)
-// }
-
-//adding an employee
-console.log('Adding a new employee/admin to databse:');
-try{
-    const admin1 = await admin.createAdmin("Jane", "Dane", "A24294821" ,"adminUser1", "adminPassword1");
-    console.log(admin1)
-}catch(e){
-    console.log(e);
+console.log('Adding admins:');
+try {
+  const admin1 = await admin.createAdmin("Jane", "Dane", "A24294821", "adminUser1", "adminPassword1");
+  console.log(admin1);
+} catch (e) {
+  console.error(e);
 }
 
-//adding another employee
-console.log('Adding a new employee/admin to databse2:');
-try{
-    const admin2 = await admin.createAdmin("Wes", "Nabo", "WN167059" ,"wnabo", "nabo_password1");
-    console.log(admin2)
-}catch(e){
-    console.log(e);
+try {
+  const admin2 = await admin.createAdmin("Wes", "Nabo", "WN167059", "wnabo", "nabo_password1");
+  console.log(admin2);
+} catch (e) {
+  console.error(e);
 }
-
 
 console.log('Done seeding database');
 await closeConnection();

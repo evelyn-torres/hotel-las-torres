@@ -157,7 +157,7 @@ router.route('/dashboard/createAdmin')
     });
 
 router.route('/addRoom')
-    .get((req,res) =>{
+    .get(ensureAdmin, (req,res) =>{
         try{
             res.render('addRoom', {pageTitle: 'Add New Room', hasErrors: false});
         }catch(e){
@@ -197,7 +197,7 @@ router.route('/addRoom')
     });
 
 router.route('/editRoom/:roomId')
-    .get(async (req,res) => {
+    .get(ensureAdmin, async (req,res) => {
         const roomId = req.params.roomId;
         console.log('tried')
         try {
@@ -214,7 +214,7 @@ router.route('/editRoom/:roomId')
             res.status(500).send('Error fetching room data: ' + e);
         }
     })
-    .post(async (req,res) => {
+    .post(ensureAdmin, async (req,res) => {
         const roomId = req.params.roomId;
         console.log("update", req.body, roomId);
         try {
@@ -239,7 +239,7 @@ router.route('/editRoom/:roomId')
     });
 
 router.route('/:roomId/toggleStatus')
-    .post(async (req, res) => {
+    .post(ensureAdmin, async (req, res) => {
         const { roomId } = req.params;
         try {
             const room = await roomData.getRoomById(roomId);

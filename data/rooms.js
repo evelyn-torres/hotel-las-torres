@@ -71,9 +71,16 @@ export const createRoom = async (
     //checks for availability 
     //requires further checks for inside the object 
     let todaysDate = new Date();
-   // todaysDate.setHours(0, 0, 0, 0); // Reset today's date to midnight
-    beginDate - validation.checkString(beginDate, "begin date");
-    endDate - validation.checkString(endDate, "end date");  
+    todaysDate.setHours(0, 0, 0, 0); // Reset today's date to midnight
+    // beginDate - validation.checkString(beginDate, "begin date");
+    // endDate - validation.checkString(endDate, "end date"); 
+
+    beginDate = new Date(beginDate).toISOString();
+    endDate = new Date(endDate).toISOString();
+    console.log('before begin date validation', beginDate) 
+
+    beginDate = validation.checkDate(beginDate, "begin date");
+    endDate = validation.checkDate(endDate, "end date");
     let begin = new Date(beginDate);
     let end = new Date(endDate);
 
