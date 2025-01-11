@@ -813,9 +813,45 @@ body.modal-open {
   transform: scale(1.05);
 }
 
-.tourism-image {
+.tourism-card img {
   width: 100%;
-  height: 200px;
-  object-fit: cover;
-  border-bottom: 1px solid #ddd;
+  border-radius: 8px;
+  margin-bottom: 12px;
+}
+.tourism-card p {
+  color: #7f8c8d;
+  font-size: 1em;
+  margin-bottom: 12px;
+}
+.tourism-card ul {
+  list-style: none;
+  padding: 1px;
+  margin: 10px;
+  text-align: left;
+}
+
+.tourism-card ul li {
+  margin: 6px 0;
+  font-size: 0.9em;
+}
+
+.tourism-card a {
+  color: #3498db;
+  text-decoration: none;
+}
+
+.tourism-card a:hover {
+  text-decoration: underline;
+}
+
+.translate-dropdown {
+  position: absolute;
+  top: 10px; /* Distance from the top of the page */
+  right: 10px; /* Distance from the right of the page */
+  z-index: 1000; /* Ensures it stays above other elements */
+}
+
+#google_translate_element {
+  margin-left: 20px;
+  display: right;
 }
