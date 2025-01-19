@@ -10,6 +10,8 @@ import cookieParser from "cookie-parser";
 import session from "express-session";
 import methodOverride from 'method-override';
 import roomsRoutes from './routes/rooms.js'; 
+import dotenv from 'dotenv';
+dotenv.config();
 
 const app = express();
 
@@ -47,7 +49,12 @@ app.use(
 app.use('/public', express.static(path.join(__dirname, 'static')));
 app.use('/contact', contactRoutes);
 app.use('/tourism', tourismRoutes);
+app.use('/pics', express.static("public/pics"));
+app.use('/pics', express.static('pics'));
 
+app.get('/test-image', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public/pics/room_pics/room5.jpg'));
+});
 
 // Middleware 1: Log requests
 app.use((req, res, next) => {

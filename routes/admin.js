@@ -208,7 +208,8 @@ router.route('/editRoom/:roomId')
                 pricingPerNight: room.pricingPerNight,
                 balcony: room.balcony,
                 bedSizes: Object.entries(room.bedSizes),
-                partial: "edit_script"
+                partial: "edit_script",
+                imagePath: room.imagePath
             });
         } catch (e) {
             res.status(500).send('Error fetching room data: ' + e);

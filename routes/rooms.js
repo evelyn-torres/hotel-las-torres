@@ -3,8 +3,36 @@ const router = Router();
 import {roomData, reservationData} from '../data/index.js';
 import { rooms } from '../config/mongoCollections.js';
 import validation from '../helpers.js';
+import multer from 'multer';
+import path from 'path';
 
 
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, path.join(__dirname, '../public/pics/room_pics'));
+  }
+  ,
+    filename: (req, file, cb) => {
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+        cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname));
+    }
+});
+
+const upload = multer({ 
+    storage,
+    limits: { fileSize: 5 * 1024 * 1024 }, // Limit file size to 5MB
+    fileFilter: (req, file, cb) => {
+        const allowedTypes = /jpeg|jpg|png/;
+        const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
+        const mimetype = allowedTypes.test(file.mimetype);
+
+        if (extname && mimetype) {
+            cb(null, true);
+        } else {
+            cb(new Error('Images must be in JPEG or PNG format.'));
+        }
+    }
+});
 
 router //show all rooms
     .route('/')
@@ -73,12 +101,12 @@ router //after click on book now, route to room by roomid
         if (!newBookingInfo) throw `Internal Error(R): could not create new booking`;
     
         let resID = newBookingInfo._id
-        
+        let reservationCode = newBookingInfo.reservationCode;
         let roomName = await roomData.getRoomById(roomId).roomName;
         return res.status(201).render('roomBooking', {
           partial: 'rooms',
           success: true,
-          successMessage: `Booking has been made! Your Reservation ID is ${resID}. Thank you for choosing Hotel Las Torres for your stay.`,
+          successMessage: `Booking has been made! Your Reservation ID is ${reservationCode}. Thank you for choosing Hotel Las Torres for your stay.`,
           resID: resID,
           roomId: roomId,
           roomName: roomName
@@ -172,7 +200,7 @@ router
       res.status(500).json({error: 'Internal Server Error'})
   }
     })
-  .post(ensureAdmin, async (req, res)=>{
+  .post(ensureAdmin, upload.single('roomImage'), async (req, res)=>{
     let { roomName, pricingPerNight, balcony, bedSizes, beginDate, endDate } = req.body;
     let errors =[];
     try{
@@ -208,16 +236,21 @@ router
     
 
 
+
   const hasBalcony = balcony === 'true';
   const parsedPricing = parseFloat(pricingPerNight);
-      
+    
+  const imagePath = req.file ? `pics/room_pics/${req.file.filename}` : null;
+
   const newRoom = await roomData.createRoom(
       roomName,
       hasBalcony,
       bedSizesObject,
       parsedPricing,
       beginDate,
-      endDate
+      endDate,
+      imagePath
+      
     );
 
   const roomList = await roomData.getAllRooms();

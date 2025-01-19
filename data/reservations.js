@@ -4,6 +4,9 @@ import {ObjectId} from 'mongodb';
 import validation from '../helpers.js';
 import * as guestData from '../data/guests.js';
 import {getRoomById} from '../data/rooms.js';
+import crypto from 'crypto'; 
+import validator from 'validator';
+import { sendEmailConfirmation } from '../utils/emailService.js';
 
 
 export const getReservationById = async (id) => {
@@ -34,6 +37,8 @@ export const createReservation = async(
     parking, 
     totalCost 
 ) => {
+
+    const reservationCode = crypto.randomBytes(6).toString('hex').toUpperCase();
 
     //validate guest booking inputs
     guestFirstName = validation.checkString(guestFirstName); //name
@@ -111,6 +116,10 @@ export const createReservation = async(
     if(govID.length > 20) throw "Government ID must be less than 20 characters";
     if(govID.includes(" ")) throw "Government ID must not have spaces in between";
 
+    //checks for email validation
+    if(!validator.isEmail(email)){
+        throw 'Invalid email address.';
+    }
     //checks for totalCost 
     console.log('avail check', chosenRoom.availability);
     const reservationCollection = await reservations();
@@ -127,7 +136,8 @@ export const createReservation = async(
         checkOutDate: checkOutDate, 
         daysBooked: daysBooked,
         parking: parking, 
-        totalCost: totalCost  
+        totalCost: totalCost  ,
+        reservationCode: reservationCode
     };
 
     const insertInfo = await reservationCollection.insertOne(newReservation);
@@ -141,7 +151,11 @@ export const createReservation = async(
     await roomCollection.updateOne({_id: new ObjectId(chosenRoom._id)}, {$set: {availability: chosenRoom.availability}})
     console.log("newly booked", await getRoomById(roomID));
 
+    
+    await sendEmailConfirmation(email, reservation);
+    console.log('after email confirmation.');
     return reservation;
+
 }
 
 export const removeReservation = async(id) => {
