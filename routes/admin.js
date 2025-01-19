@@ -64,7 +64,8 @@ router.get('/dashboard', async (req,res) => {
                 pageTitle: "Admin Dashboard",
                 adminDetails: { name: "Admin Name", role: "Administrator" },
                 rooms: roomList,
-                partial: "admin_dash"
+                partial: "admin_dash",
+                isAdmin: true
               
             });
         }catch(e){

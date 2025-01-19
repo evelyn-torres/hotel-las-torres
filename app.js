@@ -88,6 +88,7 @@ app.use('/login', (req, res, next) => {
   const user = req.session.user;
   if (user && user.toLowerCase() === 'admin') {
     // console.log('in app.js ')
+      user = {role: 'Administrator'};
       return res.redirect('/admin/dashboard'); // Correctly redirect to admin page
   }
   next(); 
