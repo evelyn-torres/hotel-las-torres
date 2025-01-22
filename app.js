@@ -11,6 +11,8 @@ import session from "express-session";
 import methodOverride from 'method-override';
 import roomsRoutes from './routes/rooms.js'; 
 import dotenv from 'dotenv';
+import adminRoutes from './routes/admin.js'; 
+import { removeReservation } from './data/reservations.js';
 dotenv.config();
 
 const app = express();
@@ -51,10 +53,7 @@ app.use('/contact', contactRoutes);
 app.use('/tourism', tourismRoutes);
 app.use('/pics', express.static("public/pics"));
 app.use('/pics', express.static('pics'));
-
-app.get('/test-image', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public/pics/room_pics/room5.jpg'));
-});
+app.use('/admin', adminRoutes);
 
 // Middleware 1: Log requests
 app.use((req, res, next) => {
@@ -70,20 +69,6 @@ app.use((req, res, next) => {
 
 
 
-// // Middleware 2: Redirect authenticated users from /login
-// app.use("/login", (req, res, next) => {
-//   const user = req.session.user;
-//   if (user) {
-//     return res.redirect(
-//       user.role.toLowerCase() === "administrator" ? "/administrator" : "/user"
-//     );
-//   }
-//   next();
-// });
-
-
-
-
 app.use('/login', (req, res, next) => {
   const user = req.session.user;
   if (user && user.toLowerCase() === 'admin') {
@@ -93,6 +78,18 @@ app.use('/login', (req, res, next) => {
   }
   next(); 
 });
+
+app.get('/remove/:id', async (req, res) => {
+  try {
+      const reservationId = req.params.id;
+      await removeReservation(reservationId);
+      res.redirect('/reservations'); // Redirect back to the reservations page after removal
+  } catch (error) {
+      console.error('Error deleting reservation:', error);
+      res.status(500).send('Error deleting reservation');
+  }
+});
+
 
 
 

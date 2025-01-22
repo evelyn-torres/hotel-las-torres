@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Reservations</title>
+</head>
+
+ <h1>Reservations</h1>
+<table>
+    <thead>
+        <tr>
+            <th>Reservation Code</th>
+            <th>Guest Name</th>
+            <th>Phone Number</th>
+            <th>Room</th>
+            <th>Check-in Date</th>
+            <th>Check-out Date</th>
+            <th>Number of Guests</th>
+            <th>Total Cost</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{#each reservations}}
+        <tr>
+            <td>{{reservationCode}}</td>
+            <td>{{guestFirstName}} {{guestLastName}}</td>
+            <td>{{phone}}</td>
+            <td>{{roomName}}</td>
+            <td>{{checkInDate}}</td>
+            <td>{{checkOutDate}}</td>
+            <td>{{numOfGuests}}</td>
+            <td>${{totalCost}}</td>
+            <td>
+                <a href="/remove/{{_id}}">Remove</a>
+                <a href="/modidy/{{_id}}">Modify</a>
+            </td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
+
+
+<script src="/public/js/admin_dash.js" defer></script>
