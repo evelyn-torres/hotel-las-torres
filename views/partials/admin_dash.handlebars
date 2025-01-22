@@ -11,20 +11,18 @@
   <div class = "dashboard-actions">
     <p><a href="/admin/dashboard/createAdmin">Create Admin</a></p>
 
-   <form action="/logout" method="GET">
-     <button type="submit" class="logout-button">Logout</button>
-    </form>
 
-    <a href="/rooms/addRoomForm" class="add-room-button">Add Room</a>
+    <p><a href="/rooms/addRoomForm" class="add-room-button">Add Room</a></p>
 
    
   </div>
   <div class="rooms-container">
       {{#each rooms}}
       <div class="room-card">
-        <img src="{{imageURL}}" alt="{{roomName}}" class="room-image" />
+       
         <div class="room-details">
           <h2>{{roomName}}</h2>
+           <img src="{{imagePath}}" alt="{{roomName}}" class="room-image" />
           <p><strong>Balcony:</strong> {{#if balcony}}Yes{{else}}No{{/if}}</p>
           <p><strong>Pricing Per Night:</strong> ${{pricingPerNight}}</p>
           <p><strong>Bed Sizes:</strong> 

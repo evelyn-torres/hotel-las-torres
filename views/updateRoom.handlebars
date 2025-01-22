@@ -28,6 +28,7 @@
                 <label for="bedSizes">Bed Sizes (comma-separated):</label><small>Format: size:count,size:count</small>
                 <input type="text" id="bedSizes" name="bedSizes" value="{{bedSizes}}" pattern="^([a-zA-Z]+:\d+)(,[a-zA-Z]+:\d+)*$" placeholder="Queen:1,Twin:1" required><br>
                 
+                 <input type="file" id="roomImage" name="roomImage" accept="image/*">
                 <button type="submit" id="saveButton">Save</button>
             </form>
           </div>

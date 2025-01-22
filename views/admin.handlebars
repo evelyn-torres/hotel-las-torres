@@ -20,24 +20,14 @@
           {{/each}}
       </ul>
     {{/if}}
-{{!-- <body>
-    <h1>Welcome to the Admin Dashboard</h1>
-    <table id="rooms-table">
-        <thead>
-            <tr>
-                <th>Room Number</th>
-                <th>Status</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            <!-- Room rows will be dynamically added here -->
-        </tbody>
-    </table>
-    
-    <button class="logout-button" onclick="location.href='/logout'">Logout</button>
-</body> --}}
+
+     {{#if admin_reservations}}
+        {{> admin_reservations }}
+    {{/if}}
+
+
 </html>
 
 
 <script src="/public/js/admin_dash.js"></script>
+

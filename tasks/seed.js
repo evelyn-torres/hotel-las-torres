@@ -4,6 +4,8 @@ import * as guests from '../data/guests.js';
 import * as reservations from '../data/reservations.js';
 import * as comments from '../data/comments.js';
 import * as admin from '../data/admin.js';
+//import * as roomPics from '../public/pics/room_pics'
+
 
 const db = await dbConnection();
 await db.dropDatabase();
@@ -52,7 +54,7 @@ try {
 }
 
 try {
-  roomFive = await rooms.createRoom("Room 5", false, { "Double": 1 }, 100.00, openDate, closeDate);
+  roomFive = await rooms.createRoom("Room 5", false, { "Double": 1 }, 100.00, openDate, closeDate, "pics/room_pics/room5.jpg");
   console.log(roomFive);
 } catch (e) {
   console.error(e);
@@ -146,6 +148,20 @@ try {
 } catch (e) {
   console.error(e);
 }
+
+// try{
+//   const edit5 = await rooms.updateRoom(
+//     "roomFive._id",
+//     "Room 5",
+//     true,
+//     {double: 2},
+//     150,
+//     "pics/room_pics/room5.jpg"
+//   )
+//     console.log('try to add img to room 5');
+// }catch(e){
+//   console.error(e);
+// }
 
 console.log('Done seeding database');
 await closeConnection();

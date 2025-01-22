@@ -1,7 +1,7 @@
 import {Router} from 'express';
 import * as adminData from '../data/admin.js';
 import validation from '../helpers.js';
-import {roomData} from '../data/index.js';
+import {reservationData, roomData} from '../data/index.js';
 import xss from 'xss';
 import { ObjectId } from 'mongodb';
 import {admins} from '../config/mongoCollections.js';
@@ -64,7 +64,8 @@ router.get('/dashboard', async (req,res) => {
                 pageTitle: "Admin Dashboard",
                 adminDetails: { name: "Admin Name", role: "Administrator" },
                 rooms: roomList,
-                partial: "admin_dash"
+                partial: "admin_dash",
+                isAdmin: true
               
             });
         }catch(e){
@@ -72,6 +73,52 @@ router.get('/dashboard', async (req,res) => {
             res.status(500).json({ error: 'Internal server error' });
         }
     })
+router.get('/reservations', async (req,res) => {
+    try{
+        if(!req.session.user || req.session.user.toLowerCase() !== 'admin'){
+            return res.redirect('/login');
+        }
+        const allReservations = await reservationData.getAllReservations();
+      //  console.log("All Reservations:", allReservations); // Log the reservations data
+       // res.render('reservations', { reservations: allReservations });
+
+        res.render('admin', {
+            pageTitle: "Reservations",
+            adminDetails: { name: "Admin Name", role: "Administrator" },
+            reservations: allReservations,
+            partial: "admin_reservations",
+            isAdmin: true
+          
+        });
+    }catch(e){
+        console.error("Error loading admin dashboard:", e);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+})
+
+router.post('/:reservationId/remove', async (req, res) =>{
+        try {
+            const reservationId = req.params.reservationId;
+
+            // Validate reservationId
+            if (!reservationId || typeof reservationId !== 'string' || !ObjectId.isValid(reservationId)) {
+                throw 'Error: Invalid reservation ID';
+            }
+
+            // Remove the reservation
+            const reservationToDelete = await reservationData.removeReservation(reservationId);
+            if (!reservationToDelete) {
+                throw 'Error: Could not delete reservation';
+            }
+            const allReservations = await reservationData.getAllReservations();
+
+            // Redirect to reservations page to reload the data
+            res.redirect('/admin/reservations');
+        }catch(e){
+            res.status(500).send("Error toggling room status");
+        }
+    })
+
 
 function ensureAdmin(req, res, next) {
         if (!req.session.user || req.session.user.toLowerCase() !== 'admin') {
@@ -208,7 +255,8 @@ router.route('/editRoom/:roomId')
                 pricingPerNight: room.pricingPerNight,
                 balcony: room.balcony,
                 bedSizes: Object.entries(room.bedSizes),
-                partial: "edit_script"
+                partial: "edit_script",
+                imagePath: room.imagePath
             });
         } catch (e) {
             res.status(500).send('Error fetching room data: ' + e);
@@ -253,5 +301,6 @@ router.route('/:roomId/toggleStatus')
             res.status(500).send("Error toggling room status");
         }
     });
+
 
 export default router;

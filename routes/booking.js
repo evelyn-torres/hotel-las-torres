@@ -40,11 +40,12 @@ router.route('/').get(async (req, res) => {
     if (!newBookingInfo) throw `Internal Error(R): could not create new booking`;
 
     let resID = newBookingInfo._id
+    let reservationCode = newBookingInfo.reservationCode;
     
     return res.status(201).render('roomBooking', {
       partial: 'rooms',
       success: true,
-      successMessage: `Booking has been made! Your Reservation ID is ${resID}. Thank you for choosing Hotel Las Torres for your stay.`,
+      successMessage: `Booking has been made! Your Reservation ID is ${reservationCode}. Thank you for choosing Hotel Las Torres for your stay.`,
       resID: resID
   });
 

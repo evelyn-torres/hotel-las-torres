@@ -41,6 +41,8 @@ export const createRoom = async (
     pricingPerNight, 
     beginDate,
     endDate,
+    imagePath
+
   ) => {
     //checks for numRooms 
     if(!roomName) throw "You must provide the number of rooms";
@@ -93,13 +95,16 @@ export const createRoom = async (
     if(!availability) throw "You must provide the availability for the room";
     if(typeof availability !== "object") throw "availability must be an object";
 
+    //if (!imagePath || typeof imagePath !== "string") throw "You must provide a valid image path";
+
     let newRoom = {
         roomName: roomName, 
         balcony: balcony, 
         bedSizes: bedSizes, 
         pricingPerNight: pricingPerNight, 
         availability: availability,
-        status: "ready"
+        status: "ready",
+        imagePath: imagePath
     };
 
     const insertInfo = await roomCollection.insertOne(newRoom);
