@@ -30,9 +30,12 @@ app.engine('handlebars', exphbs.engine({
   }));
 
 
-  app.engine('handlebars', handlebars.engine);
-app.set('view engine', 'handlebars');
+//   app.engine('handlebars', handlebars.engine);
+// app.set('view engine', 'handlebars');
 
+app.set("views", path.join(__dirname, "views"));
+app.engine("handlebars", exphbs.engine());
+app.set("view engine", "handlebars");
 
 // Middleware for parsing and static files
 app.use(express.json());
