@@ -7,6 +7,9 @@
     "start": "node app.js",
     "seed": "node ./tasks/seed.js"
   },
+  "engines":{
+    "node": "18.x"
+  },
   "keywords": [],
   "author": "Evelyn Torres | CWID 20006628, Ayushi Gupta | CWID 20006238 | Wesley Nabo 2000636",
   "license": "ISC",

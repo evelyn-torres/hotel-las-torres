@@ -48,7 +48,8 @@ app.use(
     })
 );
 
-app.use('/public', express.static(path.join(__dirname, 'static')));
+//app.use('/public', express.static(path.join(__dirname, 'static')));
+app.use('/public', express.static(path.join(__dirname, 'public')));
 app.use('/contact', contactRoutes);
 app.use('/tourism', tourismRoutes);
 app.use('/pics', express.static("public/pics"));
@@ -79,16 +80,6 @@ app.use('/login', (req, res, next) => {
   next(); 
 });
 
-app.get('/remove/:id', async (req, res) => {
-  try {
-      const reservationId = req.params.id;
-      await removeReservation(reservationId);
-      res.redirect('/reservations'); // Redirect back to the reservations page after removal
-  } catch (error) {
-      console.error('Error deleting reservation:', error);
-      res.status(500).send('Error deleting reservation');
-  }
-});
 
 
 
@@ -131,7 +122,9 @@ app.use((err, req, res, next) => {
   res.status(500).render("error", { message: "Internal Server Error" });
 });
 
-app.listen(3000, () => {
-    console.log('Server is running on http://localhost:3000');
-});
+// app.listen(3000, () => {
+//     console.log('Server is running on http://localhost:3000');
+// });
+
+export default app;
 

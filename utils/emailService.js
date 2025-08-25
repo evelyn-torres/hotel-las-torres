@@ -7,6 +7,7 @@ export const sendEmailConfirmation = async (toEmail, reservation) => {
     const msg = {
         to: toEmail,
         from: 'hotellastorres2006@hotmail.com', // Verified sender email
+        //password: Quimbaya2006
         subject: 'Hotel Reservation Confirmation',
         html: `
             <h1>Hotel Las Torres - Reservation Confirmation</h1>
