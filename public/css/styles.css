@@ -30,7 +30,7 @@ header{/* Headers will be this color and size*/
   width: 400px;
   height: 400px;
   object-fit: cover;
-  flex-shrink: 1;
+  flex-shrink: 0;
   border-radius: 12px;
 }
 

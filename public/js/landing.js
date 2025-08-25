@@ -9,7 +9,8 @@ function showSlide(i) {
   if (i < 0) index = images.length - 1;
   else if (i >= images.length) index = 0;
   else index = i;
-  carousel.style.transform = `translateX(${-index * 400}px)`;
+  const imageWidth = images[0].clientWidth; // dynamically get width
+  carousel.style.transform = `translateX(${-index * imageWidth}px)`;
 }
 
 prevBtn.addEventListener('click', () => showSlide(index - 1));
