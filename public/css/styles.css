@@ -906,8 +906,11 @@ body.modal-open {
 }
 
 #google_translate_element {
-  margin-left: 20px;
-  display: right;
+  position: relative;
+  z-index: 9999; /* keep it above other elements if needed */
+  margin: 10px auto;
+  display: flex;
+  justify-content: right; /* center horizontally */
 }
 
 

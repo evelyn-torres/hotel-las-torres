@@ -24,9 +24,10 @@ const __dirname = path.dirname(__filename);
 // Handlebars setup
 const handlebars = exphbs.create({ defaultLayout: 'main', helpers: {eq: (a, b) => a === b} });
 app.engine('handlebars', exphbs.engine({
+    // extname: "hbs",
     defaultLayout: 'main',
     layoutsDir: path.join(__dirname, 'views/layouts'),
-    partialsDir: path.join(__dirname, 'views/partials' ),
+    partialsDir: path.join(__dirname, 'views/partials/' ),
   }));
 
 
@@ -34,7 +35,7 @@ app.engine('handlebars', exphbs.engine({
 // app.set('view engine', 'handlebars');
 
 app.set("views", path.join(__dirname, "views"));
-app.engine("handlebars", exphbs.engine());
+
 app.set("view engine", "handlebars");
 
 // Middleware for parsing and static files
