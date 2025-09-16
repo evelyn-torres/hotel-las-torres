@@ -1,28 +1,31 @@
-import {MongoClient, ServerApiVersion} from 'mongodb';
-import {mongoConfig} from './settings.js';
+import { MongoClient } from "mongodb";
 
-let _connection = undefined;
-let _db = undefined;
+let _connection;
+let _db;
 
-export const dbConnection = async () => {
+const dbConnection = async () => {
   if (!_connection) {
-    if (!mongoConfig.serverUrl) {
-      throw new Error('MongoDB connection string is undefined. Check your .env file!');
-    }
-    _connection = await MongoClient.connect(mongoConfig.serverUrl );
-    _db = _connection.db(mongoConfig.database);
-  }
+    const uri = process.env.MONGODB_URI;
+    const dbName = process.env.DB_NAME;
 
+    if (!uri) throw new Error("MongoDB connection string is undefined. Check your .env or Vercel env vars!");
+    if (!dbName) throw new Error("Database name is undefined.");
+
+    try {
+      _connection = await MongoClient.connect(uri);
+      _db = _connection.db(dbName);
+      console.log("✅ MongoDB connected!");
+    } catch (err) {
+      console.error("DB Connection Error:", err);
+      throw err;
+    }
+  }
   return _db;
 };
-export const closeConnection = async () => {
-  if (_connection) {
-    await _connection.close();
-    _connection = null;
-    _db = null;
-    console.log('MongoDB connection closed');
-  }
+
+const closeConnection = async () => {
+  if (_connection) await _connection.close();
 };
 
-// export {dbConnection, closeConnection};
+export { dbConnection, closeConnection };
 
