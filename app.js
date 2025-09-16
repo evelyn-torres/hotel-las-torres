@@ -12,6 +12,7 @@ import roomsRoutes from './routes/rooms.js';
 import dotenv from 'dotenv';
 import adminRoutes from './routes/admin.js'; 
 import { removeReservation } from './data/reservations.js';
+import { dbConnection } from './config/mongoConnection.js';
 
 dotenv.config();
 const app = express();
@@ -78,6 +79,20 @@ app.use('/login', (req, res, next) => {
     return res.redirect('/admin/dashboard');
   }
   next();
+});
+
+app.get('/test-db', async (req, res) => {
+  try {
+    const db = await dbConnection();
+    const collections = await db.listCollections().toArray();
+    res.json({
+      status: 'connected',
+      collections: collections.map(c => c.name)
+    });
+  } catch (e) {
+    console.error("DB Connection Error:", e);
+    res.status(500).json({ status: 'error', message: e.message });
+  }
 });
 
 // Logout
