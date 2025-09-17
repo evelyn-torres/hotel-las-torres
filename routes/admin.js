@@ -77,12 +77,12 @@ router.get('/dashboard', async (req,res) => {
     })
 router.get('/reservations', async (req,res) => {
     try{
-        if(!req.session.user || req.session.user.toLowerCase() !== 'admin'){
+        if(!req.session.user ||req.session.user.role !== "Administrator"){
             return res.redirect('/login');
         }
         const allReservations = await reservationData.getAllReservations();
        console.log("All Reservations:", allReservations); // Log the reservations data
-       res.render('reservations', { reservations: allReservations });
+       //res.render('reservations', { reservations: allReservations });
 
         res.render('admin', {
             pageTitle: "Reservations",
@@ -123,7 +123,7 @@ router.post('/:reservationId/remove', async (req, res) =>{
 
 
 function ensureAdmin(req, res, next) {
-        if (!req.session.user || req.session.user.toLowerCase() !== 'admin') {
+        if (!req.session.user || req.session.user.role !== "Administrator") {
             return res.status(403).render('error', {
                 pageTitle: 'Access Denied',
                 message: 'You do not have permission to perform this action.',

@@ -61,25 +61,34 @@ app.use('/admin', adminRoutes);
 app.use('/rooms', roomsRoutes);  // ✅ mount rooms route
 
 // Request logger
+// app.use((req, res, next) => {
+//   const currentTime = new Date().toUTCString();
+//   const user = req.session.user;
+//   const status = user
+//     ? `Authenticated ${user.role === "Administrator" ? "Administrator" : "User"}`
+//     : "Non-Authenticated";
+//   console.log(`[${currentTime}]: ${req.method} ${req.originalUrl} (${status})`);
+//   next();
+// });
 app.use((req, res, next) => {
   const currentTime = new Date().toUTCString();
   const user = req.session.user;
   const status = user
-    ? `Authenticated ${user.role === "Administrator" ? "Administrator" : "User"}`
+    ? `Authenticated ${user.role}`
     : "Non-Authenticated";
   console.log(`[${currentTime}]: ${req.method} ${req.originalUrl} (${status})`);
   next();
 });
 
 // Login redirect for admin
-app.use('/login', (req, res, next) => {
-  const user = req.session.user;
-  if (user && typeof user === "string" && user.toLowerCase() === 'admin') {
-    req.session.user = { role: 'Administrator' }; // ✅ fix reassign
-    return res.redirect('/admin/dashboard');
-  }
-  next();
-});
+// app.use('/login', (req, res, next) => {
+//   const user = req.session.user;
+//   if (user && typeof user === "string" && user.toLowerCase() === 'admin') {
+//     req.session.user = { role: 'Administrator' }; // ✅ fix reassign
+//     return res.redirect('/admin/dashboard');
+//   }
+//   next();
+// });
 
 app.get('/test-db', async (req, res) => {
   try {
