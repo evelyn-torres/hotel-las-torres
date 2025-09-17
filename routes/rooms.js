@@ -258,7 +258,7 @@ router
     res.redirect('/admin/dashboard');
     // res.render('addRoom', 
     //   {rooms: roomList, 
-    //     pageTitle: "Rooms", 
+    //     pageTitle: , 
     //     partial: 'addRoomForm',
     //     success: true,
     //     successMessage: `Room "${newRoom.roomName}" has been added successfully!`,});

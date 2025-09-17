@@ -6,7 +6,7 @@ import * as guestData from '../data/guests.js';
 import {getRoomById} from '../data/rooms.js';
 import crypto from 'crypto'; 
 import validator from 'validator';
-import { sendEmailConfirmation } from '../utils/emailService.js';
+//import { sendEmailConfirmation } from '../utils/emailService.js';
 
 
 export const getReservationById = async (id) => {
@@ -152,7 +152,7 @@ export const createReservation = async(
     console.log("newly booked", await getRoomById(roomID));
 
     
-    await sendEmailConfirmation(email, reservation);
+   //await sendEmailConfirmation(email, reservation);
     console.log('after email confirmation.');
     return reservation;
 

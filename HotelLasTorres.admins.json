@@ -1,0 +1,20 @@
+[{
+  "_id": {
+    "$oid": "68ae707cd603e24eb5a1eb51"
+  },
+  "employeeFirstName": "Jane",
+  "employeeLastName": "Dane",
+  "govID": "A24294821",
+  "userName": "adminUser1",
+  "password": "adminPassword1"
+},
+{
+  "_id": {
+    "$oid": "68ae707cd603e24eb5a1eb52"
+  },
+  "employeeFirstName": "Wes",
+  "employeeLastName": "Nabo",
+  "govID": "WN167059",
+  "userName": "wnabo",
+  "password": "nabo_password1"
+}]

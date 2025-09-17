@@ -1,0 +1,22 @@
+[{
+  "_id": {
+    "$oid": "68ae707cd603e24eb5a1eb4f"
+  },
+  "guestFirstName": "John",
+  "guestLastName": "Doe",
+  "guestAge": 24,
+  "govID": "A24294820",
+  "phoneNumber": 9144093842,
+  "email": "john.doe@gmail.com"
+},
+{
+  "_id": {
+    "$oid": "68ae707cd603e24eb5a1eb50"
+  },
+  "guestFirstName": "Harry",
+  "guestLastName": "Potter",
+  "guestAge": 16,
+  "govID": "83J91938",
+  "phoneNumber": 20184983921,
+  "email": "hp@gryffindor.com"
+}]
