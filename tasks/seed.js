@@ -1,3 +1,6 @@
+import dotenv from 'dotenv';
+dotenv.config();
+
 import { dbConnection, closeConnection } from '../config/mongoConnection.js';
 import * as rooms from '../data/rooms.js';
 import * as guests from '../data/guests.js';

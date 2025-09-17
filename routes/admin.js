@@ -59,7 +59,9 @@ router.get('/dashboard', async (req,res) => {
             }
             const roomList = await roomData.getAllRooms(); // Example: Fetching room data
             roomList.forEach(room => {
-                room._id = room._id.toString();
+    room._id = room._id.toString();
+    room.roomNumber = room.roomNumber || room.roomName;
+    room.availability = room.availability || { open: true, booked: false };
             });
             
 
