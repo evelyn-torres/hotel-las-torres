@@ -79,8 +79,8 @@ router.get('/reservations', async (req,res) => {
             return res.redirect('/login');
         }
         const allReservations = await reservationData.getAllReservations();
-      //  console.log("All Reservations:", allReservations); // Log the reservations data
-       // res.render('reservations', { reservations: allReservations });
+       console.log("All Reservations:", allReservations); // Log the reservations data
+       res.render('reservations', { reservations: allReservations });
 
         res.render('admin', {
             pageTitle: "Reservations",
