@@ -1,5 +1,6 @@
 import { MongoClient } from "mongodb";
 
+let _client;
 let _connection;
 let _db;
 
@@ -11,6 +12,10 @@ const dbConnection = async () => {
     if (!uri) throw new Error("MongoDB connection string is undefined. Check your .env or Vercel env vars!");
     if (!dbName) throw new Error("Database name is undefined.");
 
+    _client = new MongoClient(uri);
+    await _client.connect();
+    _db = _client.db(dbName);
+    
     try {
       _connection = await MongoClient.connect(uri);
       _db = _connection.db(dbName);
