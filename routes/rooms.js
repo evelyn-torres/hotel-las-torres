@@ -44,8 +44,11 @@ router //show all rooms
             room._id = room._id.toString();
           });
           // console.log(roomList);
-         if (req.xhr || (req.headers.accept && req.headers.accept.includes('application/json'))) {
-        return res.json({ rooms: roomList });
+      //    if (req.xhr || (req.headers.accept && req.headers.accept.includes('application/json'))) {
+      //   return res.json({ rooms: roomList });
+      // }
+      if (req.headers.accept && req.headers.accept.includes('application/json')) {
+        return res.json({ rooms }); // <-- frontend fetch will work
       }
 
           // Otherwise, render the Handlebars page
