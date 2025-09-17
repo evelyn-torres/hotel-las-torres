@@ -81,14 +81,14 @@ app.use((req, res, next) => {
 });
 
 // Login redirect for admin
-// app.use('/login', (req, res, next) => {
-//   const user = req.session.user;
-//   if (user && typeof user === "string" && user.toLowerCase() === 'admin') {
-//     req.session.user = { role: 'Administrator' }; // ✅ fix reassign
-//     return res.redirect('/admin/dashboard');
-//   }
-//   next();
-// });
+app.use('/login', (req, res, next) => {
+  const user = req.session.user;
+  if (user && typeof user === "string" && user.toLowerCase() === 'admin') {
+    req.session.user = { role: 'Administrator' }; // ✅ fix reassign
+    return res.redirect('/admin/dashboard');
+  }
+  next();
+});
 
 app.get('/test-db', async (req, res) => {
   try {
