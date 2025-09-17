@@ -61,6 +61,9 @@ router.get('/dashboard', async (req,res) => {
             roomList.forEach(room => {
                 room._id = room._id.toString();
             });
+            if (req.session.user && req.session.user.role === "Administrator") {
+                return res.redirect('/admin/dashboard');
+                }
 
             res.render('admin', {
                 pageTitle: "Admin Dashboard",
