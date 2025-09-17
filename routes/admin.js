@@ -30,7 +30,9 @@ router.route('/')
             if(!admin){
                 return res.status(401).json({ error: 'Invalid username or password' });
             }
-            req.session.user = 'admin'; //stores the logged in admin in session 
+            //req.session.user = 'admin'; //stores the logged in admin in session 
+            req.session.user = { role: "Administrator", username: userInput };
+
             // console.log(admin);
 
             return res.redirect('/admin/dashboard');
@@ -52,7 +54,7 @@ router.route('/')
 
 router.get('/dashboard', async (req,res) => {
         try{
-            if(!req.session.user || req.session.user.toLowerCase() !== 'admin'){
+            if(!req.session.user ||req.session.user.role !== "Administrator"){
                 return res.redirect('/login');
             }
             const roomList = await roomData.getAllRooms(); // Example: Fetching room data
