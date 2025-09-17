@@ -1,7 +1,7 @@
 import { MongoClient } from "mongodb";
 
 const uri = "mongodb://127.0.0.1:27017"; // try IP instead of "localhost"
-const client = new MongoClient(uri);
+const client = new MongoClient(process.env.MONGODB_URI);
 
 try {
   await client.connect();
