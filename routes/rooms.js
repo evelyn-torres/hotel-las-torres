@@ -44,7 +44,16 @@ router //show all rooms
             room._id = room._id.toString();
           });
           // console.log(roomList);
-          res.render('rooms', {rooms: roomList, pageTitle: "Rooms", partial: 'rooms'});
+         if (req.xhr || (req.headers.accept && req.headers.accept.includes('application/json'))) {
+        return res.json({ rooms: roomList });
+      }
+
+          // Otherwise, render the Handlebars page
+          res.render('rooms', {
+            rooms: roomList,
+            pageTitle: "Rooms",
+            partial: 'rooms'
+          });
         } catch (e) {
           res.status(500).json({error: e});
         }
