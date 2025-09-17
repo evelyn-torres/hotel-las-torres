@@ -55,15 +55,13 @@ router.route('/')
 router.get('/dashboard', async (req,res) => {
         try{
             if(!req.session.user ||req.session.user.role !== "Administrator"){
-                return res.redirect('/login');
+                return res.redirect('/admin'); //???
             }
             const roomList = await roomData.getAllRooms(); // Example: Fetching room data
             roomList.forEach(room => {
                 room._id = room._id.toString();
             });
-            if (req.session.user && req.session.user.role === "Administrator") {
-                return res.redirect('/admin/dashboard');
-                }
+            
 
             res.render('admin', {
                 pageTitle: "Admin Dashboard",
