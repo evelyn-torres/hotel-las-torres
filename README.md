@@ -9,3 +9,11 @@ While on the website:
 - comment page: after booking a room, put in the reservation id to leave a review
 - admin page: log in with proper credentials to create, delete, update, and delete rooms. You can also can mark rooms temporarily available and unavailable
 
+Hosted on GoDaddy
+
+Deployed on Vercel
+
+Database stored on MongoAtlas
+
+
+
