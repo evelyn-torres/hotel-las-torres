@@ -5,8 +5,22 @@ import {reservationData, roomData} from '../data/index.js';
 import xss from 'xss';
 import { ObjectId } from 'mongodb';
 import {admins} from '../config/mongoCollections.js';
+import multer from 'multer';
+import path from 'path';
 
 const router = Router();
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, path.join(process.cwd(), 'public/pics/room_pics'));
+  },
+  filename: (req, file, cb) => {
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname));
+  }
+});
+
+const upload = multer({ storage });
 
 router.route('/')
     .get(async (req, res)=>{
@@ -255,19 +269,23 @@ router.route('/editRoom/:roomId')
         try {
             const room = await roomData.getRoomById(roomId); 
             res.render('updateRoom', { 
-                roomId: room._id, 
+                roomId: room._id.toString(), 
                 roomName: room.roomName, 
                 pricingPerNight: room.pricingPerNight,
-                balcony: room.balcony,
-                bedSizes: Object.entries(room.bedSizes),
-                partial: "edit_script",
-                imagePath: room.imagePath
+                balcony: room.balcony === true || room.balcony === "true",
+                bedSizes: Object.entries(room.bedSizes)
+                    .map(([size, count]) => `${size}:${count}`)
+                    .join(","),
+                imagePath: room.imagePath,
+                partial: "edit_script"
+                
             });
         } catch (e) {
+            console.log('error fetching room data');
             res.status(500).send('Error fetching room data: ' + e);
         }
     })
-    .post(ensureAdmin, async (req,res) => {
+    .post(ensureAdmin, upload.single('roomImage'),async (req,res) => {
         const roomId = req.params.roomId;
         console.log("update", req.body, roomId);
         try {
@@ -276,12 +294,16 @@ router.route('/editRoom/:roomId')
             bedSizes.split(",").forEach((bed) => {
                 newBedSize[bed.split(":")[0]] = parseInt(bed.split(":")[1]);
             });
+
+            const imagePath = req.file ? `/pics/room_pics/${req.file.filename}` : undefined;
+
             const updatedRoomInfo = await roomData.updateRoom(
                 roomId,
                 roomName,
                 balcony === 'true',
                 newBedSize,
                 parseFloat(pricingPerNight),
+                imagePath
             );
             //if (!updatedRoomInfo || updatedRoomInfo === undefined) throw "Admin Error: Error updating room, please try again later";
             res.redirect('/admin/dashboard'); // go back to admin page after update
