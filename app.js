@@ -47,6 +47,7 @@ app.use(
   })
 );
 
+console.log("old-main attemtt");
 app.use(methodOverride('_method'));
 
 // Static
