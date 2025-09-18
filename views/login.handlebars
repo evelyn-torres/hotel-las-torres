@@ -1,18 +1,19 @@
-    <section>
-        <h1>{{pageTitle}}</h1>    
-            {{#if error}}
-               <div class="error-list">{{error}}</div>
-            {{/if}}
-    
-        <form  id="loginForm" method ="POST" class="form-container" >
-            <label for="userInput">Username:</label>
-            <input type="text" name="userInput" id="userInput" placeholder="Enter your username...">
-            <br>
+<section>
+    <h1>{{pageTitle}}</h1>    
 
-            <label for="passInput">Password: </label>
-            <input type="password" name="passInput" id="passInput" required>
-            <br>
-            <button type="submit">Login</button>
-        </form>
+    {{#if error}}
+       <div class="error-list">{{error}}</div>
+    {{/if}}
 
-    </section>
+    <form id="loginForm" method="POST" action="/admin">
+        <label for="userInput">Username:</label>
+        <input type="text" name="userInput" id="userInput" placeholder="Enter your username..." required>
+        <br>
+
+        <label for="passInput">Password:</label>
+        <input type="password" name="passInput" id="passInput" placeholder="Enter your password..." required>
+        <br>
+
+        <button type="submit">Login</button>
+    </form>
+</section>
