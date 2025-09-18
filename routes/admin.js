@@ -139,7 +139,7 @@ router.post('/:reservationId/remove', async (req, res) =>{
     })
 
 
-function ensureAdmin(req, res, next) {
+export function ensureAdmin(req, res, next) {
         if (!req.session.user || req.session.user.role !== "Administrator") {
             return res.status(403).render('error', {
                 pageTitle: 'Access Denied',
