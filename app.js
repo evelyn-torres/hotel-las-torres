@@ -93,56 +93,14 @@ app.use((req, res, next) => {
 });
 
 // Login redirect for admin
-// app.use('/login', (req, res, next) => {
-//   const user = req.session.user;
-//   if (user && typeof user === "string" && user.toLowerCase() === 'admin') {
-//     req.session.user = { role: 'Administrator' }; // ✅ fix reassign
-//     return res.redirect('/admin/dashboard', ensureAdmin, adminRoutes);
-//   }
-//   next();
-// });
-
-app.post('/login', async (req, res) => {
-  try {
-    let { userInput, passInput } = req.body;
-
-    // Basic server-side validation
-    if (!userInput || !passInput) {
-      return res.status(400).render('login', { 
-        pageTitle: "Employee Login",
-        partial: "dead_server_script",
-        error: "Username and password are required"
-      });
-    }
-
-    // Check credentials using your adminData
-    const admin = await adminData.grabAdminByLogin(userInput, passInput);
-    if (!admin) {
-      return res.status(401).render('login', { 
-        pageTitle: "Employee Login",
-        partial: "dead_server_script",
-        error: "Invalid username or password"
-      });
-    }
-
-    // ✅ Set session for admin
-    req.session.user = { role: "Administrator", username: userInput };
-
-    // Redirect to dashboard
-    return res.redirect('/admin/dashboard');
-  } catch (e) {
-    console.error("Login error:", e);
-    return res.status(500).render('login', { 
-      pageTitle: "Employee Login",
-      partial: "dead_server_script",
-      error: "Internal server error"
-    });
+app.use('/login', (req, res, next) => {
+  const user = req.session.user;
+  if (user && typeof user === "string" && user.toLowerCase() === 'admin') {
+    req.session.user = { role: 'Administrator' }; // ✅ fix reassign
+    return res.redirect('/admin/dashboard', ensureAdmin, adminRoutes);
   }
+  next();
 });
-
-
-
-
 
 app.get('/test-db', async (req, res) => {
   try {
