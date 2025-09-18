@@ -6,28 +6,33 @@
     <title>Admin Dashboard</title>
     <link rel="stylesheet" href="/public/css/styles.css"> 
 </head>
-        {{#if success}}
-            <div class="success-message">
-                {{successMessage}}
-            </div>
-        {{/if}}
-        {{#if hasErrors}}
-      <ul class="error-list">
-          {{#each errors}}
-          <li>
-          {{this}}
-          </li>
-          {{/each}}
-      </ul>
+<body>
+
+    <div class="dashboard-actions">
+    </div>
+
+    {{#if success}}
+        <div class="success-message">
+            {{successMessage}}
+        </div>
     {{/if}}
 
-     {{#if admin_reservations}}
+    {{#if hasErrors}}
+        <ul class="error-list">
+            {{#each errors}}
+            <li>{{this}}</li>
+            {{/each}}
+        </ul>
+    {{/if}}
+
+    {{#if rooms}}
+        {{> admin_dash }}
+    {{/if}}
+
+    {{#if reservations}}
         {{> admin_reservations }}
     {{/if}}
 
-
+    <script src="/public/js/admin_dash.js"></script>
+</body>
 </html>
-
-
-<script src="/public/js/admin_dash.js"></script>
-

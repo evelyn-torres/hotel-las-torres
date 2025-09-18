@@ -8,31 +8,47 @@
 </head>
 <body>
     <h1>Edit Room</h1>
-      <div id="editRoomModal" class="modal">
-        <div class="modal-content">
-            <button class="modal-close" onclick="closeModal()" id="closeButton">close</button>
-            <form action="/admin/editRoom/{{roomId}}" method="POST" id="adminUpdateRoomForm">
-                <label for="roomName">Room Name:</label>
-                <input type="text" id="roomName" name="roomName" value="{{roomName}}" required><br>
-                
-                <label for="pricingPerNight">Pricing Per Night:</label>
-                <input type="number" id="pricingPerNight" name="pricingPerNight" value="{{pricingPerNight}}" required><br>
 
-                <label for="balcony">Balcony:</label>
-                <select id="balcony" name="balcony" required>
-                    <option value="" disabled {{#unless balcony}}selected{{/unless}}>Select an option</option>
-                    <option value="true" {{#if (eq balcony true)}}selected{{/if}}>Yes</option>
-                    <option value="false" {{#if (eq balcony false)}}selected{{/if}}>No</option>
-                </select><br>
-                
-                <label for="bedSizes">Bed Sizes (comma-separated):</label><small>Format: size:count,size:count</small>
-                <input type="text" id="bedSizes" name="bedSizes" value="{{bedSizes}}" pattern="^([a-zA-Z]+:\d+)(,[a-zA-Z]+:\d+)*$" placeholder="Queen:1,Twin:1" required><br>
-                
-                 <input type="file" id="roomImage" name="roomImage" accept="image/*">
-                <button type="submit" id="saveButton">Save</button>
-            </form>
-          </div>
-        </div>
+    <div class="form-container">
+        <form action="/admin/editRoom/{{roomId}}" method="POST" id="adminUpdateRoomForm" enctype="multipart/form-data">
+            
+            <!-- Room Name -->
+            <label for="roomName">Room Name:</label>
+            <input type="text" id="roomName" name="roomName" value="{{roomName}}" required><br>
+            
+            <!-- Pricing -->
+            <label for="pricingPerNight">Pricing Per Night:</label>
+            <input type="number" id="pricingPerNight" name="pricingPerNight" 
+                   value="{{pricingPerNight}}" required><br>
+
+            <!-- Balcony -->
+            <label for="balcony">Balcony:</label>
+            <select id="balcony" name="balcony" required>
+                <option value="true" {{#if balcony}}selected{{/if}}>Yes</option>
+                <option value="false" {{#unless balcony}}selected{{/unless}}>No</option>
+            </select><br>
+            
+            <!-- Bed Sizes -->
+            <label for="bedSizes">Bed Sizes:</label>
+            <small>Format: size:count,size:count</small>
+            <input type="text" id="bedSizes" name="bedSizes" 
+                   value="{{bedSizes}}" 
+                   placeholder="Queen:1,Twin:1" required><br>
+            
+            {{#if imagePath}}
+              <div>
+                  <img src="/{{imagePath}}" alt="Room Image" width="150">
+                  <label>
+                      <input type="checkbox" name="deleteImage" value="true">
+                      Delete this image
+                  </label>
+              </div>
+          {{/if}}
+            
+            <label for="roomImage">Room Image:</label>
+            <input type="file" id="roomImage" name="roomImage" accept="image/*">
+            <button type="submit" id="saveButton">Save</button>
+        </form>
+    </div>
 </body>
 </html>
-

@@ -135,7 +135,7 @@ export const removeRoom = async(id) => {
     return {...deletionInfo, deleted: true};
 };
 
-export const updateRoom = async(id, roomName, balcony, bedSizes, pricingPerNight) => {
+export const updateRoom = async(id, roomName, balcony, bedSizes, pricingPerNight, imagePath) => {
     //checks for numRooms 
     if(!roomName) throw "You must provide the number of rooms";
     roomName = validation.checkString(roomName, "room name");
@@ -182,6 +182,12 @@ export const updateRoom = async(id, roomName, balcony, bedSizes, pricingPerNight
         pricingPerNight: pricingPerNight, 
         availability: currentRoomAvail //will keep the same and use another function to gray out completely
     } 
+     if (imagePath === null) {
+        updatedRoom.imagePath = null;
+    } else if (imagePath) {
+        updatedRoom.imagePath = imagePath;
+    }
+
 
     const roomCollection = await rooms();
     const updateInfo = await roomCollection.findOneAndUpdate(

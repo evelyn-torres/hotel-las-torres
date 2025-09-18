@@ -34,21 +34,78 @@ const upload = multer({
     }
 });
 
-router //show all rooms
-    .route('/')
-    .get(async (req, res) => {
-        try {
-          const roomList = await roomData.getAllRooms();
-          roomList.forEach(room => {
-            //console.log("testing", roomSel);
-            room._id = room._id.toString();
-          });
-          // console.log(roomList);
-          res.render('rooms', {rooms: roomList, pageTitle: "Rooms", partial: 'rooms'});
-        } catch (e) {
-          res.status(500).json({error: e});
-        }
-    });
+// router //show all rooms
+//     .route('/')
+//     .get(async (req, res) => {
+//         try {
+//           const roomList = await roomData.getAllRooms();
+//           roomList.forEach(room => {
+//             //console.log("testing", roomSel);
+//             room._id = room._id.toString();
+//           });
+//           // console.log(roomList);
+//         if (req.xhr || (req.headers.accept && req.headers.accept.includes('application/json'))) {
+//       return res.json({ rooms: roomList });
+//     }
+
+//     // Otherwise, render Handlebars as usual
+//     res.render('rooms', { rooms: roomList, pageTitle: "Rooms", partial: 'rooms' });
+//   } catch (e) {
+//     res.status(500).json({ error: e.toString() });
+//   }
+//     });
+
+// router //show all rooms
+//     .route('/')
+//     .get(async (req, res) => {
+//        try {
+//       const roomList = await roomData.getAllRooms();
+//       roomList.forEach(room => {
+//         room._id = room._id.toString(); // convert ObjectId to string
+//       });
+
+//       // ✅ Send JSON instead of rendering HTML
+//       res.json({ rooms: roomList });
+//     } catch (e) {
+//       console.error("Error fetching rooms:", e);
+//       res.status(500).json({ error: "Failed to fetch rooms" });
+//     }
+//     });
+
+router.route('/')
+  .get(async (req, res) => {
+    try {
+      const roomList = await roomData.getAllRooms();
+      roomList.forEach(room => {
+        room._id = room._id.toString();
+      });
+
+      res.render('rooms', { 
+        rooms: roomList, 
+        pageTitle: "Rooms", 
+        partial: 'rooms' 
+      });
+    } catch (e) {
+      console.error("Error fetching rooms for page:", e);
+      res.status(500).render('error', { message: 'Failed to load rooms', partial: 'dead_server_script' });
+    }
+  });
+
+  router.route('/data')
+  .get(async (req, res) => {
+    try {
+      const roomList = await roomData.getAllRooms();
+      roomList.forEach(room => {
+        room._id = room._id.toString();
+      });
+      res.json({ rooms: roomList });
+    } catch (e) {
+      console.error("Error fetching rooms JSON:", e);
+      res.status(500).json({ error: "Failed to fetch rooms" });
+    }
+  });
+
+    
 
 router //after click on book now, route to room by roomid
     .route('/:roomId/bookingRoom')
@@ -277,5 +334,6 @@ router
       });
     }
   });
+  
 
 export default router;

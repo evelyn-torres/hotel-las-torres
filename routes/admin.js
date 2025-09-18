@@ -5,8 +5,22 @@ import {reservationData, roomData} from '../data/index.js';
 import xss from 'xss';
 import { ObjectId } from 'mongodb';
 import {admins} from '../config/mongoCollections.js';
+import multer from 'multer';
+import path from 'path';
 
 const router = Router();
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, path.join(process.cwd(), 'public/pics/room_pics'));
+  },
+  filename: (req, file, cb) => {
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname));
+  }
+});
+
+const upload = multer({ storage });
 
 router.route('/')
     .get(async (req, res)=>{
@@ -30,7 +44,9 @@ router.route('/')
             if(!admin){
                 return res.status(401).json({ error: 'Invalid username or password' });
             }
-            req.session.user = 'admin'; //stores the logged in admin in session 
+            //req.session.user = 'admin'; //stores the logged in admin in session 
+            req.session.user = { role: "Administrator", username: userInput };
+
             // console.log(admin);
 
             return res.redirect('/admin/dashboard');
@@ -52,13 +68,16 @@ router.route('/')
 
 router.get('/dashboard', async (req,res) => {
         try{
-            if(!req.session.user || req.session.user.toLowerCase() !== 'admin'){
-                return res.redirect('/login');
+            if(!req.session.user ||req.session.user.role !== "Administrator"){
+                return res.redirect('/admin'); //???
             }
             const roomList = await roomData.getAllRooms(); // Example: Fetching room data
             roomList.forEach(room => {
-                room._id = room._id.toString();
+    room._id = room._id.toString();
+    room.roomNumber = room.roomNumber || room.roomName;
+    room.availability = room.availability || { open: true, booked: false };
             });
+            
 
             res.render('admin', {
                 pageTitle: "Admin Dashboard",
@@ -75,12 +94,12 @@ router.get('/dashboard', async (req,res) => {
     })
 router.get('/reservations', async (req,res) => {
     try{
-        if(!req.session.user || req.session.user.toLowerCase() !== 'admin'){
+        if(!req.session.user ||req.session.user.role !== "Administrator"){
             return res.redirect('/login');
         }
         const allReservations = await reservationData.getAllReservations();
-      //  console.log("All Reservations:", allReservations); // Log the reservations data
-       // res.render('reservations', { reservations: allReservations });
+       console.log("All Reservations:", allReservations); // Log the reservations data
+       //res.render('reservations', { reservations: allReservations });
 
         res.render('admin', {
             pageTitle: "Reservations",
@@ -121,7 +140,7 @@ router.post('/:reservationId/remove', async (req, res) =>{
 
 
 function ensureAdmin(req, res, next) {
-        if (!req.session.user || req.session.user.toLowerCase() !== 'admin') {
+        if (!req.session.user || req.session.user.role !== "Administrator") {
             return res.status(403).render('error', {
                 pageTitle: 'Access Denied',
                 message: 'You do not have permission to perform this action.',
@@ -250,33 +269,47 @@ router.route('/editRoom/:roomId')
         try {
             const room = await roomData.getRoomById(roomId); 
             res.render('updateRoom', { 
-                roomId: room._id, 
+                roomId: room._id.toString(), 
                 roomName: room.roomName, 
                 pricingPerNight: room.pricingPerNight,
-                balcony: room.balcony,
-                bedSizes: Object.entries(room.bedSizes),
-                partial: "edit_script",
-                imagePath: room.imagePath
+                balcony: room.balcony === true || room.balcony === "true",
+                bedSizes: Object.entries(room.bedSizes)
+                    .map(([size, count]) => `${size}:${count}`)
+                    .join(","),
+                imagePath: room.imagePath,
+                partial: "edit_script"
+                
             });
         } catch (e) {
+            console.log('error fetching room data');
             res.status(500).send('Error fetching room data: ' + e);
         }
     })
-    .post(ensureAdmin, async (req,res) => {
+    .post(ensureAdmin, 
+        upload.single('roomImage'),
+        async (req,res) => {
         const roomId = req.params.roomId;
         console.log("update", req.body, roomId);
         try {
-            const { roomName, balcony, bedSizes, pricingPerNight} = req.body;
+            const { roomName, balcony, bedSizes, pricingPerNight, deleteImage} = req.body;
             let newBedSize = {};
             bedSizes.split(",").forEach((bed) => {
                 newBedSize[bed.split(":")[0]] = parseInt(bed.split(":")[1]);
             });
+
+            let imagePath = req.file ? `/pics/room_pics/${req.file.filename}` : undefined;
+
+            if (deleteImage === "true"){
+                imagePath = null;
+            }
+
             const updatedRoomInfo = await roomData.updateRoom(
                 roomId,
                 roomName,
                 balcony === 'true',
                 newBedSize,
                 parseFloat(pricingPerNight),
+                imagePath
             );
             //if (!updatedRoomInfo || updatedRoomInfo === undefined) throw "Admin Error: Error updating room, please try again later";
             res.redirect('/admin/dashboard'); // go back to admin page after update

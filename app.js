@@ -61,11 +61,20 @@ app.use('/admin', adminRoutes);
 app.use('/rooms', roomsRoutes);  // ✅ mount rooms route
 
 // Request logger
+// app.use((req, res, next) => {
+//   const currentTime = new Date().toUTCString();
+//   const user = req.session.user;
+//   const status = user
+//     ? `Authenticated ${user.role === "Administrator" ? "Administrator" : "User"}`
+//     : "Non-Authenticated";
+//   console.log(`[${currentTime}]: ${req.method} ${req.originalUrl} (${status})`);
+//   next();
+// });
 app.use((req, res, next) => {
   const currentTime = new Date().toUTCString();
   const user = req.session.user;
   const status = user
-    ? `Authenticated ${user.role === "Administrator" ? "Administrator" : "User"}`
+    ? `Authenticated ${user.role}`
     : "Non-Authenticated";
   console.log(`[${currentTime}]: ${req.method} ${req.originalUrl} (${status})`);
   next();
