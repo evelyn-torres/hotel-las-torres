@@ -45,9 +45,11 @@ router
 
       console.log('Before grabAdminByLogin', userInput, passInput);
       const admin = await adminData.grabAdminByLogin(userInput, passInput);
+      
       console.log('After grabAdminByLogin', admin);
 
       if (!admin) {
+        console.log("login failed for: ", userInput);
         return res.status(401).render('login', {
           partial: 'dead_server_script',
           pageTitle: 'Employee Login',

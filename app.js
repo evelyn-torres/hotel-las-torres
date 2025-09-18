@@ -42,23 +42,24 @@ app.use(methodOverride('_method'));
 // ---------- Session Setup ----------
 app.use(
   session({
-    name: 'session_id',
-    secret: process.env.SESSION_SECRET || 'supersecret',
+    name: "session_id",
+    secret: process.env.SESSION_SECRET || "supersecret",
     resave: false,
     saveUninitialized: false,
     store: MongoStore.create({
       mongoUrl: process.env.MONGODB_URI,
-      collectionName: 'sessions',
-      ttl: 60 * 60, // 1 hour
+      collectionName: "sessions",
+      ttl: 60 * 60,
     }),
     cookie: {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production', // only secure in prod
-      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
-      maxAge: 1000 * 60 * 60, // 1 hour
+      secure: false,//process.env.NODE_ENV === "production", // only HTTPS in prod
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax", // Vercel requires none + HTTPS
+      maxAge: 1000 * 60 * 60,
     },
   })
 );
+
 
 // ---------- Static Files ----------
 app.use('/public', express.static(path.join(__dirname, 'public')));
