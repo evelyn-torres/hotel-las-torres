@@ -44,7 +44,9 @@ router.route('/')
             userInput = validation.checkString(xss(userInput), "Username");
             passInput = validation.checkString(xss(passInput), "Password");
           
+            console.log('Before grabAdminByLogin', userInput, passInput);
             const admin = await adminData.grabAdminByLogin(userInput, passInput);
+            console.log('After grabAdminByLogin', admin);
             // console.log(admin);
            if (!admin) {
                 return res.status(401).render('login', {
