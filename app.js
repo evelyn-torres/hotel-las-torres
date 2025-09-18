@@ -81,6 +81,8 @@ app.use((req, res, next) => {
   next();
 });
 
+console.log("TRIED TO GO BACK TO OLD COMMIT ON Samebranch;")
+
 // Login redirect for admin
 //REMOVED TO  TRY TO FIX THE :PERMISSION VERIFIC ISSUES vvv
 
