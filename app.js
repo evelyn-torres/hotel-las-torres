@@ -46,7 +46,7 @@ app.use(
     cookie: { secure: true }, // set to true in production with HTTPS
   })
 );
-
+console.log('check deployment version working');
 app.use(methodOverride('_method'));
 
 // Static
