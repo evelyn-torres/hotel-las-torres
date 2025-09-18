@@ -43,7 +43,7 @@ app.use(
     secret: 'your-secret-key',
     resave: false,
     saveUninitialized: true,
-    cookie: { secure: false }, // set to true in production with HTTPS
+    cookie: { secure: true }, // set to true in production with HTTPS
   })
 );
 
