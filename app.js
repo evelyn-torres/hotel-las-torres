@@ -47,8 +47,9 @@ app.use(
     saveUninitialized: false,
     store: MongoStore.create({
       mongoUrl: process.env.MONGODB_URI,
-      dbName:process.env.DB_NAME,
-      collectionName:"sessions"
+      // dbName:process.env.DB_NAME,
+      collectionName:"sessions",
+      ttl:60*60
     }),
     cookie: { 
       httpOnly:true,
@@ -110,6 +111,15 @@ app.get('/test-db', async (req, res) => {
     console.error("DB Connection Error:", e);
     res.status(500).json({ status: 'error', message: e.message });
   }
+});
+
+app.get('/test-session', (req, res) => {
+  req.session.user = { role: "Administrator", username: "test" };
+  res.send("Session set!");
+});
+
+app.get('/check-session', (req, res) => {
+  res.json(req.session);
 });
 
 // Logout
