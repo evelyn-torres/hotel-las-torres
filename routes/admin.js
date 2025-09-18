@@ -285,17 +285,23 @@ router.route('/editRoom/:roomId')
             res.status(500).send('Error fetching room data: ' + e);
         }
     })
-    .post(ensureAdmin, upload.single('roomImage'),async (req,res) => {
+    .post(ensureAdmin, 
+        upload.single('roomImage'),
+        async (req,res) => {
         const roomId = req.params.roomId;
         console.log("update", req.body, roomId);
         try {
-            const { roomName, balcony, bedSizes, pricingPerNight} = req.body;
+            const { roomName, balcony, bedSizes, pricingPerNight, deleteImage} = req.body;
             let newBedSize = {};
             bedSizes.split(",").forEach((bed) => {
                 newBedSize[bed.split(":")[0]] = parseInt(bed.split(":")[1]);
             });
 
-            const imagePath = req.file ? `/pics/room_pics/${req.file.filename}` : undefined;
+            let imagePath = req.file ? `/pics/room_pics/${req.file.filename}` : undefined;
+
+            if (deleteImage === "true"){
+                imagePath = null;
+            }
 
             const updatedRoomInfo = await roomData.updateRoom(
                 roomId,

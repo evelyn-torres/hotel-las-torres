@@ -182,9 +182,12 @@ export const updateRoom = async(id, roomName, balcony, bedSizes, pricingPerNight
         pricingPerNight: pricingPerNight, 
         availability: currentRoomAvail //will keep the same and use another function to gray out completely
     } 
-     if (imagePath) {
+     if (imagePath === null) {
+        updatedRoom.imagePath = null;
+    } else if (imagePath) {
         updatedRoom.imagePath = imagePath;
     }
+
 
     const roomCollection = await rooms();
     const updateInfo = await roomCollection.findOneAndUpdate(

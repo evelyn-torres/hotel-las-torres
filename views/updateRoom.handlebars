@@ -35,7 +35,16 @@
                    value="{{bedSizes}}" 
                    placeholder="Queen:1,Twin:1" required><br>
             
-            <!-- Image (optional, not yet handled in backend) -->
+            {{#if imagePath}}
+              <div>
+                  <img src="/{{imagePath}}" alt="Room Image" width="150">
+                  <label>
+                      <input type="checkbox" name="deleteImage" value="true">
+                      Delete this image
+                  </label>
+              </div>
+          {{/if}}
+            
             <label for="roomImage">Room Image:</label>
             <input type="file" id="roomImage" name="roomImage" accept="image/*">
             <button type="submit" id="saveButton">Save</button>
