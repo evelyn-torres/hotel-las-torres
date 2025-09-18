@@ -10,6 +10,7 @@
 
     <div class="dashboard-actions">
     </div>
+   
 
     {{#if success}}
         <div class="success-message">
@@ -31,6 +32,10 @@
 
     {{#if reservations}}
         {{> admin_reservations }}
+    {{/if}}
+
+    {{#if partial}}
+    {{> (lookup . 'partial') }}
     {{/if}}
 
     <script src="/public/js/admin_dash.js"></script>

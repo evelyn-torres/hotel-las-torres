@@ -203,9 +203,10 @@ router.route('/dashboard/createAdmin')
             if(!newAdmin) throw "couldn't create admin"
 
             res.render('admin', {
-                pageTitle: "Admin Dashboard",
+                pageTitle: " Create Administrator",
                 adminDetails: { name: "Admin Name", role: "Administrator" },
                 rooms: roomList,
+                showCreateAdmin: true,
                 partial: "admin_dash", 
                 successMessage: "Admin has been created!" 
             });
