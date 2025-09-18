@@ -46,15 +46,29 @@ router.route('/')
           
             const admin = await adminData.grabAdminByLogin(userInput, passInput);
             // console.log(admin);
-            if(!admin){
-                return res.status(401).json({ error: 'Invalid username or password' });
-            }
+           if (!admin) {
+                return res.status(401).render('login', {
+                    partial: 'dead_server_script',
+                    pageTitle: 'Employee Login',
+                    error: 'Invalid username or password'
+                });
+                }
+
+            
             //req.session.user = 'admin'; //stores the logged in admin in session 
             req.session.user = { role: "Administrator", username: userInput };
 
-            // console.log(admin);
-
-            return res.redirect('/admin/dashboard');
+            req.session.save((err) => {
+                if (err) {
+                    console.error('Session save error:', err);
+                    return res.status(500).render('login', {
+                    partial: 'dead_server_script',
+                    pageTitle: 'Employee Login',
+                    error: 'Login failed. Please try again.'
+                    });
+                }
+                return res.redirect('/admin/dashboard');
+                });
             //maybe change to redirect so it isnt just going into admin page and /login
         } catch (e) {
 
