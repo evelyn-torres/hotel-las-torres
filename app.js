@@ -13,6 +13,7 @@ import dotenv from 'dotenv';
 import adminRoutes from './routes/admin.js'; 
 import { removeReservation } from './data/reservations.js';
 import { dbConnection } from './config/mongoConnection.js';
+import MongoStore from 'connect-mongo';
 
 dotenv.config();
 const app = express();
@@ -40,10 +41,20 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(
   session({
-    secret: 'your-secret-key',
+    secret: process.env.SESSION_SECRET,
     resave: false,
-    saveUninitialized: true,
-    cookie: { secure: false }, // set to true in production with HTTPS
+    saveUninitialized: false,
+    store: MongoStore.create({
+      mongoUrl: process.env.MONGODB_URI,
+      dbName:process.env.DB_NAME,
+      collectionName:"sessions"
+    }),
+    cookie: { 
+      httpOnly:true,
+      secure: true }, // set to true in production with HTTPS
+      sameSite: "lax",
+      maxAge: 1000*60*60 //1 hour
+
   })
 );
 
