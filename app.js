@@ -43,10 +43,10 @@ app.use(
     secret: 'your-secret-key',
     resave: false,
     saveUninitialized: true,
-    cookie: { secure: true }, // set to true in production with HTTPS
+    cookie: { secure: false }, // set to true in production with HTTPS
   })
 );
-console.log('check deployment version working');
+
 app.use(methodOverride('_method'));
 
 // Static
