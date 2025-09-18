@@ -79,7 +79,7 @@ app.use((req, res, next) => {
   console.log(`[${currentTime}]: ${req.method} ${req.originalUrl} (${status})`);
   next();
 });
-
+console.log("AGHGHGHGHGHGH");
 // Login redirect for admin
 app.use('/login', (req, res, next) => {
   const user = req.session.user;
