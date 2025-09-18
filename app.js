@@ -66,22 +66,9 @@ app.use('/public', express.static(path.join(__dirname, 'public')));
 app.use('/pics', express.static("public/pics"));
 app.use('/pics', express.static('pics'));
 
-// Routes
-app.use('/contact', contactRoutes);
-app.use('/tourism', tourismRoutes);
-app.use('/admin', adminRoutes);
-app.use('/rooms', roomsRoutes);  // ✅ mount rooms route
 
-// Request logger
-// app.use((req, res, next) => {
-//   const currentTime = new Date().toUTCString();
-//   const user = req.session.user;
-//   const status = user
-//     ? `Authenticated ${user.role === "Administrator" ? "Administrator" : "User"}`
-//     : "Non-Authenticated";
-//   console.log(`[${currentTime}]: ${req.method} ${req.originalUrl} (${status})`);
-//   next();
-// });
+
+//request logger
 app.use((req, res, next) => {
   const currentTime = new Date().toUTCString();
   const user = req.session.user;
@@ -92,15 +79,24 @@ app.use((req, res, next) => {
   next();
 });
 
+
+// Routes
+app.use('/contact', contactRoutes);
+app.use('/tourism', tourismRoutes);
+app.use('/admin', adminRoutes);
+app.use('/rooms', roomsRoutes);  // ✅ mount rooms route
+
+
+
 // Login redirect for admin
-app.use('/login', (req, res, next) => {
-  const user = req.session.user;
-  if (user && typeof user === "string" && user.toLowerCase() === 'admin') {
-    req.session.user = { role: 'Administrator' }; // ✅ fix reassign
-    return res.redirect('/admin/dashboard', ensureAdmin, adminRoutes);
-  }
-  next();
-});
+// app.use('/login', (req, res, next) => {
+//   const user = req.session.user;
+//   if (user && typeof user === "string" && user.toLowerCase() === 'admin') {
+//     req.session.user = { role: 'Administrator' }; // ✅ fix reassign
+//     return res.redirect('/admin/dashboard', ensureAdmin, adminRoutes);
+//   }
+//   next();
+// });
 
 app.get('/test-db', async (req, res) => {
   try {

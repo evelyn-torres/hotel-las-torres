@@ -297,10 +297,10 @@ router.route('/editRoom/:roomId')
                 newBedSize[bed.split(":")[0]] = parseInt(bed.split(":")[1]);
             });
 
-            let imagePath = req.file ? `/pics/room_pics/${req.file.filename}` : undefined;
+            const imagePath = req.file ? `/pics/room_pics/${req.file.filename}` : undefined;
 
             if (deleteImage === "true"){
-                imagePath = null;
+                imagePath =null
             }
 
             const updatedRoomInfo = await roomData.updateRoom(
