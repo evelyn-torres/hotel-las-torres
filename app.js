@@ -81,6 +81,8 @@ app.use((req, res, next) => {
   next();
 });
 
+console.log("TRYING AGAIN");
+
 // Login redirect for admin
 app.use('/login', (req, res, next) => {
   const user = req.session.user;
