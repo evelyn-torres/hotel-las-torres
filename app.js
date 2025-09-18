@@ -52,11 +52,11 @@ app.use(
     }),
     cookie: { 
       httpOnly:true,
-      secure: true }, // set to true in production with HTTPS
+      secure:  process.env.NODE_ENV === "production" && req/protocol === "https",  // set to true in production with HTTPS
       sameSite: "lax",
       maxAge: 1000*60*60 //1 hour
 
-  })
+  }})
 );
 
 app.use(methodOverride('_method'));

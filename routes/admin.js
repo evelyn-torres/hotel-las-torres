@@ -25,7 +25,12 @@ const upload = multer({ storage });
 router.route('/')
     .get(async (req, res)=>{
         try{
-            res.render('login', { partial: "dead_server_script", pageTitle: "Employee Login"})
+            // If user is logged in as admin, redirect to dashboard
+            if (req.session.user && req.session.user.role === "Administrator") {
+                return res.redirect('/admin/dashboard');
+            }
+            // Otherwise render login
+            res.render('login', { partial: "dead_server_script", pageTitle: "Employee Login"});
         }catch(e){
             res.status(500).json({ error: 'Internal server error' });
         }
@@ -56,8 +61,6 @@ router.route('/')
 
             console.log('in catch statement for post of admin login');
             console.error(e);
-
-
             return res.render('login', { 
                 partial: "dead_server_script", 
                 pageTitle: "Employee Login", 
@@ -243,11 +246,11 @@ router.route('/addRoom')
             const newRoom = await roomData.createRoom(roomName, balcony, bedSizes, pricingPerNight, availability);
 
             res.status(201).render('admin/dashboard', {
-            success: true,
-            successMessage: `Room "${newRoom.roomName}" has been successfully added.`,
-            rooms: await roomData.getAllRooms(),
-            pageTitle: 'Rooms',
-            partial: 'rooms',
+                success: true,
+                successMessage: `Room "${newRoom.roomName}" has been successfully added.`,
+                rooms: await roomData.getAllRooms(),
+                pageTitle: 'Rooms',
+                partial: 'rooms',
             });
 
         } catch(e) {
