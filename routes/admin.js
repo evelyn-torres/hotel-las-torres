@@ -47,6 +47,19 @@ router.route('/')
             //req.session.user = 'admin'; //stores the logged in admin in session 
             req.session.user = { role: "Administrator", username: userInput };
 
+            req.session.save(err => {
+                if(err){
+                    console.error("Session save error: ", err);
+                    return res.status(500).render('login', {
+                        partial: "dead_server_script",
+                        pageTitle: "Employee Login",
+                        error: "failed to login, please try again"
+                    });
+                }
+            })
+
+            
+
             // console.log(admin);
 
             return res.redirect('/admin/dashboard');
