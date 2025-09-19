@@ -13,6 +13,7 @@ import dotenv from 'dotenv';
 import adminRoutes from './routes/admin.js'; 
 import { removeReservation } from './data/reservations.js';
 import { dbConnection } from './config/mongoConnection.js';
+import MongoStore from 'connect-mongo';
 
 dotenv.config();
 const app = express();
@@ -40,12 +41,23 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(
   session({
-    secret: 'your-secret-key',
+    secret: process.env.SESSION_SECRET || 'your-secret-key',
     resave: false,
-    saveUninitialized: true,
-    cookie: { secure: false }, // set to true in production with HTTPS
+    saveUninitialized: false, // better for production
+    store: MongoStore.create({
+      mongoUrl: process.env.MONGODB_URI, // your Atlas connection string
+      ttl: 14 * 24 * 60 * 60, // 14 days
+    }),
+    cookie: {
+      secure: process.env.NODE_ENV === 'production',
+      httpOnly: true,
+      maxAge: 1000 * 60 * 60 * 2,
+      sameSite: 'lax',
+    },
   })
 );
+
+
 
 console.log("old-main attemtt");
 app.use(methodOverride('_method'));
@@ -84,14 +96,14 @@ app.use((req, res, next) => {
 console.log("TRYING AGAIN");
 
 // Login redirect for admin
-app.use('/login', (req, res, next) => {
-  const user = req.session.user;
-  if (user && typeof user === "string" && user.toLowerCase() === 'admin') {
-    req.session.user = { role: 'Administrator' }; // ✅ fix reassign
-    return res.redirect('/admin/dashboard');
-  }
-  next();
-});
+// app.use('/login', (req, res, next) => {
+//   const user = req.session.user;
+//   if (user && typeof user === "string" && user.toLowerCase() === 'admin') {
+//     req.session.user = { role: 'Administrator' }; // ✅ fix reassign
+//     return res.redirect('/admin/dashboard');
+//   }
+//   next();
+// });
 
 app.get('/test-db', async (req, res) => {
   try {
