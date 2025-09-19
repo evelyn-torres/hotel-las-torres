@@ -75,8 +75,10 @@ router.route('/')
 
 //     });
         router.post('/', async (req, res) => {
+
             try {
                 let { userInput, passInput } = req.body;
+                console.log("Login attempt:", userInput);
 
                 // Validate and sanitize inputs
                 userInput = validation.checkString(xss(userInput), "Username");
@@ -102,7 +104,7 @@ router.route('/')
                         return res.status(500).render('login', {
                             partial: "dead_server_script",
                             pageTitle: "Employee Login",
-                            error: "Failed to login, please try again"
+                            error: "Failed to login, please try again | IN SESSION SAVE!!!"
                         });
                     }
 
