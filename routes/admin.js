@@ -109,6 +109,7 @@ router.route('/')
                     }
 
                     // Redirect to dashboard after session is saved
+                    console.log("✅ Session saved for:", req.session.user);
                     return res.redirect('/admin/dashboard');
                 });
 

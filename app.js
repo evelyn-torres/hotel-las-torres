@@ -39,6 +39,8 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+console.log("MONGODB_URI:", process.env.MONGODB_URI);
+
 app.use(
   session({
     secret: process.env.SESSION_SECRET || 'your-secret-key',
@@ -56,6 +58,19 @@ app.use(
     },
   })
 );
+
+app.use((req, res, next) => {
+  if (req.session) {
+    req.sessionStore.on('disconnect', () => {
+      console.error("❌ Lost connection to session store");
+    });
+    req.sessionStore.on('connect', () => {
+      console.log("✅ Connected to session store");
+    });
+  }
+  next();
+});
+
 
 
 
