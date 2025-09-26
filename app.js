@@ -114,14 +114,13 @@ app.use((req, res, next) => {
 console.log("TRYING AGAIN");
 
 // Login redirect for admin
-// app.use('/login', (req, res, next) => {
-//   const user = req.session.user;
-//   if (user && typeof user === "string" && user.toLowerCase() === 'admin') {
-//     req.session.user = { role: 'Administrator' }; // ✅ fix reassign
-//     return res.redirect('/admin/dashboard');
-//   }
-//   next();
-// });
+app.get('/login', (req, res) => {
+  if (req.session.user && req.session.user.role === "Administrator") {
+    // Already logged in → redirect to dashboard
+    return res.redirect('/admin/dashboard');
+  }
+  res.render('login', { partial: "dead_server_script", pageTitle: "Employee Login" });
+});
 
 app.get('/test-db', async (req, res) => {
   try {

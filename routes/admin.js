@@ -30,18 +30,9 @@ router.route('/')
     //         res.status(500).json({ error: 'Internal server error' });
     //     }
     // })
-    .get(async (req, res) => {
-    try {
-      if (req.session.user && req.session.user.role === "Administrator") {
-        return res.redirect('/admin/dashboard'); // ✅ send admins to dashboard
-      }
-      res.render('login', { partial: "dead_server_script", pageTitle: "Employee Login"});
-    } catch(e) {
-      res.status(500).json({ error: 'Internal server error' });
-    }
-  });
+    
 
-        router.post('/', async (req, res) => {
+        router.post('/login', async (req, res) => {
 
             try {
                 let { userInput, passInput } = req.body;
@@ -94,7 +85,7 @@ router.route('/')
 router.get('/dashboard', async (req,res) => {
         try{
             if(!req.session.user ||req.session.user.role !== "Administrator"){
-                return res.redirect('/admin'); //???
+                return res.redirect('/login'); //???
             }
             const roomList = await roomData.getAllRooms(); // Example: Fetching room data
             roomList.forEach(room => {
@@ -108,7 +99,7 @@ router.get('/dashboard', async (req,res) => {
                 pageTitle: "Admin Dashboard",
                 adminDetails: { name: "Admin Name", role: "Administrator" },
                 rooms: roomList,
-                partial: "admin_dash",
+                //partial: "admin_dash",
                 isAdmin: true
               
             });
