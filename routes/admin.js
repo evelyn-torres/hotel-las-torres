@@ -32,7 +32,7 @@ router.route('/')
     // })
     
 
-        router.post('/', async (req, res) => {
+        router.post('/login', async (req, res) => {
 
             try {
                 let { userInput, passInput } = req.body;
