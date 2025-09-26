@@ -49,6 +49,7 @@ app.use(
     store: MongoStore.create({
       mongoUrl: process.env.MONGODB_URI, // your Atlas connection string
       ttl: 14 * 24 * 60 * 60, // 14 days
+      collectionName: "sessions"
     }),
     cookie: {
       secure: process.env.NODE_ENV === 'production'&& process.env.VERCEL_ENV === 'production',
