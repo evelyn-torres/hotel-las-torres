@@ -52,7 +52,7 @@ app.use(
       collectionName: "sessions"
     }),
     cookie: {
-      secure: process.env.NODE_ENV === 'production'&& process.env.VERCEL_ENV === 'production',
+      secure: process.env.NODE_ENV === 'production',//&& process.env.VERCEL_ENV === 'production',
       httpOnly: true,
       maxAge: 1000 * 60 * 60 * 2,
       sameSite: 'lax',
