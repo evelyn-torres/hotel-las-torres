@@ -18,6 +18,8 @@ import MongoStore from 'connect-mongo';
 dotenv.config();
 const app = express();
 
+app.set('trust proxy' , 1); //recently added
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
@@ -52,7 +54,7 @@ app.use(
       collectionName: "sessions"
     }),
     cookie: {
-      secure: process.env.NODE_ENV === 'production'&& process.env.VERCEL_ENV === 'production',
+      secure: process.env.NODE_ENV === 'production', //&& process.env.VERCEL_ENV === 'production',
       httpOnly: true,
       maxAge: 1000 * 60 * 60 * 2,
       sameSite: 'lax',
