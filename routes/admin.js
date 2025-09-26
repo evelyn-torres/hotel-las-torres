@@ -23,57 +23,24 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 router.route('/')
-    .get(async (req, res)=>{
-        try{
-            res.render('login', { partial: "dead_server_script", pageTitle: "Employee Login"})
-        }catch(e){
-            res.status(500).json({ error: 'Internal server error' });
-        }
-    })
-//     .post( async (req,res) => { 
-//         // console.log('in post but before try');
-//         try { //check if user/pass combo registers as user or not → user/pass fomrat checked in function
-//             // console.log('reqbody', req.body);
-//             let {userInput, passInput} = req.body;
-            
-//             userInput = validation.checkString(xss(userInput), "Username");
-//             passInput = validation.checkString(xss(passInput), "Password");
-          
-//             const admin = await adminData.grabAdminByLogin(userInput, passInput);
-//             // console.log(admin);
-//             if(!admin){
-//                 return res.status(401).json({ error: 'Invalid username or password' });
-//             }
-//             //req.session.user = 'admin'; //stores the logged in admin in session 
-//             req.session.user = { role: "Administrator", username: userInput };
+    // .get(async (req, res)=>{
+    //     try{
+    //         res.render('login', { partial: "dead_server_script", pageTitle: "Employee Login"})
+    //     }catch(e){
+    //         res.status(500).json({ error: 'Internal server error' });
+    //     }
+    // })
+    .get(async (req, res) => {
+    try {
+      if (req.session.user && req.session.user.role === "Administrator") {
+        return res.redirect('/admin/dashboard'); // ✅ send admins to dashboard
+      }
+      res.render('login', { partial: "dead_server_script", pageTitle: "Employee Login"});
+    } catch(e) {
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  });
 
-// req.session.save(err => {
-//     if(err){
-//         console.error("Session save error: ", err);
-//         return res.status(500).render('login', {
-//             partial: "dead_server_script",
-//             pageTitle: "Employee Login",
-//             error: "failed to login, please try again"
-//         });
-//     }
-//     // ✅ Only redirect after session is saved
-//     return res.redirect('/admin/dashboard');
-// });
-//             //maybe change to redirect so it isnt just going into admin page and /login
-//         } catch (e) {
-
-
-//             console.log('in catch statement for post of admin login');
-//             console.error(e);
-
-
-//             return res.render('login', { 
-//                 partial: "dead_server_script", 
-//                 pageTitle: "Employee Login", 
-//                 error: 'Invalid username or password' 
-//         })}
-
-//     });
         router.post('/', async (req, res) => {
 
             try {
