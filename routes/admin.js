@@ -220,7 +220,7 @@ router.route('/dashboard/createAdmin')
             if (empPass !== empConfirmPass) throw "Passwords must match";
             if (empUser.includes(" ")) throw "User name cannot contain spaces";
             if (empFirstName.includes(" ")) throw "First name cannot contain spaces";
-            if (empLastName.includes(" ")) throw "Last name cannot contain spaces";
+            //if (empLastName.includes(" ")) throw "Last name cannot contain spaces";
             if (empGovID.includes(" ")) throw "Government ID cannot contain spaces";
             if (empPass.includes(" ")) throw "Password cannot contain spaces";
             
