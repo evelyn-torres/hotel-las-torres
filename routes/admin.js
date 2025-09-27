@@ -63,7 +63,11 @@ router.route('/')
                 }
 
                 // Set session
-                req.session.user = { role: "Administrator", username: userInput };
+                req.session.user = { 
+                    role: "Administrator",
+                    employeeFirstName: admin.employeeFirstName,
+                    employeeLastName: admin.employeeLastName, 
+                    username: userInput };
 
                 // ✅ Save session before redirecting
                 req.session.save(err => {
