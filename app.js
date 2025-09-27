@@ -29,9 +29,16 @@ const hbs = exphbs.create({
   layoutsDir: path.join(__dirname, 'views/layouts'),
   partialsDir: path.join(__dirname, 'views/partials/'),
   helpers: {
-    eq: (a, b) => a === b
-  }
-});
+    eq: (a, b) => a === b,
+    formatCOP: function (value) {
+      if (!value) return "";
+      return new Intl.NumberFormat("es-CO", {
+        style: "currency",
+        currency: "COP",
+        minimumFractionDigits: 0,
+      }).format(value);
+    }} }
+);
 
 app.engine('handlebars', hbs.engine);
 app.set('view engine', 'handlebars');
