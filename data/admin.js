@@ -52,7 +52,7 @@ export const createAdmin = async (
   if (!govID){ 
     throw("Error: You must provide a government ID for the employee");
 }
-  govID = validation.checkString(govID, "Government ID");
+  govID = validation.checkGovId(govID, "Government ID");
 
   if (!userName){
     throw ("Error: You must provide a username")};
