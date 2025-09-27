@@ -6,6 +6,13 @@ import validation from '../helpers.js';
 import multer from 'multer';
 import path from 'path';
 
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -20,7 +27,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({ 
     storage,
-    limits: { fileSize: 5 * 1024 * 1024 }, // Limit file size to 5MB
+    limits: { fileSize: 20 * 1024 * 1024 }, // Limit file size to 5MB
     fileFilter: (req, file, cb) => {
         const allowedTypes = /jpeg|jpg|png/;
         const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
@@ -34,43 +41,7 @@ const upload = multer({
     }
 });
 
-// router //show all rooms
-//     .route('/')
-//     .get(async (req, res) => {
-//         try {
-//           const roomList = await roomData.getAllRooms();
-//           roomList.forEach(room => {
-//             //console.log("testing", roomSel);
-//             room._id = room._id.toString();
-//           });
-//           // console.log(roomList);
-//         if (req.xhr || (req.headers.accept && req.headers.accept.includes('application/json'))) {
-//       return res.json({ rooms: roomList });
-//     }
 
-//     // Otherwise, render Handlebars as usual
-//     res.render('rooms', { rooms: roomList, pageTitle: "Rooms", partial: 'rooms' });
-//   } catch (e) {
-//     res.status(500).json({ error: e.toString() });
-//   }
-//     });
-
-// router //show all rooms
-//     .route('/')
-//     .get(async (req, res) => {
-//        try {
-//       const roomList = await roomData.getAllRooms();
-//       roomList.forEach(room => {
-//         room._id = room._id.toString(); // convert ObjectId to string
-//       });
-
-//       // ✅ Send JSON instead of rendering HTML
-//       res.json({ rooms: roomList });
-//     } catch (e) {
-//       console.error("Error fetching rooms:", e);
-//       res.status(500).json({ error: "Failed to fetch rooms" });
-//     }
-//     });
 
 router.route('/')
   .get(async (req, res) => {
@@ -297,7 +268,7 @@ router
   const hasBalcony = balcony === 'true';
   const parsedPricing = parseFloat(pricingPerNight);
     
-  const imagePath = req.file ? `pics/room_pics/${req.file.filename}` : null;
+  const imagePath = req.file ? `/pics/room_pics/${req.file.filename}` : null;
 
   const newRoom = await roomData.createRoom(
       roomName,
@@ -313,13 +284,12 @@ router
   const roomList = await roomData.getAllRooms();
 
     res.redirect('/admin/dashboard');
-    // res.render('addRoom', 
-    //   {rooms: roomList, 
-    //     pageTitle: , 
-    //     partial: 'addRoomForm',
-    //     success: true,
-    //     successMessage: `Room "${newRoom.roomName}" has been added successfully!`,});
-    //    res.redirect('/admin/dashboard');
+    res.render('addRoom', 
+      {rooms: roomList, 
+        partial: 'addRoomForm',
+        success: true,
+        successMessage: `Room "${newRoom.roomName}" has been added successfully!`,});
+       res.redirect('/admin/dashboard');
 
 
 
