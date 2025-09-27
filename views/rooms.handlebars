@@ -9,7 +9,7 @@
               <h2>{{roomName}}</h2>
              <img src="{{imagePath}}" alt="{{roomName}}" class="room-image" />
               <p><strong>Balcony:</strong> {{#if balcony}}Yes{{else}}No{{/if}}</p>
-              <p><strong>Pricing Per Night Per Person:</strong> {{formatCOP pricingPerNight}} COP</p>
+              <p><strong>Pricing Per Night/PP:</strong> {{formatCOP pricingPerNight}} COP</p>
               <p><strong>Bed Sizes:</strong> 
                 {{#each bedSizes}}
                   {{@key}}: {{this}}<br>
