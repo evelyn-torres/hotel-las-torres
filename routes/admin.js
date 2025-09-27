@@ -6,18 +6,28 @@ import xss from 'xss';
 import { ObjectId } from 'mongodb';
 import {admins} from '../config/mongoCollections.js';
 import multer from 'multer';
+import { CloudinaryStorage } from "multer-storage-cloudinary";
+import cloudinary from "../config/cloudinary.js";
 import path from 'path';
 
 const router = Router();
 
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, path.join(process.cwd(), 'public/pics/room_pics'));
+// const storage = multer.diskStorage({ //LOCALLY STORED
+//   destination: (req, file, cb) => {
+//     cb(null, path.join(process.cwd(), 'public/pics/room_pics'));
+//   },
+//   filename: (req, file, cb) => {
+//     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+//     cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname));
+//   }
+// });
+
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: "hotel-las-torres/rooms", // your folder in Cloudinary
+    allowed_formats: ["jpg", "jpeg", "png"],
   },
-  filename: (req, file, cb) => {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-    cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname));
-  }
 });
 
 const upload = multer({ storage });
@@ -314,7 +324,7 @@ router.route('/editRoom/:roomId')
                 newBedSize[bed.split(":")[0]] = parseInt(bed.split(":")[1]);
             });
 
-            let imagePath = req.file ? `/pics/room_pics/${req.file.filename}` : undefined;
+           let imagePath = req.file ? req.file.path : undefined;
 
             if (deleteImage === "true"){
                 imagePath = null;
