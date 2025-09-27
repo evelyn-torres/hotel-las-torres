@@ -61,7 +61,7 @@ header{/* Headers will be this color and size*/
 
 .taskbar{
   display: flex;
-  justify-content: space-between;
+  /* justify-content: space-between; */
   align-items: center;
   padding: 10px 20px;
   background-color: rgba(64, 87, 67, 0.8);
