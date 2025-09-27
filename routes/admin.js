@@ -204,7 +204,7 @@ router.route('/dashboard/createAdmin')
             }
             let empFirstName = validation.checkString(employeeFirstName, "Employee First Name");
             let empLastName = validation.checkString(employeeLastName, "Employee Last Name"); 
-            let empGovID = validation.checkString(govID, "GovernmentID"); 
+            let empGovID = validation.checkGovId(govID, "GovernmentID"); 
             let empUser = validation.checkString(userName, "Employee User Name"); 
             let empPass = validation.checkString(password, "Employee Password");
             let empConfirmPass = validation.checkString(confirmPassword, "Employee Confirm Password");
