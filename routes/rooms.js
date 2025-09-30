@@ -174,9 +174,12 @@ router
             }
 
             res.json({
-                open: room.availability.open,
-                booked: room.availability.booked,
+                // open: room.availability.open,
+                // booked: room.availability.booked,
+                 open: ["2025-10-01", "2025-10-02", "2025-10-03"], 
+                 booked: ["2025-10-05", "2025-10-06"]
             });
+            res.json(availability);
 
         } catch (e) {
             console.log(e);
