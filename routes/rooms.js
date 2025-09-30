@@ -128,6 +128,16 @@ router //after click on book now, route to room by roomid
           email, numOfGuests, roomId, checkIn, checkOut, parking, totalcost) 
         if (!newBookingInfo) throw `Internal Error(R): could not create new booking`;
     
+         const roomCollection = await rooms();
+          await roomCollection.updateOne(
+            { _id: new ObjectId(roomId) },
+            {
+              $push: {
+                "availability.booked": { checkIn, checkOut }
+              }
+            }
+          );
+
         let resID = newBookingInfo._id
         let reservationCode = newBookingInfo.reservationCode;
         let roomName = await roomData.getRoomById(roomId).roomName;
@@ -166,7 +176,7 @@ router
     .get(async (req, res) => {
       let { roomId } = req.params;
         try {
-            //const {roomId} = req.params.roomId;
+            const {roomId} = req.params.roomId;
             //console.log('Room ID:', roomId); // Debugging log
             const room = await roomData.getRoomById(roomId);
             if (!room) {
