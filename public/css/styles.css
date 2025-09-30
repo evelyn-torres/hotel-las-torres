@@ -149,6 +149,10 @@ footer ul {
   margin: 0; /* Removes default margin */
   padding: 0; /* Removes default padding */
 }
+.footer-center {
+  display: flex;
+  justify-content: center;
+}
 
 
 
