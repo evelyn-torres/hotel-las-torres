@@ -139,7 +139,8 @@ footer {
 }
 
 .footer-left,
-.footer-right {
+.footer-right,
+.footer-center {
   flex: 1; /* Equal width for left and right sections */
   margin: 0 10px;
 }
@@ -149,10 +150,20 @@ footer ul {
   margin: 0; /* Removes default margin */
   padding: 0; /* Removes default padding */
 }
-.footer-center {
-  display: flex;
-  text-align: center;
+/* .footer-center {
+  margin-top: 0 10px;
+  flex: 1
 }
+.footer-center ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-center li {
+  margin: 4px 0;
+} */
+
 
 
 
