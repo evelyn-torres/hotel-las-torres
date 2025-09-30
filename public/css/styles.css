@@ -151,7 +151,7 @@ footer ul {
 }
 .footer-center {
   display: flex;
-  justify-content: center;
+  text-align: center;
 }
 
 
