@@ -30,12 +30,14 @@
        <span class="admin-name">Welcome, {{user.employeeFirstName}} </span>
       <a href="/admin/dashboard">Dashboard</a>
       <a href="/admin/reservations">View Reservations</a>
+     
+
       <a href="/logout">Logout</a>
     {{else}}
         <a href="/">Home</a>
     <a href="/about">About Us</a>
     <a href="/rooms">Rooms</a>
-    {{!-- <a href="/tourism">Tourism</a> --}}
+    <a href="/tourism">Tourism</a>
     {{!-- <a href="/contact">Reviews</a> --}}
     <a href="/login">Employee Login</a>
     {{/if}}
