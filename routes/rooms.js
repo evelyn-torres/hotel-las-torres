@@ -199,7 +199,7 @@ router
   router
     .route('/:roomId')
     .delete(ensureAdmin, async (req, res) => {
-     // const {roomId} = req.params;
+     const {roomId} = req.params;
     //  console.log('DELETE req received', req.params.roomId);
      try{
 
