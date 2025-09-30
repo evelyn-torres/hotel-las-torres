@@ -34,7 +34,7 @@
             })) : [])
         ];
         
-        var calendar = new FullCalendar.Calendar(roomCalendar[0], {
+        const calendar = new FullCalendar.Calendar(roomCalendar[0], {
             initialView: 'dayGridMonth',
             headerToolbar: { /**gets an unknown error option but still fine */
               left: 'prev,next today',
