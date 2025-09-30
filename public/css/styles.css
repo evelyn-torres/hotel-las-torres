@@ -150,8 +150,8 @@ footer ul {
   padding: 0; /* Removes default padding */
 }
 .footer-center {
-  margin-top:  10px;
-  text-align: center;
+  margin-top: 0 10px;
+  flex: 1
 }
 .footer-center ul {
   list-style-type: none;
