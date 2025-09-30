@@ -128,15 +128,15 @@ router //after click on book now, route to room by roomid
           email, numOfGuests, roomId, checkIn, checkOut, parking, totalcost) 
         if (!newBookingInfo) throw `Internal Error(R): could not create new booking`;
     
-         const roomCollection = await rooms();
-          await roomCollection.updateOne(
-            { _id: new ObjectId(roomId) },
-            {
-              $push: {
-                "availability.booked": { checkIn, checkOut }
-              }
-            }
-          );
+        //  const roomCollection = await rooms();
+        //   await roomCollection.updateOne(
+        //     { _id: new ObjectId(roomId) },
+        //     {
+        //       $push: {
+        //         "availability.booked": { checkIn, checkOut }
+        //       }
+        //     }
+        //   );
 
         let resID = newBookingInfo._id
         let reservationCode = newBookingInfo.reservationCode;
