@@ -75,7 +75,7 @@ router.route('/')
       res.status(500).json({ error: "Failed to fetch rooms" });
     }
   });
-
+  
 
     
 
@@ -183,19 +183,10 @@ router
             if (!room) {
                 return res.status(404).json({ error: 'Room not found' });
             }
-            
-
-            const booked = reservations.map(r => ({
-              start: r.checkInDate,
-              end: r.checkOutDate,
-              title: `Reserved by ${r.guestFirstName} ${r.guestLastName}`,
-              color: 'red'
-            }));
-
 
             res.json({
-                open: room.availability.open || [],
-                booked
+                open: room.availability.open,
+                booked: room.availability.booked,
                  
             });
             //res.json(availability) IDK IF THIS should be 
