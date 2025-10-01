@@ -14,7 +14,7 @@
 
     let requestConfig = {
     method: 'GET',
-    url: `/api/${roomId}/availability`
+    url: `/rooms/${roomId}/availability`
     };
 
     //Make AJAX Call
