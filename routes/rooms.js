@@ -82,7 +82,7 @@ router //after click on book now, route to room by roomid
     .route('/:roomId/bookingRoom')
     .get(async (req,res) => { 
       //console.log("params", req.params);
-      //const roomId = req.params.roomId;
+      const roomId = req.params.roomId;
       try{ //grab specifc room
         // console.log("get passed", roomId);
         let room = await roomData.getRoomById(roomId);
@@ -200,7 +200,7 @@ router
     .route('/:roomId')
     .delete(ensureAdmin, async (req, res) => {
      //const {roomId} = req.params;
-    //  console.log('DELETE req received', req.params.roomId);
+    console.log('DELETE req received', req.params.roomId);
      try{
 
       const roomId = validation.checkId(req.params.roomId, "room ID");
