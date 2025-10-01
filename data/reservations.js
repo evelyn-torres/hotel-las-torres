@@ -31,7 +31,7 @@ export const createReservation = async(
     phone, 
     email,
     numOfGuests,
-    roomID, 
+    roomId, 
     checkInDate, 
     checkOutDate, 
     parking, 
@@ -58,7 +58,7 @@ export const createReservation = async(
     phone = phone.slice(0,3)+phone.slice(4,7)+phone.slice(8); //takes the "-" out
     if (phone.length != 10 || parseInt(phone) < 1111111111 || parseInt(phone) > 9999999999) throw "Error: invalid phone number input";
     //TO-DO: validate email
-    const chosenRoom = await getRoomById(roomID);
+    const chosenRoom = await getRoomById(roomId);
     console.log(chosenRoom)
     let roomCapacity = 0; //room cap: double =2, while twin + semi_double ==1. SO all of that added up is roomCap
 
@@ -131,7 +131,7 @@ export const createReservation = async(
         phone: phone, 
         email: email,
         numOfGuests: numOfGuests,
-        roomID: roomID, 
+        roomId: roomId, 
         checkInDate: checkInDate, 
         checkOutDate: checkOutDate, 
         daysBooked: daysBooked,
@@ -149,7 +149,7 @@ export const createReservation = async(
     //update room in db
     const roomCollection = await rooms();
     await roomCollection.updateOne({_id: new ObjectId(chosenRoom._id)}, {$set: {availability: chosenRoom.availability}})
-    console.log("newly booked", await getRoomById(roomID));
+    console.log("newly booked", await getRoomById(roomId));
 
     
    //await sendEmailConfirmation(email, reservation);

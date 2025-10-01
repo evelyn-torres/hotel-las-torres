@@ -1,3 +1,4 @@
+
 (function ($) {
     //Let's get references to our form elements and the div where the todo's will go
     let roomCalendar = $('#room_calendar');
@@ -32,7 +33,7 @@
                 color: 'red',
             })) : [])
         ];
-
+        
         const calendar = new FullCalendar.Calendar(roomCalendar[0], {
             initialView: 'dayGridMonth',
             headerToolbar: { /**gets an unknown error option but still fine */
