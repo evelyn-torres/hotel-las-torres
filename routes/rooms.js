@@ -174,9 +174,9 @@ router //after click on book now, route to room by roomid
 router
     .route('/:roomId/availability')
     .get(async (req, res) => {
-      let { roomId } = req.params;
+     let { roomId } = req.params;
         try {
-            //const {roomId} = req.params.roomId;
+           // const {roomId} = req.params.roomId;
             //console.log('Room ID:', roomId); // Debugging log
             const room = await roomData.getRoomById(roomId);
             if (!room) {
@@ -188,7 +188,7 @@ router
                 booked: room.availability.booked,
                  
             });
-            res.json(availability)
+            //res.json(availability) IDK IF THIS should be 
 
         } catch (e) {
             console.log(e);
