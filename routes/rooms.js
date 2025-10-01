@@ -5,8 +5,6 @@ import { rooms } from '../config/mongoCollections.js';
 import validation from '../helpers.js';
 import multer from 'multer';
 import path from 'path';
-import {roomData, reservationData} from '../data/index.js';
-
 
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
@@ -185,7 +183,7 @@ router
             if (!room) {
                 return res.status(404).json({ error: 'Room not found' });
             }
-            const reservations = await reservationData.getReservationById(roomId);
+            
 
             const booked = reservations.map(r => ({
               start: r.checkInDate,
