@@ -135,7 +135,7 @@ router.get('/reservations', async (req,res) => {
             pageTitle: "Reservations",
             adminDetails: { name: "Admin Name", role: "Administrator" },
             reservations: allReservations,
-            partial: "admin_reservations",
+           // partial: "admin_reservations",
             isAdmin: true
           
         });
