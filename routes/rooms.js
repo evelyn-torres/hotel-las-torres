@@ -176,8 +176,8 @@ router
     .get(async (req, res) => {
      let { roomId } = req.params;
         try {
-           // const {roomId} = req.params.roomId;
-            //console.log('Room ID:', roomId); // Debugging log
+           const {roomId} = req.params.roomId;
+          console.log('Room ID:', roomId); // Debugging log
             const room = await roomData.getRoomById(roomId);
             if (!room) {
                 return res.status(404).json({ error: 'Room not found' });
