@@ -176,7 +176,7 @@ router
     .get(async (req, res) => {
      let { roomId } = req.params;
         try {
-           const {roomId} = req.params.roomId;
+          //  const {roomId} = req.params.roomId;
           console.log('Room ID:', roomId); // Debugging log
             const room = await roomData.getRoomById(roomId);
             if (!room) {
@@ -199,7 +199,7 @@ router
   router
     .route('/:roomId')
     .delete(ensureAdmin, async (req, res) => {
-     const {roomId} = req.params;
+     //const {roomId} = req.params;
     //  console.log('DELETE req received', req.params.roomId);
      try{
 
