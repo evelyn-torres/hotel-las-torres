@@ -102,7 +102,7 @@ router //after click on book now, route to room by roomid
     .post(async (req,res) => { //after clicking submit on booking room, making booking and check avail
       const roomId = req.params.roomId;
       const newBookingData = req.body;
-      // console.log("data from room", newBookingData);
+      console.log("data from room", newBookingData);
 
       let errors = [];
       try {
