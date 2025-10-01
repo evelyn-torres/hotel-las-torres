@@ -76,6 +76,7 @@ router.route('/')
     }
   });
 
+
     
 
 router //after click on book now, route to room by roomid
@@ -182,10 +183,21 @@ router
             if (!room) {
                 return res.status(404).json({ error: 'Room not found' });
             }
+            const reservations = await reservationsCollection
+              .find({ roomId: roomId })   // ⚠️ note: must match your field name "roomID"
+              .toArray();
+
+            const booked = reservations.map(r => ({
+              start: r.checkInDate,
+              end: r.checkOutDate,
+              title: `Reserved by ${r.guestFirstName} ${r.guestLastName}`,
+              color: 'red'
+            }));
+
 
             res.json({
-                open: room.availability.open,
-                booked: room.availability.booked,
+                open: room.availability.open || [],
+                booked
                  
             });
             //res.json(availability) IDK IF THIS should be 
