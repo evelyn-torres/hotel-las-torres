@@ -66,10 +66,10 @@ export const createReservation = async(
     let numOfBeds = Object.values(chosenRoom.bedSizes);
 
     for(let x in beds) {
-        if(beds[x] === "Double") {
+        if(beds[x] === "Double" || beds[x] === "Doble" ) {
             roomCapacity += numOfBeds[x] * 2; 
         }
-        if(beds[x] === "Semi-Double") {
+        if(beds[x] === "Semi-Double" || beds[x] === "Semi-Doble") {
             roomCapacity += numOfBeds[x]; 
         }
         if(beds[x] === "Twin") {

@@ -87,7 +87,15 @@ router //after click on book now, route to room by roomid
       try{ //grab specifc room
         // console.log("get passed", roomId);
         let room = await roomData.getRoomById(roomId);
-        res.render('roomBooking', {pageTitle: `Book ${room.roomName}`, hasErrors: false, partial:'rooms', roomId: roomId, roomName: room.roomName});
+        const isAdmin = res.locals.isAdmin = req.session.user?.role === "Administrator";
+        res.render('roomBooking', 
+          {pageTitle: `Book ${room.roomName}`,
+           hasErrors: false, partial:'rooms', 
+           roomId: roomId,
+            roomName: room.roomName,
+            isAdmin
+          
+          });
 
       } catch (e){ //can be used to make sure rooms are not avail after deleting
         console.log(e);
@@ -164,11 +172,14 @@ router //after click on book now, route to room by roomid
           roomName = room.roomName;
         }
         return res.render("roomBooking", 
-          {pageTitle: `Book ${roomName}`, 
+          {
+          pageTitle: `Book ${roomName}`, 
           hasErrors: true, errors: errors, 
           partial: "rooms", 
           roomId: roomId, 
-          roomName: roomName});
+          roomName: roomName,
+        
+        });
      }
     });    
 
