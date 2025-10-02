@@ -89,26 +89,58 @@ export const createReservation = async(
 
     const begin = new Date(checkInDate);
     const end = new Date(checkOutDate);
-    if (end.getTime() - begin.getTime() < 0) throw "Booking Error: Check-Out date must be after Check-In Date.";
-    if (end.getTime()-begin.getTime() > 2678400000) throw "Booking Error: Per our Hotel Policy, You cannot book a room for more than 31 days. Please select another date.";
-    const daysBooked = end.getDate()-begin.getDate();
-    let curr = begin.valueOf();
-    for (let i = 0; i < daysBooked; i++){
-        if (chosenRoom.availability.booked.includes(new Date(curr).toISOString().slice(0,10))){ //if room is booked, ask to book another range
-            throw `Booking Error: Room is booked on ${new Date(curr).toISOString().slice(0,10)}, please select another date.`
-            break;
+
+    if (end.getTime() <= begin.getTime() ) throw "Booking Error: Check-Out date must be after Check-In Date.";
+    
+    //if (end.getTime()-begin.getTime() > 2678400000) throw "Booking Error: Per our Hotel Policy, You cannot book a room for more than 31 days. Please select another date.";
+    const msDiff = end.getTime() - begin.getTime();
+    if(msDiff > 2678400000 ) throw "Booking Error: Per our Hotel Policy, You cannot book a room for more than 31 days. Please select another date.";
+    
+   // const daysBooked = end.getDate()-begin.getDate();
+
+   // compute number of nights (treat checkOut as exclusive)
+    const nights = Math.round(msDiff / 86400000); // whole days difference
+
+    // iterate each day from check-in (inclusive) for `nights` days
+    let curr = begin.getTime();
+    for (let i = 0; i < nights; i++){
+        const dateStr = new Date(curr).toISOString().slice(0,10); //YYYY-MM-DD
+
+        if(Array.isArray(chosenRoom.availability.booked) && chosenRoom.availability.booked.includes(dateStr)){
+            throw `Booking Error: Room is already booked on ${dateStr}, please select another date.`;
         }
-        else if(chosenRoom.availability.open.includes(new Date(curr).toISOString().slice(0,10))){ //if room is open, check each date and add to current
-            let selectDate = new Date(curr).toISOString().slice(0,10); //set date to add to booked
-            chosenRoom.availability.open = chosenRoom.availability.open.filter(x => x !== selectDate); //remove from open array
-            chosenRoom.availability.booked.push(selectDate) // add it to booked column
-            if (chosenRoom.availability.open.includes(selectDate) || !chosenRoom.availability.booked.includes(selectDate)) throw `Booking Error: Failure to Book on ${selectDate}`;
-            curr += 86400000;
+
+        if (Array.isArray(chosenRoom.availability.open) && chosenRoom.availability.open.includes(dateStr)){
+            chosenRoom.availability.open = chosenRoom.availability.open.filter(x => x !== dateStr);
+            chosenRoom.availability.booked = chosenRoom.availability.booked || [];
+            chosenRoom.availability.booked.push(dateStr);
+            
+            if (!chosenRoom.availability.booked.includes(dateStr)) {
+                throw `Booking Error: Failure to book ${dateStr}`;
+                }
+        } else{
+            throw `Booking Error: We currently aren't offering this room on ${dateStr}, please select another date.`;
         }
-        else{ //date isn't offered, choose another day
-            throw `Booking Error: We currently aren't offering this room on ${new Date(curr).toISOString().slice(0,10)}, please select another date.`
-        }
+
+        curr += 24 * 60 * 60 * 1000; //go up a day
     }
+    const daysBooked = nights;
+
+    //     if (chosenRoom.availability.booked.includes(new Date(curr).toISOString().slice(0,10))){ //if room is booked, ask to book another range
+    //         throw `Booking Error: Room is booked on ${new Date(curr).toISOString().slice(0,10)}, please select another date.`
+    //         break;
+    //     }
+    //     else if(chosenRoom.availability.open.includes(new Date(curr).toISOString().slice(0,10))){ //if room is open, check each date and add to current
+    //         let selectDate = new Date(curr).toISOString().slice(0,10); //set date to add to booked
+    //         chosenRoom.availability.open = chosenRoom.availability.open.filter(x => x !== selectDate); //remove from open array
+    //         chosenRoom.availability.booked.push(selectDate) // add it to booked column
+    //         if (chosenRoom.availability.open.includes(selectDate) || !chosenRoom.availability.booked.includes(selectDate)) throw `Booking Error: Failure to Book on ${selectDate}`;
+    //         curr += 86400000;
+    //     }
+    //     else{ //date isn't offered, choose another day
+    //         throw `Booking Error: We currently aren't offering this room on ${new Date(curr).toISOString().slice(0,10)}, please select another date.`
+    //     }
+    // }
     
     //checks for govID
     govID = validation.checkGovId(govID)
