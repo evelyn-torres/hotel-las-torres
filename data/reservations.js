@@ -180,6 +180,11 @@ export const createReservation = async(
 
     //update room in db
     const roomCollection = await rooms();
+    console.log("before update booked:", chosenRoom.availability.booked);
+
+    const checkRoom = await roomCollection.findOne({_id: new ObjectId(chosenRoom._id)});
+    console.log("after update booked in DB:", checkRoom.availability.booked);
+
     await roomCollection.updateOne({_id: new ObjectId(chosenRoom._id)}, {$set: {availability: chosenRoom.availability}})
     console.log("newly booked", await getRoomById(roomId));
 
