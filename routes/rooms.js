@@ -88,6 +88,7 @@ router //after click on book now, route to room by roomid
         // console.log("get passed", roomId);
         let room = await roomData.getRoomById(roomId);
         const isAdmin = res.locals.isAdmin = req.session.user?.role === "Administrator";
+        
         res.render('roomBooking', 
           {pageTitle: `Book ${room.roomName}`,
            hasErrors: false, partial:'rooms', 
@@ -105,7 +106,7 @@ router //after click on book now, route to room by roomid
         if (room && room !== undefined){
           roomName = room.roomName;
         }
-        return res.render('roomBooking', {pageTitle: `Book ${roomName}`, hasError: true, errors: e, partial: "rooms", roomId: roomId, roomName: roomName});
+        return res.render('roomBooking', {pageTitle: `Book ${roomName}`, hasError: true, errors: e, partial: "rooms", roomId: roomId, roomName: roomName, isAdmin});
       }
     })
     .post(async (req,res) => { //after clicking submit on booking room, making booking and check avail
