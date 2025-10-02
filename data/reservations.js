@@ -60,7 +60,7 @@ export const createReservation = async(
     //TO-DO: validate email
     const chosenRoom = await getRoomById(roomId);
     console.log(chosenRoom)
-    let roomCapacity = 0; //room cap: double =2, while twin + semi_double ==1. SO all of that added up is roomCap
+    let roomCapacity = 1; //room cap: double =2, while twin + semi_double ==1. SO all of that added up is roomCap
 
     let beds = Object.keys(chosenRoom.bedSizes);
     let numOfBeds = Object.values(chosenRoom.bedSizes);
