@@ -27,6 +27,7 @@
     <div style="padding: 20px;">
       <div id='room_calendar' data-room_id="{{roomId}}"></div>
     </div>
+    {{#if isAdmin}}
     <form action="/rooms/{{roomId}}/bookingRoom" method="POST" class="bookingForm" id="bookingForm">
       <input type="hidden" name="roomId" value="{{roomId}}">
       <label for="checkIn">Check-in Date:</label>
@@ -67,6 +68,7 @@
 
       <button type="submit">Book Now</button>
     </form>
+    {{/if}}
     
     <ul id="newBooking"> </ul>
   </body>
