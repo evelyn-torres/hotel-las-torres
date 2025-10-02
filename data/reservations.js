@@ -31,7 +31,7 @@ export const createReservation = async(
     phone, 
     email,
     numOfGuests,
-    roomID, 
+    roomId, 
     checkInDate, 
     checkOutDate, 
     parking, 
@@ -58,18 +58,18 @@ export const createReservation = async(
     phone = phone.slice(0,3)+phone.slice(4,7)+phone.slice(8); //takes the "-" out
     if (phone.length != 10 || parseInt(phone) < 1111111111 || parseInt(phone) > 9999999999) throw "Error: invalid phone number input";
     //TO-DO: validate email
-    const chosenRoom = await getRoomById(roomID);
+    const chosenRoom = await getRoomById(roomId);
     console.log(chosenRoom)
-    let roomCapacity = 0; //room cap: double =2, while twin + semi_double ==1. SO all of that added up is roomCap
+    let roomCapacity = 1; //room cap: double =2, while twin + semi_double ==1. SO all of that added up is roomCap
 
     let beds = Object.keys(chosenRoom.bedSizes);
     let numOfBeds = Object.values(chosenRoom.bedSizes);
 
     for(let x in beds) {
-        if(beds[x] === "Double") {
+        if(beds[x] === "Double" || beds[x] === "Doble" ) {
             roomCapacity += numOfBeds[x] * 2; 
         }
-        if(beds[x] === "Semi-Double") {
+        if(beds[x] === "Semi-Double" || beds[x] === "Semi-Doble") {
             roomCapacity += numOfBeds[x]; 
         }
         if(beds[x] === "Twin") {
@@ -89,26 +89,58 @@ export const createReservation = async(
 
     const begin = new Date(checkInDate);
     const end = new Date(checkOutDate);
-    if (end.getTime() - begin.getTime() < 0) throw "Booking Error: Check-Out date must be after Check-In Date.";
-    if (end.getTime()-begin.getTime() > 2678400000) throw "Booking Error: Per our Hotel Policy, You cannot book a room for more than 31 days. Please select another date.";
-    const daysBooked = end.getDate()-begin.getDate();
-    let curr = begin.valueOf();
-    for (let i = 0; i < daysBooked; i++){
-        if (chosenRoom.availability.booked.includes(new Date(curr).toISOString().slice(0,10))){ //if room is booked, ask to book another range
-            throw `Booking Error: Room is booked on ${new Date(curr).toISOString().slice(0,10)}, please select another date.`
-            break;
+
+    if (end.getTime() <= begin.getTime() ) throw "Booking Error: Check-Out date must be after Check-In Date.";
+    
+    //if (end.getTime()-begin.getTime() > 2678400000) throw "Booking Error: Per our Hotel Policy, You cannot book a room for more than 31 days. Please select another date.";
+    const msDiff = end.getTime() - begin.getTime();
+    if(msDiff > 2678400000 ) throw "Booking Error: Per our Hotel Policy, You cannot book a room for more than 31 days. Please select another date.";
+    
+   // const daysBooked = end.getDate()-begin.getDate();
+
+   // compute number of nights (treat checkOut as exclusive)
+    const nights = Math.round(msDiff / 86400000); // whole days difference
+
+    // iterate each day from check-in (inclusive) for `nights` days
+    let curr = begin.getTime();
+    for (let i = 0; i < nights; i++){
+        const dateStr = new Date(curr).toISOString().slice(0,10); //YYYY-MM-DD
+
+        if(Array.isArray(chosenRoom.availability.booked) && chosenRoom.availability.booked.includes(dateStr)){
+            throw `Booking Error: Room is already booked on ${dateStr}, please select another date.`;
         }
-        else if(chosenRoom.availability.open.includes(new Date(curr).toISOString().slice(0,10))){ //if room is open, check each date and add to current
-            let selectDate = new Date(curr).toISOString().slice(0,10); //set date to add to booked
-            chosenRoom.availability.open = chosenRoom.availability.open.filter(x => x !== selectDate); //remove from open array
-            chosenRoom.availability.booked.push(selectDate) // add it to booked column
-            if (chosenRoom.availability.open.includes(selectDate) || !chosenRoom.availability.booked.includes(selectDate)) throw `Booking Error: Failure to Book on ${selectDate}`;
-            curr += 86400000;
+
+        if (Array.isArray(chosenRoom.availability.open) && chosenRoom.availability.open.includes(dateStr)){
+            chosenRoom.availability.open = chosenRoom.availability.open.filter(x => x !== dateStr);
+            chosenRoom.availability.booked = chosenRoom.availability.booked || [];
+            chosenRoom.availability.booked.push(dateStr);
+            
+            if (!chosenRoom.availability.booked.includes(dateStr)) {
+                throw `Booking Error: Failure to book ${dateStr}`;
+                }
+        } else{
+            throw `Booking Error: We currently aren't offering this room on ${dateStr}, please select another date.`;
         }
-        else{ //date isn't offered, choose another day
-            throw `Booking Error: We currently aren't offering this room on ${new Date(curr).toISOString().slice(0,10)}, please select another date.`
-        }
+
+        curr += 24 * 60 * 60 * 1000; //go up a day
     }
+    const daysBooked = nights;
+
+    //     if (chosenRoom.availability.booked.includes(new Date(curr).toISOString().slice(0,10))){ //if room is booked, ask to book another range
+    //         throw `Booking Error: Room is booked on ${new Date(curr).toISOString().slice(0,10)}, please select another date.`
+    //         break;
+    //     }
+    //     else if(chosenRoom.availability.open.includes(new Date(curr).toISOString().slice(0,10))){ //if room is open, check each date and add to current
+    //         let selectDate = new Date(curr).toISOString().slice(0,10); //set date to add to booked
+    //         chosenRoom.availability.open = chosenRoom.availability.open.filter(x => x !== selectDate); //remove from open array
+    //         chosenRoom.availability.booked.push(selectDate) // add it to booked column
+    //         if (chosenRoom.availability.open.includes(selectDate) || !chosenRoom.availability.booked.includes(selectDate)) throw `Booking Error: Failure to Book on ${selectDate}`;
+    //         curr += 86400000;
+    //     }
+    //     else{ //date isn't offered, choose another day
+    //         throw `Booking Error: We currently aren't offering this room on ${new Date(curr).toISOString().slice(0,10)}, please select another date.`
+    //     }
+    // }
     
     //checks for govID
     govID = validation.checkGovId(govID)
@@ -131,7 +163,7 @@ export const createReservation = async(
         phone: phone, 
         email: email,
         numOfGuests: numOfGuests,
-        roomID: roomID, 
+        roomId: roomId, 
         checkInDate: checkInDate, 
         checkOutDate: checkOutDate, 
         daysBooked: daysBooked,
@@ -148,8 +180,13 @@ export const createReservation = async(
 
     //update room in db
     const roomCollection = await rooms();
+    console.log("before update booked:", chosenRoom.availability.booked);
+
+    const checkRoom = await roomCollection.findOne({_id: new ObjectId(chosenRoom._id)});
+    console.log("after update booked in DB:", checkRoom.availability.booked);
+
     await roomCollection.updateOne({_id: new ObjectId(chosenRoom._id)}, {$set: {availability: chosenRoom.availability}})
-    console.log("newly booked", await getRoomById(roomID));
+    console.log("newly booked", await getRoomById(roomId));
 
     
    //await sendEmailConfirmation(email, reservation);

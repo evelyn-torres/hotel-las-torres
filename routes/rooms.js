@@ -75,6 +75,7 @@ router.route('/')
       res.status(500).json({ error: "Failed to fetch rooms" });
     }
   });
+  
 
     
 
@@ -86,7 +87,16 @@ router //after click on book now, route to room by roomid
       try{ //grab specifc room
         // console.log("get passed", roomId);
         let room = await roomData.getRoomById(roomId);
-        res.render('roomBooking', {pageTitle: `Book ${room.roomName}`, hasErrors: false, partial:'rooms', roomId: roomId, roomName: room.roomName});
+        const isAdmin = res.locals.isAdmin = req.session.user?.role === "Administrator";
+        
+        res.render('roomBooking', 
+          {pageTitle: `Book ${room.roomName}`,
+           hasErrors: false, partial:'rooms', 
+           roomId: roomId,
+            roomName: room.roomName,
+            isAdmin
+          
+          });
 
       } catch (e){ //can be used to make sure rooms are not avail after deleting
         console.log(e);
@@ -96,13 +106,13 @@ router //after click on book now, route to room by roomid
         if (room && room !== undefined){
           roomName = room.roomName;
         }
-        return res.render('roomBooking', {pageTitle: `Book ${roomName}`, hasError: true, errors: e, partial: "rooms", roomId: roomId, roomName: roomName});
+        return res.render('roomBooking', {pageTitle: `Book ${roomName}`, hasError: true, errors: e, partial: "rooms", roomId: roomId, roomName: roomName, isAdmin});
       }
     })
     .post(async (req,res) => { //after clicking submit on booking room, making booking and check avail
       const roomId = req.params.roomId;
       const newBookingData = req.body;
-      // console.log("data from room", newBookingData);
+      console.log("data from room", newBookingData);
 
       let errors = [];
       try {
@@ -128,6 +138,16 @@ router //after click on book now, route to room by roomid
           email, numOfGuests, roomId, checkIn, checkOut, parking, totalcost) 
         if (!newBookingInfo) throw `Internal Error(R): could not create new booking`;
     
+         const roomCollection = await rooms();
+          await roomCollection.updateOne(
+            { _id: new ObjectId(roomId) },
+            {
+              $push: {
+                "availability.booked": { checkIn, checkOut }
+              }
+            }
+          );
+
         let resID = newBookingInfo._id
         let reservationCode = newBookingInfo.reservationCode;
         let roomName = await roomData.getRoomById(roomId).roomName;
@@ -153,21 +173,24 @@ router //after click on book now, route to room by roomid
           roomName = room.roomName;
         }
         return res.render("roomBooking", 
-          {pageTitle: `Book ${roomName}`, 
+          {
+          pageTitle: `Book ${roomName}`, 
           hasErrors: true, errors: errors, 
           partial: "rooms", 
           roomId: roomId, 
-          roomName: roomName});
+          roomName: roomName,
+        
+        });
      }
     });    
 
 router
     .route('/:roomId/availability')
     .get(async (req, res) => {
-      let { roomId } = req.params;
+     let { roomId } = req.params;
         try {
-            //const {roomId} = req.params.roomId;
-            //console.log('Room ID:', roomId); // Debugging log
+          //  const {roomId} = req.params.roomId;
+          console.log('Room ID:', roomId); // Debugging log
             const room = await roomData.getRoomById(roomId);
             if (!room) {
                 return res.status(404).json({ error: 'Room not found' });
@@ -176,7 +199,9 @@ router
             res.json({
                 open: room.availability.open,
                 booked: room.availability.booked,
+                 
             });
+            //res.json(availability) IDK IF THIS should be 
 
         } catch (e) {
             console.log(e);
@@ -187,8 +212,8 @@ router
   router
     .route('/:roomId')
     .delete(ensureAdmin, async (req, res) => {
-     // const {roomId} = req.params;
-    //  console.log('DELETE req received', req.params.roomId);
+     //const {roomId} = req.params;
+    console.log('DELETE req received', req.params.roomId);
      try{
 
       const roomId = validation.checkId(req.params.roomId, "room ID");
