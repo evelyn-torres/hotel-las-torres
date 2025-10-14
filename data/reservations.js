@@ -166,8 +166,11 @@ export const createReservation = async(
     }
     //checks for totalCost 
     console.log('avail check', chosenRoom.availability);
-    const pricingPerNight = chosenRoom.pricingPerNight; 
+
+    pricingPerNight = chosenRoom.pricingPerNight; 
+    
     const totalCost = await calcTotalCost(chosenRoom, numOfGuests, age, checkInDate, checkOutDate);
+
 
     console.log( "this is the totalCost: ", totalCost);
 
@@ -180,7 +183,8 @@ export const createReservation = async(
         phone: phone, 
         email: email,
         numOfGuests: numOfGuests,
-        roomId: roomId, 
+        roomId: roomId,
+        roomName: chosenRoom.roomName || chosenRoom.name,
         checkInDate: checkInDate, 
         checkOutDate: checkOutDate, 
         daysBooked: daysBooked,

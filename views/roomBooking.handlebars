@@ -25,7 +25,7 @@
       </ul>
     {{/if}}
     <div style="padding: 20px;">
-      <div id='room_calendar' data-room_id="{{roomId}}"></div>
+      <div id='room_calendar' data-room_id="{{_id}}"></div>
     </div>
     {{#if isAdmin}}
     <form action="/rooms/{{roomId}}/bookingRoom" method="POST" class="bookingForm" id="bookingForm">
