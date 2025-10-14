@@ -62,6 +62,7 @@ header{/* Headers will be this color and size*/
 .taskbar{
   display: flex;
   align-items: center;
+  padding: 10px 20px;
   background-color: rgba(64, 87, 67, 0.8);
 }
 
@@ -76,6 +77,11 @@ header{/* Headers will be this color and size*/
 .taskbar .logo{
   height: 65px;
   margin-right: 30px;
+}
+.admin-name{
+  font-size: 16px;
+  font-weight: 500;
+  color: #f1eeee;
 }
 
 
@@ -133,7 +139,8 @@ footer {
 }
 
 .footer-left,
-.footer-right {
+.footer-right,
+.footer-center {
   flex: 1; /* Equal width for left and right sections */
   margin: 0 10px;
 }
@@ -143,6 +150,20 @@ footer ul {
   margin: 0; /* Removes default margin */
   padding: 0; /* Removes default padding */
 }
+/* .footer-center {
+  margin-top: 0 10px;
+  flex: 1
+}
+.footer-center ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-center li {
+  margin: 4px 0;
+} */
+
 
 
 

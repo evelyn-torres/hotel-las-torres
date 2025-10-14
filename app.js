@@ -18,6 +18,8 @@ import MongoStore from 'connect-mongo';
 dotenv.config();
 const app = express();
 
+app.set('trust proxy' , 1); //recently added
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
@@ -27,9 +29,16 @@ const hbs = exphbs.create({
   layoutsDir: path.join(__dirname, 'views/layouts'),
   partialsDir: path.join(__dirname, 'views/partials/'),
   helpers: {
-    eq: (a, b) => a === b
-  }
-});
+    eq: (a, b) => a === b,
+    formatCOP: function (value) {
+      if (!value) return "";
+      return new Intl.NumberFormat("es-CO", {
+        style: "currency",
+        currency: "COP",
+        minimumFractionDigits: 0,
+      }).format(value);
+    }} }
+);
 
 app.engine('handlebars', hbs.engine);
 app.set('view engine', 'handlebars');
@@ -52,7 +61,7 @@ app.use(
       collectionName: "sessions"
     }),
     cookie: {
-      secure: process.env.NODE_ENV === 'production'&& process.env.VERCEL_ENV === 'production',
+      secure: process.env.NODE_ENV === 'production', //&& process.env.VERCEL_ENV === 'production',
       httpOnly: true,
       maxAge: 1000 * 60 * 60 * 2,
       sameSite: 'lax',
@@ -71,6 +80,12 @@ app.use((req, res, next) => {
   }
   next();
 });
+
+app.use((req,res,next) => {
+  res.locals.user = req.session.user || null;
+  res.locals.isAdmin = req.session.user?.role === "Administrator";
+  next();
+})
 
 
 
@@ -112,14 +127,13 @@ app.use((req, res, next) => {
 console.log("TRYING AGAIN");
 
 // Login redirect for admin
-// app.use('/login', (req, res, next) => {
-//   const user = req.session.user;
-//   if (user && typeof user === "string" && user.toLowerCase() === 'admin') {
-//     req.session.user = { role: 'Administrator' }; // ✅ fix reassign
-//     return res.redirect('/admin/dashboard');
-//   }
-//   next();
-// });
+app.get('/login', (req, res) => {
+  if (req.session.user && req.session.user.role === "Administrator") {
+    // Already logged in → redirect to dashboard
+    return res.redirect('/admin/dashboard');
+  }
+  res.render('login', { partial: "dead_server_script", pageTitle: "Employee Login" });
+});
 
 app.get('/test-db', async (req, res) => {
   try {

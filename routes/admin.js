@@ -6,75 +6,43 @@ import xss from 'xss';
 import { ObjectId } from 'mongodb';
 import {admins} from '../config/mongoCollections.js';
 import multer from 'multer';
+import { CloudinaryStorage } from "multer-storage-cloudinary";
+import cloudinary from "../config/cloudinary.js";
 import path from 'path';
 
 const router = Router();
 
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, path.join(process.cwd(), 'public/pics/room_pics'));
+// const storage = multer.diskStorage({ //LOCALLY STORED
+//   destination: (req, file, cb) => {
+//     cb(null, path.join(process.cwd(), 'public/pics/room_pics'));
+//   },
+//   filename: (req, file, cb) => {
+//     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+//     cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname));
+//   }
+// });
+
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: "hotel-las-torres/rooms", // your folder in Cloudinary
+    allowed_formats: ["jpg", "jpeg", "png"],
   },
-  filename: (req, file, cb) => {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-    cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname));
-  }
 });
 
 const upload = multer({ storage });
 
 router.route('/')
-    .get(async (req, res)=>{
-        try{
-            res.render('login', { partial: "dead_server_script", pageTitle: "Employee Login"})
-        }catch(e){
-            res.status(500).json({ error: 'Internal server error' });
-        }
-    })
-//     .post( async (req,res) => { 
-//         // console.log('in post but before try');
-//         try { //check if user/pass combo registers as user or not → user/pass fomrat checked in function
-//             // console.log('reqbody', req.body);
-//             let {userInput, passInput} = req.body;
-            
-//             userInput = validation.checkString(xss(userInput), "Username");
-//             passInput = validation.checkString(xss(passInput), "Password");
-          
-//             const admin = await adminData.grabAdminByLogin(userInput, passInput);
-//             // console.log(admin);
-//             if(!admin){
-//                 return res.status(401).json({ error: 'Invalid username or password' });
-//             }
-//             //req.session.user = 'admin'; //stores the logged in admin in session 
-//             req.session.user = { role: "Administrator", username: userInput };
+    // .get(async (req, res)=>{
+    //     try{
+    //         res.render('login', { partial: "dead_server_script", pageTitle: "Employee Login"})
+    //     }catch(e){
+    //         res.status(500).json({ error: 'Internal server error' });
+    //     }
+    // })
+    
 
-// req.session.save(err => {
-//     if(err){
-//         console.error("Session save error: ", err);
-//         return res.status(500).render('login', {
-//             partial: "dead_server_script",
-//             pageTitle: "Employee Login",
-//             error: "failed to login, please try again"
-//         });
-//     }
-//     // ✅ Only redirect after session is saved
-//     return res.redirect('/admin/dashboard');
-// });
-//             //maybe change to redirect so it isnt just going into admin page and /login
-//         } catch (e) {
-
-
-//             console.log('in catch statement for post of admin login');
-//             console.error(e);
-
-
-//             return res.render('login', { 
-//                 partial: "dead_server_script", 
-//                 pageTitle: "Employee Login", 
-//                 error: 'Invalid username or password' 
-//         })}
-
-//     });
-        router.post('/', async (req, res) => {
+        router.post('/login', async (req, res) => {
 
             try {
                 let { userInput, passInput } = req.body;
@@ -95,7 +63,11 @@ router.route('/')
                 }
 
                 // Set session
-                req.session.user = { role: "Administrator", username: userInput };
+                req.session.user = { 
+                    role: "Administrator",
+                    employeeFirstName: admin.employeeFirstName,
+                    employeeLastName: admin.employeeLastName, 
+                    username: userInput };
 
                 // ✅ Save session before redirecting
                 req.session.save(err => {
@@ -127,7 +99,7 @@ router.route('/')
 router.get('/dashboard', async (req,res) => {
         try{
             if(!req.session.user ||req.session.user.role !== "Administrator"){
-                return res.redirect('/admin'); //???
+                return res.redirect('/login'); //???
             }
             const roomList = await roomData.getAllRooms(); // Example: Fetching room data
             roomList.forEach(room => {
@@ -141,7 +113,7 @@ router.get('/dashboard', async (req,res) => {
                 pageTitle: "Admin Dashboard",
                 adminDetails: { name: "Admin Name", role: "Administrator" },
                 rooms: roomList,
-                partial: "admin_dash",
+                //partial: "admin_dash",
                 isAdmin: true
               
             });
@@ -163,7 +135,7 @@ router.get('/reservations', async (req,res) => {
             pageTitle: "Reservations",
             adminDetails: { name: "Admin Name", role: "Administrator" },
             reservations: allReservations,
-            partial: "admin_reservations",
+           // partial: "admin_reservations",
             isAdmin: true
           
         });
@@ -236,7 +208,7 @@ router.route('/dashboard/createAdmin')
             }
             let empFirstName = validation.checkString(employeeFirstName, "Employee First Name");
             let empLastName = validation.checkString(employeeLastName, "Employee Last Name"); 
-            let empGovID = validation.checkString(govID, "GovernmentID"); 
+            let empGovID = validation.checkGovId(govID, "GovernmentID"); 
             let empUser = validation.checkString(userName, "Employee User Name"); 
             let empPass = validation.checkString(password, "Employee Password");
             let empConfirmPass = validation.checkString(confirmPassword, "Employee Confirm Password");
@@ -252,7 +224,7 @@ router.route('/dashboard/createAdmin')
             if (empPass !== empConfirmPass) throw "Passwords must match";
             if (empUser.includes(" ")) throw "User name cannot contain spaces";
             if (empFirstName.includes(" ")) throw "First name cannot contain spaces";
-            if (empLastName.includes(" ")) throw "Last name cannot contain spaces";
+            //if (empLastName.includes(" ")) throw "Last name cannot contain spaces";
             if (empGovID.includes(" ")) throw "Government ID cannot contain spaces";
             if (empPass.includes(" ")) throw "Password cannot contain spaces";
             
@@ -356,7 +328,7 @@ router.route('/editRoom/:roomId')
                 newBedSize[bed.split(":")[0]] = parseInt(bed.split(":")[1]);
             });
 
-            let imagePath = req.file ? `/pics/room_pics/${req.file.filename}` : undefined;
+           let imagePath = req.file ? req.file.path : undefined;
 
             if (deleteImage === "true"){
                 imagePath = null;

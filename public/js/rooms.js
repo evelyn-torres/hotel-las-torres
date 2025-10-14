@@ -14,13 +14,13 @@
 
     let requestConfig = {
     method: 'GET',
-    url: `/api/${roomId}/availability`
+    url: `/rooms/${roomId}/availability`
     };
 
     //Make AJAX Call
     $.ajax(requestConfig).then(function (responseMessage) {
         console.log("test passed", responseMessage);
-        
+        console.log("response messages book or open: ", responseMessage.booked);
         const events = [
             ...(Array.isArray(responseMessage.open) ? responseMessage.open.map(date => ({
                 start: date,
@@ -34,7 +34,7 @@
             })) : [])
         ];
         
-        var calendar = new FullCalendar.Calendar(roomCalendar[0], {
+        const calendar = new FullCalendar.Calendar(roomCalendar[0], {
             initialView: 'dayGridMonth',
             headerToolbar: { /**gets an unknown error option but still fine */
               left: 'prev,next today',

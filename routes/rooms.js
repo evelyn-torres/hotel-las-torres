@@ -6,6 +6,13 @@ import validation from '../helpers.js';
 import multer from 'multer';
 import path from 'path';
 
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -20,9 +27,9 @@ const storage = multer.diskStorage({
 
 const upload = multer({ 
     storage,
-    limits: { fileSize: 5 * 1024 * 1024 }, // Limit file size to 5MB
+    limits: { fileSize: 20 * 1024 * 1024 }, // Limit file size to 5MB
     fileFilter: (req, file, cb) => {
-        const allowedTypes = /jpeg|jpg|png/;
+        const allowedTypes = /jpeg|jpg|png|heic/;
         const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
         const mimetype = allowedTypes.test(file.mimetype);
 
@@ -34,43 +41,7 @@ const upload = multer({
     }
 });
 
-// router //show all rooms
-//     .route('/')
-//     .get(async (req, res) => {
-//         try {
-//           const roomList = await roomData.getAllRooms();
-//           roomList.forEach(room => {
-//             //console.log("testing", roomSel);
-//             room._id = room._id.toString();
-//           });
-//           // console.log(roomList);
-//         if (req.xhr || (req.headers.accept && req.headers.accept.includes('application/json'))) {
-//       return res.json({ rooms: roomList });
-//     }
 
-//     // Otherwise, render Handlebars as usual
-//     res.render('rooms', { rooms: roomList, pageTitle: "Rooms", partial: 'rooms' });
-//   } catch (e) {
-//     res.status(500).json({ error: e.toString() });
-//   }
-//     });
-
-// router //show all rooms
-//     .route('/')
-//     .get(async (req, res) => {
-//        try {
-//       const roomList = await roomData.getAllRooms();
-//       roomList.forEach(room => {
-//         room._id = room._id.toString(); // convert ObjectId to string
-//       });
-
-//       // ✅ Send JSON instead of rendering HTML
-//       res.json({ rooms: roomList });
-//     } catch (e) {
-//       console.error("Error fetching rooms:", e);
-//       res.status(500).json({ error: "Failed to fetch rooms" });
-//     }
-//     });
 
 router.route('/')
   .get(async (req, res) => {
@@ -104,6 +75,7 @@ router.route('/')
       res.status(500).json({ error: "Failed to fetch rooms" });
     }
   });
+  
 
     
 
@@ -115,7 +87,16 @@ router //after click on book now, route to room by roomid
       try{ //grab specifc room
         // console.log("get passed", roomId);
         let room = await roomData.getRoomById(roomId);
-        res.render('roomBooking', {pageTitle: `Book ${room.roomName}`, hasErrors: false, partial:'rooms', roomId: roomId, roomName: room.roomName});
+        const isAdmin = res.locals.isAdmin = req.session.user?.role === "Administrator";
+        
+        res.render('roomBooking', 
+          {pageTitle: `Book ${room.roomName}`,
+           hasErrors: false, partial:'rooms', 
+           roomId: roomId,
+            roomName: room.roomName,
+            isAdmin
+          
+          });
 
       } catch (e){ //can be used to make sure rooms are not avail after deleting
         console.log(e);
@@ -125,13 +106,13 @@ router //after click on book now, route to room by roomid
         if (room && room !== undefined){
           roomName = room.roomName;
         }
-        return res.render('roomBooking', {pageTitle: `Book ${roomName}`, hasError: true, errors: e, partial: "rooms", roomId: roomId, roomName: roomName});
+        return res.render('roomBooking', {pageTitle: `Book ${roomName}`, hasError: true, errors: e, partial: "rooms", roomId: roomId, roomName: roomName, isAdmin});
       }
     })
     .post(async (req,res) => { //after clicking submit on booking room, making booking and check avail
       const roomId = req.params.roomId;
       const newBookingData = req.body;
-      // console.log("data from room", newBookingData);
+      console.log("data from room", newBookingData);
 
       let errors = [];
       try {
@@ -157,6 +138,16 @@ router //after click on book now, route to room by roomid
           email, numOfGuests, roomId, checkIn, checkOut, parking) 
         if (!newBookingInfo) throw `Internal Error(R): could not create new booking`;
     
+         const roomCollection = await rooms();
+          await roomCollection.updateOne(
+            { _id: new ObjectId(roomId) },
+            {
+              $push: {
+                "availability.booked": { checkIn, checkOut }
+              }
+            }
+          );
+
         let resID = newBookingInfo._id
         let reservationCode = newBookingInfo.reservationCode;
         let roomName = await roomData.getRoomById(roomId).roomName;
@@ -182,21 +173,24 @@ router //after click on book now, route to room by roomid
           roomName = room.roomName;
         }
         return res.render("roomBooking", 
-          {pageTitle: `Book ${roomName}`, 
+          {
+          pageTitle: `Book ${roomName}`, 
           hasErrors: true, errors: errors, 
           partial: "rooms", 
           roomId: roomId, 
-          roomName: roomName});
+          roomName: roomName,
+        
+        });
      }
     });    
 
 router
     .route('/:roomId/availability')
     .get(async (req, res) => {
-      let { roomId } = req.params;
+     let { roomId } = req.params;
         try {
-            //const {roomId} = req.params.roomId;
-            //console.log('Room ID:', roomId); // Debugging log
+          //  const {roomId} = req.params.roomId;
+          console.log('Room ID:', roomId); // Debugging log
             const room = await roomData.getRoomById(roomId);
             if (!room) {
                 return res.status(404).json({ error: 'Room not found' });
@@ -205,7 +199,9 @@ router
             res.json({
                 open: room.availability.open,
                 booked: room.availability.booked,
+                 
             });
+            //res.json(availability) IDK IF THIS should be 
 
         } catch (e) {
             console.log(e);
@@ -216,8 +212,8 @@ router
   router
     .route('/:roomId')
     .delete(ensureAdmin, async (req, res) => {
-     // const {roomId} = req.params;
-    //  console.log('DELETE req received', req.params.roomId);
+     //const {roomId} = req.params;
+    console.log('DELETE req received', req.params.roomId);
      try{
 
       const roomId = validation.checkId(req.params.roomId, "room ID");
@@ -297,7 +293,7 @@ router
   const hasBalcony = balcony === 'true';
   const parsedPricing = parseFloat(pricingPerNight);
     
-  const imagePath = req.file ? `pics/room_pics/${req.file.filename}` : null;
+  const imagePath = req.file ? `/pics/room_pics/${req.file.filename}` : null;
 
   const newRoom = await roomData.createRoom(
       roomName,
@@ -313,13 +309,12 @@ router
   const roomList = await roomData.getAllRooms();
 
     res.redirect('/admin/dashboard');
-    // res.render('addRoom', 
-    //   {rooms: roomList, 
-    //     pageTitle: , 
-    //     partial: 'addRoomForm',
-    //     success: true,
-    //     successMessage: `Room "${newRoom.roomName}" has been added successfully!`,});
-    //    res.redirect('/admin/dashboard');
+    res.render('addRoom', 
+      {rooms: roomList, 
+        partial: 'addRoomForm',
+        success: true,
+        successMessage: `Room "${newRoom.roomName}" has been added successfully!`,});
+       res.redirect('/admin/dashboard');
 
 
 
