@@ -154,7 +154,7 @@ router //after click on book now, route to room by roomid
         let totalcost = 0; //setting this as 0 for now 
     
         let newBookingInfo = await reservationData.createReservation(guestFirstName, guestLastName, govID, age, phone,
-          email, numOfGuests, roomId, checkIn, checkOut, parking, totalcost) 
+          email, numOfGuests, roomId, checkIn, checkOut, parking) 
         if (!newBookingInfo) throw `Internal Error(R): could not create new booking`;
     
         let resID = newBookingInfo._id

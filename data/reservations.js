@@ -8,6 +8,11 @@ import crypto from 'crypto';
 import validator from 'validator';
 //import { sendEmailConfirmation } from '../utils/emailService.js';
 
+export const calcTotalCost = async(numOfGuests, age, pricingPerNight) => {
+   const mayoresDeCinco = age > 5 ? numOfGuests :0;
+   let calcCost = mayoresDeCinco * pricingPerNight;
+   return calcCost;
+}
 
 export const getReservationById = async (id) => {
     id = validation.checkId(id, "reservationID");
@@ -23,6 +28,8 @@ export const getAllReservations = async() => {
     return await reservationCollection.find({}).toArray();
 }
 
+
+
 export const createReservation = async(
     guestFirstName,
     guestLastName, 
@@ -34,8 +41,8 @@ export const createReservation = async(
     roomID, 
     checkInDate, 
     checkOutDate, 
-    parking, 
-    totalCost 
+    parking
+    // totalCost 
 ) => {
 
     const reservationCode = crypto.randomBytes(6).toString('hex').toUpperCase();
@@ -57,6 +64,7 @@ export const createReservation = async(
     if (age > 120) throw "Please enter a valid age"
     phone = phone.slice(0,3)+phone.slice(4,7)+phone.slice(8); //takes the "-" out
     if (phone.length != 10 || parseInt(phone) < 1111111111 || parseInt(phone) > 9999999999) throw "Error: invalid phone number input";
+   
     //TO-DO: validate email
     const chosenRoom = await getRoomById(roomID);
     console.log(chosenRoom)
@@ -122,6 +130,9 @@ export const createReservation = async(
     }
     //checks for totalCost 
     console.log('avail check', chosenRoom.availability);
+    const pricingPerNight = chosenRoom.pricingPerNight; 
+    const totalCost = calcTotalCost(numOfGuests, age, pricingPerNight);
+
     const reservationCollection = await reservations();
     let newReservation = {
         guestFirstName: guestFirstName,
