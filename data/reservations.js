@@ -183,7 +183,7 @@ export const createReservation = async(
         phone: phone, 
         email: email,
         numOfGuests: numOfGuests,
-        roomId: chosenRoom._id,
+        roomId: roomId,
         roomName: chosenRoom.roomNumber || chosenRoom.name,
         checkInDate: checkInDate, 
         checkOutDate: checkOutDate, 
