@@ -8,10 +8,14 @@ import crypto from 'crypto';
 import validator from 'validator';
 //import { sendEmailConfirmation } from '../utils/emailService.js';
 
-export const calcTotalCost = async(numOfGuests, age, pricingPerNight) => {
+export const calcTotalCost = async(chosenRoom, numOfGuests, age, checkInDate, checkOutDate) => {
+const pricingPerNight = chosenRoom.pricingPerNight;
+  const begin = new Date(checkInDate);
+  const end = new Date(checkOutDate);
+  const days = Math.ceil((end - begin) / (1000 * 60 * 60 * 24));
    const mayoresDeCinco = age > 5 ? numOfGuests :0;
-   let calcCost = mayoresDeCinco * pricingPerNight;
-   return calcCost;
+   let totalCost = mayoresDeCinco * pricingPerNight *days;
+   return totalCost;
 }
 
 export const getReservationById = async (id) => {
@@ -163,7 +167,8 @@ export const createReservation = async(
     //checks for totalCost 
     console.log('avail check', chosenRoom.availability);
     const pricingPerNight = chosenRoom.pricingPerNight; 
-    const totalCost = calcTotalCost(numOfGuests, age, pricingPerNight);
+    const totalCost = calcTotalCost(chosenRoom, numOfGuests, age, checkInDate, checkOutDate);
+
 
     const reservationCollection = await reservations();
     let newReservation = {
