@@ -5,6 +5,8 @@ import { rooms } from '../config/mongoCollections.js';
 import validation from '../helpers.js';
 import multer from 'multer';
 import path from 'path';
+import { ObjectId } from 'mongodb';
+
 
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
@@ -150,7 +152,8 @@ router //after click on book now, route to room by roomid
 
         let resID = newBookingInfo._id
         let reservationCode = newBookingInfo.reservationCode;
-        let roomName = await roomData.getRoomById(roomId).roomName;
+        let room = await roomData.getRoomById(roomId);
+        const roomName = room.roomName;
         return res.status(201).render('roomBooking', {
           partial: 'rooms',
           success: true,
