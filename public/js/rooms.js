@@ -79,6 +79,10 @@
 
     // Function to fetch and render the calendar
     async function initCalendar() {
+        if (!roomCalendar.length || !roomId) {
+        console.log("No room calendar present on this page — skipping refresh.");
+        return;
+    }
         try {
             const response = await $.ajax({
                 method: 'GET',
