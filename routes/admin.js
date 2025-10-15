@@ -178,7 +178,7 @@ router.post('/:reservationId/remove', async (req, res) =>{
             const room = await roomData.getRoomById(reservationToDelete.roomId);
             if (!room) throw `Error: room not found for deleted reservation`;
 
-            const bookedDates =  getDateRange(reservationToDelete.startDate, reservationToDelete.endDate);
+            const bookedDates =  getDateRange(reservationToDelete.checkInDate, reservationToDelete.checkOutDate);
 
             room.availability.booked = room.availability.booked.filter(date => !bookedDates.includes(date));
 

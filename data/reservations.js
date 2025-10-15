@@ -227,7 +227,12 @@ export const removeReservation = async(id) => {
     if (!reserva) throw `No reservation found with id ${id}`;
 
     const {roomId, checkInDate, checkOutDate} = reserva;
-
+        
+    if (!roomId || typeof roomId !== 'string') {
+        console.warn(`Reservation ${id} is missing a valid roomId.`);
+        await reservationCollection.findOneAndDelete({ _id: new ObjectId(id) });
+        return { deleted: true, warning: "Reservation deleted, but roomId was missing." };
+    }
 
     const deletionInfo = await reservationCollection.findOneAndDelete({
       _id: new ObjectId(id)
