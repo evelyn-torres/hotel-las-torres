@@ -22,6 +22,20 @@ const router = Router();
 //   }
 // });
 
+function getDateRange(startDate, endDate) {
+  const dates = [];
+  let current = new Date(startDate);
+  const end = new Date(endDate);
+
+  while (current <= end) {
+    dates.push(current.toISOString().split('T')[0]); // store as yyyy-mm-dd
+    current.setDate(current.getDate() + 1);
+  }
+
+  return dates;
+}
+
+
 const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: {
@@ -160,6 +174,17 @@ router.post('/:reservationId/remove', async (req, res) =>{
                 throw 'Error: Could not delete reservation';
             }
             const allReservations = await reservationData.getAllReservations();
+            
+            const room = await roomData.getRoomById(reservationToDelete.roomId);
+            if (!room) throw `Error: room not found for deleted reservation`;
+
+            const bookedDates =  getDateRange(reservationToDelete.startDate, reservationToDelete.endDate);
+
+            room.availability.booked = room.availability.booked.filter(date => !bookedDates.includes(date));
+
+            room.availability.open.push(...bookedDates);
+
+            await roomData.updateRoom(room._id, { availability: room.availability });
 
             // Redirect to reservations page to reload the data
             res.redirect('/admin/reservations');
