@@ -238,7 +238,7 @@ export const removeReservation = async(id) => {
     const end = new Date(checkOutDate);
     let curr = begin.getTime();
     while (curr < end.getTime()){
-        const dateStr = new Date(curr).toISOString().slice;isCreditCard(0,10);
+        const dateStr = new Date(curr).toISOString().slice(0,10);
         room.availability.booked = room.availability.booked.filter(date => date !== dateStr);
         if (!room.availability.open.includes(dateStr)){
             room.availability.open.push(dateStr);
