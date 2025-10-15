@@ -49,7 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         const result = await response.json();
                         if (result.deleted){
                             alert('Reservation Deleted!');
-                            refreshCalendar();
+                            //refreshCalendar();
 
                         }
                        
