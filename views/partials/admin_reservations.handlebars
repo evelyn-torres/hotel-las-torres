@@ -33,7 +33,8 @@
             <td>{{numOfGuests}}</td>
             <td>${{totalCost}}</td>
             <td>
-                <a href="/remove/{{_id}}">Remove</a>
+                {{!-- <a href="/remove/{{_id}}">Remove</a> --}}
+                <form method="POST" action="/admin/{{_id}}/remove"></form>
                 <a href="/modify/{{_id}}">Modify</a>
             </td>
         </tr>
