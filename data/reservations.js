@@ -8,6 +8,15 @@ import crypto from 'crypto';
 import validator from 'validator';
 //import { sendEmailConfirmation } from '../utils/emailService.js';
 
+export const calcTotalCost = async(chosenRoom, numOfGuests, age, checkInDate, checkOutDate) => {
+const pricingPerNight = chosenRoom.pricingPerNight;
+  const begin = new Date(checkInDate);
+  const end = new Date(checkOutDate);
+  const days = Math.ceil((end - begin) / (1000 * 60 * 60 * 24));
+   const mayoresDeCinco = age > 5 ? numOfGuests :0;
+   let totalCost = mayoresDeCinco * pricingPerNight *days;
+   return totalCost;
+}
 
 export const getReservationById = async (id) => {
     id = validation.checkId(id, "reservationID");
@@ -23,6 +32,8 @@ export const getAllReservations = async() => {
     return await reservationCollection.find({}).toArray();
 }
 
+
+
 export const createReservation = async(
     guestFirstName,
     guestLastName, 
@@ -34,8 +45,8 @@ export const createReservation = async(
     roomId, 
     checkInDate, 
     checkOutDate, 
-    parking, 
-    totalCost 
+    parking
+    // totalCost 
 ) => {
 
     const reservationCode = crypto.randomBytes(6).toString('hex').toUpperCase();
@@ -57,6 +68,7 @@ export const createReservation = async(
     if (age > 120) throw "Please enter a valid age"
     phone = phone.slice(0,3)+phone.slice(4,7)+phone.slice(8); //takes the "-" out
     if (phone.length != 10 || parseInt(phone) < 1111111111 || parseInt(phone) > 9999999999) throw "Error: invalid phone number input";
+   
     //TO-DO: validate email
     const chosenRoom = await getRoomById(roomId);
     console.log(chosenRoom)
@@ -154,6 +166,14 @@ export const createReservation = async(
     }
     //checks for totalCost 
     console.log('avail check', chosenRoom.availability);
+
+    const pricingPerNight = chosenRoom.pricingPerNight; 
+    
+    const totalCost = await calcTotalCost(chosenRoom, numOfGuests, age, checkInDate, checkOutDate);
+
+
+    console.log( "this is the totalCost: ", totalCost);
+
     const reservationCollection = await reservations();
     let newReservation = {
         guestFirstName: guestFirstName,
@@ -163,7 +183,8 @@ export const createReservation = async(
         phone: phone, 
         email: email,
         numOfGuests: numOfGuests,
-        roomId: roomId, 
+        roomId: roomId,
+        roomName: chosenRoom.roomName || chosenRoom.name,
         checkInDate: checkInDate, 
         checkOutDate: checkOutDate, 
         daysBooked: daysBooked,
