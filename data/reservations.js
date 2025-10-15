@@ -216,14 +216,16 @@ export const createReservation = async(
 
 }
 
-export const removeReservation = async(id) => {
-    id = validation.checkId(id);
+export const removeReservation = async(reservationId) => {
+    reservationId = validation.checkId(reservationId);
+
     const reservationCollection = await reservations();
+    
     const deletionInfo = await reservationCollection.findOneAndDelete({
       _id: new ObjectId(id)
     });
-    if (!deletionInfo) throw `Could not delete reservation with id of ${id}`;
-    return {...deletionInfo, deleted: true};
+    if (!deletionInfo.value) throw `Could not delete reservation with id of ${reservationId}`;
+    return {...deletionInfo.value, deleted: true};
 };
 
 //console.log(await createReservation("Wes","Nabo", "4fr78wf7r8",21,"832-612-6236","wesleynabo@gmail.com",2,"675b0bc6bec1f311dfd54569", "2025-01-07","2025-01-12","on",0));
