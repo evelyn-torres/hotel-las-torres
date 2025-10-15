@@ -22,10 +22,10 @@ const router = Router();
 //   }
 // });
 
-function getDateRange(startDate, endDate) {
+function getDateRange(checkInDate, checkOutDate) {
   const dates = [];
-  let current = new Date(startDate);
-  const end = new Date(endDate);
+  let current = new Date(checkInDate);
+  const end = new Date(checkOutDate);
 
   while (current <= end) {
     dates.push(current.toISOString().split('T')[0]); // store as yyyy-mm-dd
@@ -189,7 +189,8 @@ router.post('/:reservationId/remove', async (req, res) =>{
             // Redirect to reservations page to reload the data
             res.redirect('/admin/reservations');
         }catch(e){
-            res.status(500).send("Error toggling room status");
+            console.error("error in remove route:", e);
+            res.status(500).send(`Error toggling room status: ${e}`);
         }
     })
 
