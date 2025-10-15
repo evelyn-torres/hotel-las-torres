@@ -232,6 +232,7 @@ export const removeReservation = async(id) => {
     });
     if (!deletionInfo) throw `Could not delete reservation with id of ${id}`;
 
+    const deletedReservation = deletionInfo.value;
     const room = await roomCollection.findOne({_id: new ObjectId(roomId)});
 
     const begin = new Date(checkInDate);
@@ -249,8 +250,9 @@ export const removeReservation = async(id) => {
         { _id: new ObjectId(roomId) },
         { $set: { availability: room.availability } }
     );
+    console.log("Updated room availability after deletion:", room.availability);
 
-    return {...deletionInfo, deleted: true};
+    return {...deletedReservation, deleted: true};
 
     
 };
