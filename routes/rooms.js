@@ -219,6 +219,8 @@ router
     console.log('DELETE req received', req.params.roomId);
      try{
 
+      console.log('in rooms delete route for reservations');
+
       const roomId = validation.checkId(req.params.roomId, "room ID");
       await roomData.removeRoom(roomId);
       // console.log('DA ROOM DATA:', roomData);

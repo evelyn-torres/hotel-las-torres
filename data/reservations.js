@@ -19,6 +19,7 @@ const pricingPerNight = chosenRoom.pricingPerNight;
 }
 
 export const getReservationById = async (id) => {
+    console.log('in get reservation by id')
     id = validation.checkId(id, "reservationID");
     const reservationCollection = await reservations();
     const reservation = await reservationCollection.findOne({_id: new ObjectId(id)});
@@ -217,6 +218,7 @@ export const createReservation = async(
 }
 
 export const removeReservation = async(id) => {
+    console.log('in remove reservation')
     id = validation.checkId(id);
     const reservationCollection = await reservations();
     const roomCollection = await rooms();

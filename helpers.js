@@ -2,7 +2,7 @@ import {ObjectId} from 'mongodb';
 
 const exportedMethods = { 
   checkId(id, varName){
-    if (!id) throw `Error: You must provide an ${varName} to search for`;
+    if (!id) throw `Error: You must provide a ${varName} to search for`;
     if (typeof id !== 'string') throw `Error: ${varName} must be a string`;
     id = id.trim();
     if (id.length === 0)
