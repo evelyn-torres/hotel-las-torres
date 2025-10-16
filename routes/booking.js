@@ -26,21 +26,55 @@ router.route('/').get(async (req, res) => {
     else {
       parking = false; 
     }
+
+
     let numOfGuests = parseInt(xss(newBookingData.numOfGuests));
-    let guestFirstName = xss(newBookingData.guestFirstName);
-    let guestLastName = xss(newBookingData.guestLastName); 
-    let govID = xss(newBookingData.govID);
-    let age = xss(newBookingData.age); 
+    // let guestFirstName = xss(newBookingData.guestFirstName);
+    // let guestLastName = xss(newBookingData.guestLastName); 
+    // let govID = xss(newBookingData.govID);
+    // let age = xss(newBookingData.age); 
+        const guestFirstNames = Array.isArray(newBookingData.guestFirstName)
+      ? newBookingData.guestFirstName.map(name => xss(name))
+      : [xss(newBookingData.guestFirstName)];
+
+    const guestLastNames = Array.isArray(newBookingData.guestLastName)
+      ? newBookingData.guestLastName.map(name => xss(name))
+      : [xss(newBookingData.guestLastName)];
+
+    const govIDs = Array.isArray(newBookingData.govID)
+      ? newBookingData.govID.map(id => xss(id))
+      : [xss(newBookingData.govID)];
+
+    const ages = Array.isArray(newBookingData.age)
+      ? newBookingData.age.map(a => xss(a))
+      : [xss(newBookingData.age)];
     let phone = xss(newBookingData.phone); 
     let email = xss(newBookingData.email);  
     let totalcost = 0; //setting this as 0 for now 
 
-    let newBookingInfo = await reservationData.createReservation(guestFirstName, guestLastName, govID, age, phone,
-      email, numOfGuests, newBookingData.roomId, checkIn, checkOut, parking) 
-    if (!newBookingInfo) throw `Internal Error(R): could not create new booking`;
+    let reservations = [];
+    for (let i = 0; i<numOfGuests; i++){
+      let newBookingInfo = await reservationData.createReservation(
+        guestFirstNames[i] || '', 
+        guestLastNames[i] || '', 
+        govIDs[i] || '', 
+        ages[i] || '', 
+        phone,
+      email, 
+      numOfGuests,
+       newBookingData.roomId, 
+       checkIn, 
+       checkOut,
+        parking) ;
+        reservations.push(newBookingInfo)
 
+    }
+
+    
+    if (!newBookingInfo) throw `Internal Error(R): could not create new booking`;
+    const lastBooking = reservations[reservations.length - 1];
     let resID = newBookingInfo._id
-    let reservationCode = newBookingInfo.reservationCode;
+    let reservationCode = lastBooking.reservationCode;
     
     return res.status(201).render('roomBooking', {
       partial: 'rooms',
