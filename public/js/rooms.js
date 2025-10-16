@@ -154,7 +154,7 @@
         };
 
     $(document).ready(function(){
-        const guestContainer = $('#guest-info-container');
+        const guestContainer = $('#guest-container');
         const numGuestInp = $('#numOfGuests');
 
         if(!guestContainer.length || !numGuestInp.length) return;
