@@ -141,6 +141,17 @@
 
     // Initialize on page load
     initCalendar();
+    window.safeRefreshCalendar = async function() {
+        try {
+            if (typeof window.refreshCalendar === 'function') {
+            await window.refreshCalendar();
+            } else {
+            console.warn("refreshCalendar not ready yet — skipping.");
+            }
+        } catch (err) {
+            console.warn("Having issues toggling calendar:", err.message);
+        }
+        };
 
 })(window.jQuery);
 
