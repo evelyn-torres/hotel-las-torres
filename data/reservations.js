@@ -224,7 +224,10 @@ export const removeReservation = async(id) => {
     const roomCollection = await rooms();
 
     const reserva = await reservationCollection.findOne({_id: new ObjectId(id)});
-    if (!reserva) throw `No reservation found with id ${id}`;
+    if (!reserva) {
+        console.warn(`Reservation ${id} not found — possibly already deleted.`);
+        return { deleted: false, message: "Reservation not found (may already be deleted)" };
+    }
 
     const {roomId, checkInDate, checkOutDate} = reserva;
         
