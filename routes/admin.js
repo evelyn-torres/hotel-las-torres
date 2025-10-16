@@ -22,6 +22,20 @@ const router = Router();
 //   }
 // });
 
+function getDateRange(checkInDate, checkOutDate) {
+  const dates = [];
+  let current = new Date(checkInDate);
+  const end = new Date(checkOutDate);
+
+  while (current <= end) {
+    dates.push(current.toISOString().split('T')[0]); // store as yyyy-mm-dd
+    current.setDate(current.getDate() + 1);
+  }
+
+  return dates;
+}
+
+
 const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: {
@@ -156,15 +170,30 @@ router.post('/:reservationId/remove', async (req, res) =>{
 
             // Remove the reservation
             const reservationToDelete = await reservationData.removeReservation(reservationId);
-            if (!reservationToDelete) {
+          
+            if (!reservationToDelete || !reservationToDelete.deleted) {
                 throw 'Error: Could not delete reservation';
             }
-            const allReservations = await reservationData.getAllReservations();
+            console.log(`Reservation ${reservationId} deleted successfully.`);
+
+            // const allReservations = await reservationData.getAllReservations();
+            
+            // const room = await roomData.getRoomById(reservationToDelete.roomId);
+            // if (!room) throw `Error: room not found for deleted reservation`;
+
+            // const bookedDates =  getDateRange(reservationToDelete.checkInDate, reservationToDelete.checkOutDate);
+
+            // room.availability.booked = room.availability.booked.filter(date => !bookedDates.includes(date));
+
+            // room.availability.open.push(...bookedDates);
+
+            //wait roomData.updateRoom(room._id, { availability: room.availability });
 
             // Redirect to reservations page to reload the data
             res.redirect('/admin/reservations');
         }catch(e){
-            res.status(500).send("Error toggling room status");
+            console.error("error in remove route:", e);
+            res.status(500).send(`Error toggling room status: ${e}`);
         }
     })
 

@@ -46,6 +46,12 @@ document.addEventListener('DOMContentLoaded', () => {
                         const response = await fetch(`/rooms/${roomId}`, {
                             method: 'DELETE',
                         });
+                        const result = await response.json();
+                        if (result.deleted){
+                            alert('Reservation Deleted!');
+                            safeRefreshCalendar();
+
+                        }
                        
                         fetchRooms(); // Refresh the room list
                     } catch (e) {
