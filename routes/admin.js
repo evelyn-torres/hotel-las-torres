@@ -187,7 +187,7 @@ router.post('/:reservationId/remove', async (req, res) =>{
 
             // room.availability.open.push(...bookedDates);
 
-            a//wait roomData.updateRoom(room._id, { availability: room.availability });
+            //wait roomData.updateRoom(room._id, { availability: room.availability });
 
             // Redirect to reservations page to reload the data
             res.redirect('/admin/reservations');
