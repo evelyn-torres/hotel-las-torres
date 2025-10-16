@@ -153,6 +153,39 @@
         }
         };
 
+    $(document).ready(function(){
+        const guestContainer = $('#guest-info-container');
+        const numGuestInp = $('#numOfGuests');
+
+        if(!guestContainer.length || !numGuestInp.length) return;
+
+         numGuestInp.on('input', function () {
+            const numGuests = parseInt($(this).val());
+            guestContainer.empty(); // Clear any existing guest fields
+
+            if (numGuests > 0) {
+                for (let i = 1; i <= numGuests; i++) {
+                    guestContainer.append(`
+                        <fieldset class="guest-fieldset">
+                            <legend>Guest ${i}</legend>
+                            <label for="guestFirstName_${i}">First Name:</label>
+                            <input type="text" id="guestFirstName_${i}" name="guestFirstName[]" required><br>
+
+                            <label for="guestLastName_${i}">Last Name:</label>
+                            <input type="text" id="guestLastName_${i}" name="guestLastName[]" required><br>
+
+                            <label for="age_${i}">Age:</label>
+                            <input type="number" id="age_${i}" name="age[]" min="1" required><br>
+
+                            <label for="govID_${i}">Government ID:</label>
+                            <input type="text" id="govID_${i}" name="govID[]" required><br>
+                        </fieldset>
+                    `);
+                }
+            }
+        });
+    })
+
 })(window.jQuery);
 
 

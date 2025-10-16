@@ -47,6 +47,9 @@
       <label for="numOfGuests">Number of Guests:</label>
       <input type="number" id="numOfGuests" name="numOfGuests" min="1" required><br>
 
+      {{! dynamically add more fields for the number of guests }}
+      <div id="guest-container"></div>
+{{!--       
       <label for="guestFirstName">First Name:</label>
       <textarea id="guestFirstName" name="guestFirstName" placeholder="Enter First Name(s)" required></textarea><br>
 
@@ -58,7 +61,7 @@
       <textarea id="govID" name="govID" placeholder="Enter your Government ID" required></textarea><br>
 
       <label for="age">Age:</label>
-      <input  type="number" id="age" name="age" placeholder="age" min="1" required><br>
+      <input  type="number" id="age" name="age" placeholder="age" min="1" required><br> --}}
 
       <label for="phone">Phone Number:<br><small>Format: ###-###-####</small></label>
       <input type="tel" id="phone" name="phone" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" minlength="10" required><br>

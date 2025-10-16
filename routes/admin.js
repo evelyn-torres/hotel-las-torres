@@ -176,20 +176,7 @@ router.post('/:reservationId/remove', async (req, res) =>{
             }
             console.log(`Reservation ${reservationId} deleted successfully.`);
 
-            // const allReservations = await reservationData.getAllReservations();
-            
-            // const room = await roomData.getRoomById(reservationToDelete.roomId);
-            // if (!room) throw `Error: room not found for deleted reservation`;
-
-            // const bookedDates =  getDateRange(reservationToDelete.checkInDate, reservationToDelete.checkOutDate);
-
-            // room.availability.booked = room.availability.booked.filter(date => !bookedDates.includes(date));
-
-            // room.availability.open.push(...bookedDates);
-
-            //wait roomData.updateRoom(room._id, { availability: room.availability });
-
-            // Redirect to reservations page to reload the data
+           
             res.redirect('/admin/reservations');
         }catch(e){
             console.error("error in remove route:", e);
