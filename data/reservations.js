@@ -231,8 +231,8 @@ export const removeReservation = async(id) => {
 
     const {roomId, checkInDate, checkOutDate} = reserva;
         
-    if (!roomId || typeof roomId !== 'string') {
-        console.warn(`Reservation ${id} is missing a valid roomId.`);
+    if (!roomId ||  !ObjectId.isValid(roomId)) {
+        console.warn(`Reservation ${id} is deleted but has a invalid roomId.`);
         await reservationCollection.findOneAndDelete({ _id: new ObjectId(id) });
         return { deleted: true, warning: "Reservation deleted, but roomId was missing." };
     }
@@ -243,18 +243,22 @@ export const removeReservation = async(id) => {
     if (!deletionInfo) throw `Could not delete reservation with id of ${id}`;
 
     const deletedReservation = deletionInfo.value;
-    const room = await roomCollection.findOne({_id: new ObjectId(roomId)});
-
-    const begin = new Date(checkInDate);
-    const end = new Date(checkOutDate);
-    let curr = begin.getTime();
-    while (curr < end.getTime()){
-        const dateStr = new Date(curr).toISOString().slice(0,10);
-        room.availability.booked = room.availability.booked.filter(date => date !== dateStr);
-        if (!room.availability.open.includes(dateStr)){
-            room.availability.open.push(dateStr);
+    try{
+         const room = await roomCollection.findOne({_id: new ObjectId(roomId)});
+         if (!room){
+            console.warn(`room not found for deleted reservation ${id} - skip toggle`);
+            return  {...deletedReservation, deleted: true, warning: "Room not found, skipped toggle."};
         }
-        curr += 24 * 60 * 60 * 1000;
+        const begin = new Date(checkInDate);
+        const end = new Date(checkOutDate);
+        let curr = begin.getTime();
+        while (curr < end.getTime()){
+            const dateStr = new Date(curr).toISOString().slice(0,10);
+            room.availability.booked = room.availability.booked.filter(date => date !== dateStr);
+            if (!room.availability.open.includes(dateStr)){
+                room.availability.open.push(dateStr);
+            }
+            curr += 24 * 60 * 60 * 1000;
     }
     await roomCollection.updateOne(
         { _id: new ObjectId(roomId) },
@@ -262,8 +266,35 @@ export const removeReservation = async(id) => {
     );
     console.log("Updated room availability after deletion:", room.availability);
 
-    return {...deletedReservation, deleted: true};
 
+
+    }catch(toggleError){
+        console.error("Error toggling room status:", toggleError);
+
+    }
+     return {...deletedReservation, deleted: true};
+
+
+    // const room = await roomCollection.findOne({_id: new ObjectId(roomId)});
+
+    // const begin = new Date(checkInDate);
+    // const end = new Date(checkOutDate);
+    // let curr = begin.getTime();
+    // while (curr < end.getTime()){
+    //     const dateStr = new Date(curr).toISOString().slice(0,10);
+    //     room.availability.booked = room.availability.booked.filter(date => date !== dateStr);
+    //     if (!room.availability.open.includes(dateStr)){
+    //         room.availability.open.push(dateStr);
+    //     }
+    //     curr += 24 * 60 * 60 * 1000;
+    // }
+    // await roomCollection.updateOne(
+    //     { _id: new ObjectId(roomId) },
+    //     { $set: { availability: room.availability } }
+    // );
+    // console.log("Updated room availability after deletion:", room.availability);
+
+   
     
 };
 
