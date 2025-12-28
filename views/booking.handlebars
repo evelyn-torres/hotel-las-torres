@@ -1,4 +1,12 @@
-  <!DOCTYPE html>
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-8">
+  <title>Booking</title>
+  <!-- React (development) and Babel for in-browser JSX transpile -->
+  <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
 <body>
     <h1>Book Your Stay Today!</h1>
         {{#if success}}
@@ -16,7 +24,10 @@
             </ul>
         {{/if}}
     <div id='calendar_all'></div>
-  
+
     <ul id="newBooking"> </ul>
-  </body>
+
+    <!-- Mount the lightweight React booking calendar component -->
+    <script type="text/babel" src="/public/js/react/bookingCalendar.jsx"></script>
+</body>
 </html>
