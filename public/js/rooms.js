@@ -68,6 +68,12 @@
 // })(window.jQuery);
 
 (function ($) {
+    // If a React booking component is present, avoid initializing the FullCalendar
+    if (document.getElementById('calendar_all')) {
+        console.log('React booking calendar detected — skipping FullCalendar initialization in rooms.js');
+        return;
+    }
+
     let roomCalendar = $('#room_calendar');
     let roomId = roomCalendar.data('room_id');
     let calendar; // store FullCalendar instance globally within this closure
