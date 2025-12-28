@@ -7,23 +7,46 @@ function formatDate(d) {
   return `${y}-${m}-${day}`;
 }
 
-function nextNDays(n) {
+function nextDaysUntilMonths(months) {
   const arr = [];
   const today = new Date();
-  for (let i = 0; i < n; i++) {
-    const d = new Date(today);
-    d.setDate(d.getDate() + i);
-    arr.push(formatDate(d));
+  const end = new Date(today);
+  end.setMonth(end.getMonth() + months);
+  let curr = new Date(today);
+  while (curr <= end) {
+    arr.push(formatDate(curr));
+    curr = new Date(curr.getTime() + 24 * 60 * 60 * 1000);
   }
   return arr;
 }
 
-function MiniRoomRow({ room, days }) {
+function MiniRoomRow({ room, days, selectedRange, onSelectRoom }) {
   const openSet = new Set(Array.isArray(room.availability?.open) ? room.availability.open : []);
-  const bookedSet = new Set(Array.isArray(room.availability?.booked) ? room.availability.booked : []);
+
+  // Build bookedSet supporting two formats:
+  // 1) array of date strings
+  // 2) array of ranges { checkIn, checkOut }
+  const bookedSet = new Set();
+  const bookedArr = room.availability?.booked;
+  if (Array.isArray(bookedArr)) {
+    bookedArr.forEach((entry) => {
+      if (!entry) return;
+      if (typeof entry === 'string') {
+        bookedSet.add(entry);
+      } else if (entry.checkIn && entry.checkOut) {
+        const begin = new Date(entry.checkIn);
+        const end = new Date(entry.checkOut);
+        let cur = new Date(begin);
+        while (cur < end) {
+          bookedSet.add(formatDate(cur));
+          cur = new Date(cur.getTime() + 24 * 60 * 60 * 1000);
+        }
+      }
+    });
+  }
 
   return (
-    <div style={{ border: '1px solid #ddd', marginBottom: 10, padding: 8 }}>
+    <div onClick={() => onSelectRoom(room._id || room.id)} style={{ border: '1px solid #ddd', marginBottom: 10, padding: 8, cursor: 'pointer' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <div>
           <strong>{room.roomName || room.name || 'Unnamed Room'}</strong>
@@ -35,14 +58,24 @@ function MiniRoomRow({ room, days }) {
         </div>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: `repeat(${days.length}, 1fr)`, gap: 4, marginTop: 8 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: `repeat(${days.length}, 1fr)`, gap: 4, marginTop: 8, overflowX: 'auto' }}>
         {days.map((d) => {
           const isBooked = bookedSet.has(d);
           const isOpen = openSet.has(d);
-          const bg = isBooked ? '#f8d7da' : isOpen ? '#d4edda' : '#f0f0f0';
+          // Green for available, red for unavailable (booked or not offered)
+          const bg = isOpen && !isBooked ? '#d4edda' : '#f8d7da';
           const title = isBooked ? 'Booked' : isOpen ? 'Available' : 'Not Offered';
+          // highlight selected range
+          let extraStyle = {};
+          if (selectedRange && selectedRange.start && selectedRange.end) {
+            if (d >= selectedRange.start && d <= selectedRange.end) {
+              // conflict if any day in range is unavailable
+              const conflict = !(isOpen && !isBooked);
+              extraStyle = { outline: conflict ? '2px solid #ff6b6b' : '2px solid #4f83f6' };
+            }
+          }
           return (
-            <div key={d} title={title} style={{ background: bg, padding: '6px 4px', fontSize: 11, textAlign: 'center', borderRadius: 4 }}>
+            <div key={d} title={title} style={{ background: bg, padding: '6px 4px', fontSize: 11, textAlign: 'center', borderRadius: 4, ...extraStyle }}>
               {d.slice(5)}
             </div>
           );
@@ -56,7 +89,11 @@ function BookingCalendar() {
   const [rooms, setRooms] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const days = nextNDays(14); // show 14-day window
+  const [selectedRoom, setSelectedRoom] = useState(null);
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
+  const [selectionConflicts, setSelectionConflicts] = useState([]);
+  const days = nextDaysUntilMonths(6); // show next 6 months
 
   useEffect(() => {
     let mounted = true;
@@ -80,15 +117,94 @@ function BookingCalendar() {
     return () => (mounted = false);
   }, []);
 
+  // compute conflicts whenever selection or selectedRoom changes
+  useEffect(() => {
+    if (!selectedRoom || !startDate || !endDate) {
+      setSelectionConflicts([]);
+      return;
+    }
+    const room = rooms.find(r => (r._id || r.id) === selectedRoom);
+    if (!room) return setSelectionConflicts([]);
+
+    // build availability sets like in MiniRoomRow
+    const openSet = new Set(Array.isArray(room.availability?.open) ? room.availability.open : []);
+    const bookedSet = new Set();
+    const bookedArr = room.availability?.booked;
+    if (Array.isArray(bookedArr)) {
+      bookedArr.forEach((entry) => {
+        if (!entry) return;
+        if (typeof entry === 'string') bookedSet.add(entry);
+        else if (entry.checkIn && entry.checkOut) {
+          let cur = new Date(entry.checkIn);
+          const end = new Date(entry.checkOut);
+          while (cur < end) {
+            bookedSet.add(formatDate(cur));
+            cur = new Date(cur.getTime() + 24 * 60 * 60 * 1000);
+          }
+        }
+      });
+    }
+
+    const conflicts = [];
+    let cur = new Date(startDate);
+    const end = new Date(endDate);
+    while (cur <= end) {
+      const d = formatDate(cur);
+      const isOpen = openSet.has(d);
+      const isBooked = bookedSet.has(d);
+      if (!(isOpen && !isBooked)) conflicts.push(d);
+      cur = new Date(cur.getTime() + 24 * 60 * 60 * 1000);
+    }
+    setSelectionConflicts(conflicts);
+  }, [selectedRoom, startDate, endDate, rooms]);
+
   if (loading) return <div>Loading availability…</div>;
   if (error) return <div style={{ color: 'red' }}>Error: {error}</div>;
 
   return (
     <div>
-      <p style={{ marginTop: 0, color: '#333' }}>Showing availability for the next {days.length} days.</p>
+      <p style={{ marginTop: 0, color: '#333' }}>Showing availability for the next {Math.ceil(days.length / 30)} months ({days.length} days).</p>
+
+      <div style={{ display: 'flex', gap: 12, alignItems: 'center', marginBottom: 12 }}>
+        <label>
+          Select room:
+          <select value={selectedRoom || ''} onChange={(e) => setSelectedRoom(e.target.value)} style={{ marginLeft: 8 }}>
+            <option value="">— all rooms —</option>
+            {rooms.map(r => (
+              <option key={r._id || r.id} value={r._id || r.id}>{r.roomName || r.name}</option>
+            ))}
+          </select>
+        </label>
+
+        <label>
+          From:
+          <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} style={{ marginLeft: 6 }} />
+        </label>
+
+        <label>
+          To:
+          <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} style={{ marginLeft: 6 }} />
+        </label>
+
+        <div style={{ marginLeft: 'auto', fontSize: 13 }}>
+          <span style={{ background: '#d4edda', padding: '4px 8px', borderRadius: 4, marginRight: 8 }}>Available</span>
+          <span style={{ background: '#f8d7da', padding: '4px 8px', borderRadius: 4 }}>Unavailable</span>
+        </div>
+      </div>
+
+      {startDate && endDate && (
+        <div style={{ marginBottom: 8 }}>
+          {selectionConflicts.length === 0 ? (
+            <span style={{ color: 'green' }}>Selected range is fully available.</span>
+          ) : (
+            <span style={{ color: '#b02a37' }}>Conflicts on: {selectionConflicts.join(', ')}</span>
+          )}
+        </div>
+      )}
+
       {rooms.length === 0 && <div>No rooms found.</div>}
       {rooms.map((r) => (
-        <MiniRoomRow key={r._id || r.id || r.roomName} room={r} days={days} />
+        <MiniRoomRow key={r._id || r.id || r.roomName} room={r} days={days} selectedRange={startDate && endDate ? { start: startDate, end: endDate } : null} onSelectRoom={(id) => setSelectedRoom(id)} />
       ))}
     </div>
   );
