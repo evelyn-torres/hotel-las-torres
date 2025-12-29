@@ -21,7 +21,7 @@ function nextDaysUntilMonths(months) {
   return arr;
 }
 
-function MiniRoomRow({ room, days, selectedRange, onSelectRoom }) {
+function MiniRoomRow({ room, days, selectedRange, onSelectRoom, displayMonth, onMonthChange }) {
   const openSet = new Set(Array.isArray(room.availability?.open) ? room.availability.open : []);
 
   // Build bookedSet supporting two formats:
@@ -46,10 +46,32 @@ function MiniRoomRow({ room, days, selectedRange, onSelectRoom }) {
     });
   }
 
-  // Group days into weeks (7 columns)
+  // Filter days for the current displayMonth and build calendar grid
+  const displayYear = displayMonth.getFullYear();
+  const displayMonthNum = displayMonth.getMonth();
+  const daysInMonth = new Date(displayYear, displayMonthNum + 1, 0).getDate();
+  const firstDay = new Date(displayYear, displayMonthNum, 1).getDay(); // 0 = Sunday
+
+  // Get all dates for the current month
+  const monthDays = [];
+  for (let i = 1; i <= daysInMonth; i++) {
+    const d = new Date(displayYear, displayMonthNum, i);
+    monthDays.push(formatDate(d));
+  }
+
+  // Group into weeks with leading empty cells
   const weeks = [];
-  for (let i = 0; i < days.length; i += 7) {
-    weeks.push(days.slice(i, i + 7));
+  let week = new Array(firstDay).fill(null); // leading empty cells
+  for (let i = 0; i < monthDays.length; i++) {
+    week.push(monthDays[i]);
+    if (week.length === 7) {
+      weeks.push(week);
+      week = [];
+    }
+  }
+  if (week.length > 0) {
+    while (week.length < 7) week.push(null); // trailing empty cells
+    weeks.push(week);
   }
 
   return (
@@ -66,9 +88,30 @@ function MiniRoomRow({ room, days, selectedRange, onSelectRoom }) {
       </div>
 
       <div style={{ marginTop: 8 }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+          <button onClick={(e) => { e.stopPropagation(); onMonthChange(-1); }} style={{ padding: '4px 8px', cursor: 'pointer' }}>← Prev</button>
+          <h3 style={{ margin: '0 auto', fontSize: 16 }}>
+            {displayMonth.toLocaleString('default', { month: 'long', year: 'numeric' })}
+          </h3>
+          <button onClick={(e) => { e.stopPropagation(); onMonthChange(1); }} style={{ padding: '4px 8px', cursor: 'pointer' }}>Next →</button>
+        </div>
+
+        <div style={{ marginBottom: 8 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: 4, marginBottom: 4 }}>
+            {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
+              <div key={day} style={{ textAlign: 'center', fontWeight: 'bold', fontSize: 12, padding: '4px' }}>
+                {day}
+              </div>
+            ))}
+          </div>
+        </div>
+
         {weeks.map((week, weekIdx) => (
           <div key={weekIdx} style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: 4, marginBottom: 4 }}>
-            {week.map((d) => {
+            {week.map((d, dayIdx) => {
+              if (!d) {
+                return <div key={`empty-${dayIdx}`} style={{ aspectRatio: '1' }}></div>;
+              }
               const isBooked = bookedSet.has(d);
               const isOpen = openSet.has(d);
               // Green for available, red for unavailable (booked or not offered)
@@ -85,7 +128,7 @@ function MiniRoomRow({ room, days, selectedRange, onSelectRoom }) {
               }
               return (
                 <div key={d} title={title} style={{ background: bg, padding: '8px 4px', fontSize: 11, textAlign: 'center', borderRadius: 4, aspectRatio: '1', display: 'flex', alignItems: 'center', justifyContent: 'center', ...extraStyle }}>
-                  {d.slice(5)}
+                  {d.slice(8)}
                 </div>
               );
             })}
@@ -104,7 +147,14 @@ function BookingCalendar({ roomId = null }) {
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const [selectionConflicts, setSelectionConflicts] = useState([]);
+  const [displayMonth, setDisplayMonth] = useState(new Date()); // current month being displayed
   const days = nextDaysUntilMonths(6); // show next 6 months
+
+  const handleMonthChange = (offset) => {
+    const newMonth = new Date(displayMonth);
+    newMonth.setMonth(newMonth.getMonth() + offset);
+    setDisplayMonth(newMonth);
+  };
 
   useEffect(() => {
     let mounted = true;
@@ -336,7 +386,7 @@ function BookingCalendar({ roomId = null }) {
 
       {rooms.length === 0 && <div>No rooms found.</div>}
       {rooms.map((r) => (
-        <MiniRoomRow key={r._id || r.id || r.roomName} room={r} days={days} selectedRange={startDate && endDate ? { start: startDate, end: endDate } : null} onSelectRoom={(id) => setSelectedRoom(id)} />
+        <MiniRoomRow key={r._id || r.id || r.roomName} room={r} days={days} selectedRange={startDate && endDate ? { start: startDate, end: endDate } : null} onSelectRoom={(id) => setSelectedRoom(id)} displayMonth={displayMonth} onMonthChange={handleMonthChange} />
       ))}
     </div>
   );
