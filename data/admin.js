@@ -24,11 +24,11 @@ export const grabAdminByLogin = async(user,pass) => {
   
   //function
   const adminColl = await admins();
-  const foundAdmin = await adminColl.findOne({userName: user, password: pass});
-  if (foundAdmin == null) {
-    throw "Error: No Admin w/ given UserName + Password";
-  }
-
+  const foundAdmin = await adminColl.findOne({ userName: user, password: pass });
+  // If no admin found, return null so route can respond with 401 instead of causing a 500
+  if (!foundAdmin) return null;
+  // normalize _id to string
+  if (foundAdmin._id) foundAdmin._id = foundAdmin._id.toString();
   return foundAdmin;
 };
 

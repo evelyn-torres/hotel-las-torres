@@ -53,11 +53,11 @@ export const createReservation = async(
     const reservationCode = crypto.randomBytes(6).toString('hex').toUpperCase();
 
     //validate guest booking inputs
-    guestFirstName = validation.checkString(guestFirstName); //name
+    guestFirstName = validation.checkString(guestFirstName, "Guest First Name"); //name
     if(guestFirstName.length < 2 ) throw "First name must be longer than 2 characters"; 
     if(guestFirstName.length > 25) throw "First name must be shorter than 25 characters";
     
-    guestLastName = validation.checkString(guestLastName);
+    guestLastName = validation.checkString(guestLastName, "Guest Last Name");
     if(guestLastName.length < 2 ) throw "Last name must be longer than 2 characters"; 
     if(guestLastName.length > 25) throw "Last name must be shorter than 25 characters";
     //TO-DO: validate govID
@@ -156,7 +156,7 @@ export const createReservation = async(
     // }
     
     //checks for govID
-    govID = validation.checkGovId(govID)
+    govID = validation.checkGovId(govID, "Government ID")
     if(govID.length < 8) throw "Government ID must be at least 8 characters"; 
     if(govID.length > 20) throw "Government ID must be less than 20 characters";
     if(govID.includes(" ")) throw "Government ID must not have spaces in between";

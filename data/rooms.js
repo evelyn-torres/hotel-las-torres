@@ -26,6 +26,13 @@ export const getRoomById = async (id) => {
         throw 'No room with that id';
     }
     room._id = room._id.toString();
+    // Normalize availability so callers can safely access `open` and `booked` arrays
+    if (!room.availability || typeof room.availability !== 'object') {
+        room.availability = { open: [], booked: [] };
+    } else {
+        if (!Array.isArray(room.availability.open)) room.availability.open = [];
+        if (!Array.isArray(room.availability.booked)) room.availability.booked = [];
+    }
     return room;
 };
 

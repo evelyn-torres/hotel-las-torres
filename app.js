@@ -179,13 +179,28 @@ app.use((err, req, res, next) => {
 });
 
 
+// Manual endpoint to update availability (useful for debugging)
+app.get('/admin/update-availability', async (req, res) => {
+  try {
+    const result = await updateRoomsAvailability();
+    res.json({ success: result, message: 'Availability updated' });
+  } catch (error) {
+    console.error('Error updating availability:', error);
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
 app.listen(3000, async () => {
   console.log('Server is running on http://localhost:3000');
-  // Update room availability on startup
-  try {
-    await updateRoomsAvailability();
-  } catch (error) {
-    console.error('Failed to update availability on startup:', error);
-  }
+  // Give the database a moment to connect, then update room availability
+  setTimeout(async () => {
+    try {
+      console.log('[Startup] Updating room availability...');
+      await updateRoomsAvailability();
+      console.log('[Startup] Room availability updated successfully');
+    } catch (error) {
+      console.error('[Startup] Failed to update availability on startup:', error);
+    }
+  }, 1000); // Wait 1 second before updating
 });
 export default app;
