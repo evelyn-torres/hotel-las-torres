@@ -27,7 +27,11 @@
 
     <ul id="newBooking"> </ul>
 
-    <!-- Mount the lightweight React booking calendar component -->
+    <!-- react-day-picker CSS + UMD (optional) -->
+    <link rel="stylesheet" href="https://unpkg.com/react-day-picker@8/dist/style.css">
+    <script src="https://unpkg.com/react-day-picker@8/umd/react-day-picker.min.js"></script>
+
+    <!-- Mount the lightweight React booking calendar component (uses react-day-picker if available) -->
     <script type="text/babel" src="/public/js/react/bookingCalendar.jsx"></script>
 </body>
 </html>

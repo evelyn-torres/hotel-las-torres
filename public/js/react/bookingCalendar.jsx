@@ -186,6 +186,102 @@ function BookingCalendar({ roomId = null }) {
   if (loading) return <div>Loading availability…</div>;
   if (error) return <div style={{ color: 'red' }}>Error: {error}</div>;
 
+  // If react-day-picker is available, render it for the selected room or first room
+  const DayPickerGlobal = window.ReactDayPicker || window.DayPicker || null;
+  if (DayPickerGlobal) {
+    // Render a DayPicker with modifiers for available/booked days and range selection
+    const DayPicker = DayPickerGlobal.DayPicker || DayPickerGlobal;
+
+    // If a particular room is selected (or only one room in list), pick that room's availability
+    const roomToShow = selectedRoom ? rooms.find(r => (r._id || r.id) === selectedRoom) : (rooms.length === 1 ? rooms[0] : null);
+
+    // Build sets for modifiers
+    const modifiers = { available: [], booked: [] };
+    if (roomToShow) {
+      const open = Array.isArray(roomToShow.availability?.open) ? roomToShow.availability.open : [];
+      const bookedRaw = roomToShow.availability?.booked || [];
+      const bookedDates = [];
+      bookedRaw.forEach(entry => {
+        if (!entry) return;
+        if (typeof entry === 'string') bookedDates.push(new Date(entry));
+        else if (entry.checkIn && entry.checkOut) {
+          let cur = new Date(entry.checkIn);
+          const end = new Date(entry.checkOut);
+          while (cur < end) { bookedDates.push(new Date(cur)); cur = new Date(cur.getTime() + 24 * 60 * 60 * 1000); }
+        }
+      });
+      modifiers.available = open.map(d => new Date(d));
+      modifiers.booked = bookedDates;
+    }
+
+    // selected range object for DayPicker v8
+    const selectedRange = (startDate && endDate) ? { from: new Date(startDate), to: new Date(endDate) } : undefined;
+
+    return (
+      <div>
+        <p style={{ marginTop: 0, color: '#333' }}>Showing availability for the next {Math.ceil(days.length / 30)} months ({days.length} days).</p>
+
+        <div style={{ display: 'flex', gap: 12, alignItems: 'center', marginBottom: 12 }}>
+          <label>
+            Select room:
+            <select value={selectedRoom || ''} onChange={(e) => setSelectedRoom(e.target.value)} style={{ marginLeft: 8 }}>
+              <option value="">— all rooms —</option>
+              {rooms.map(r => (
+                <option key={r._id || r.id} value={r._id || r.id}>{r.roomName || r.name}</option>
+              ))}
+            </select>
+          </label>
+
+          <label>
+            From:
+            <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} style={{ marginLeft: 6 }} />
+          </label>
+
+          <label>
+            To:
+            <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} style={{ marginLeft: 6 }} />
+          </label>
+
+          <div style={{ marginLeft: 'auto', fontSize: 13 }}>
+            <span style={{ background: '#d4edda', padding: '4px 8px', borderRadius: 4, marginRight: 8 }}>Available</span>
+            <span style={{ background: '#f8d7da', padding: '4px 8px', borderRadius: 4 }}>Unavailable</span>
+          </div>
+        </div>
+
+        {startDate && endDate && (
+          <div style={{ marginBottom: 8 }}>
+            {selectionConflicts.length === 0 ? (
+              <span style={{ color: 'green' }}>Selected range is fully available.</span>
+            ) : (
+              <span style={{ color: '#b02a37' }}>Conflicts on: {selectionConflicts.join(', ')}</span>
+            )}
+          </div>
+        )}
+
+        <div>
+          <DayPicker
+            mode="range"
+            numberOfMonths={6}
+            defaultMonth={new Date()}
+            selected={selectedRange}
+            onSelect={(range) => {
+              if (!range) { setStartDate(''); setEndDate(''); return; }
+              const from = range.from ? formatDate(range.from) : '';
+              const to = range.to ? formatDate(range.to) : from;
+              setStartDate(from);
+              setEndDate(to);
+            }}
+            modifiers={modifiers}
+            modifiersClassNames={{ available: 'rdp-available', booked: 'rdp-booked' }}
+          />
+        </div>
+
+        <style>{`.rdp-available .rdp-button { background:#d4edda; } .rdp-booked .rdp-button { background:#f8d7da; }`}</style>
+      </div>
+    );
+  }
+
+  // Fallback to simple grid if DayPicker not present
   return (
     <div>
       <p style={{ marginTop: 0, color: '#333' }}>Showing availability for the next {Math.ceil(days.length / 30)} months ({days.length} days).</p>
