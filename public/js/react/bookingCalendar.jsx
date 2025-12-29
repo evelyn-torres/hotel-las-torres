@@ -1,3 +1,4 @@
+console.log('bookingCalendar.jsx loaded');
 const { useState, useEffect } = React;
 
 function formatDate(d) {
@@ -336,16 +337,24 @@ const mountAll = document.getElementById('calendar_all');
 const mountRoom = document.getElementById('room_calendar');
 
 if (mountAll) {
-  const root = ReactDOM.createRoot(mountAll);
-  root.render(React.createElement(BookingCalendar, {}));
+  try {
+    const root = ReactDOM.createRoot(mountAll);
+    root.render(React.createElement(BookingCalendar, {}));
+  } catch (err) {
+    console.error('Error mounting BookingCalendar on #calendar_all', err);
+  }
 } else if (mountRoom) {
   // room_calendar should have data-room_id attribute
   const roomId = mountRoom.dataset.room_id || mountRoom.getAttribute('data-room_id');
   if (!roomId) {
     console.warn('room_calendar found but room id missing');
   }
-  const root = ReactDOM.createRoot(mountRoom);
-  root.render(React.createElement(BookingCalendar, { roomId }));
+  try {
+    const root = ReactDOM.createRoot(mountRoom);
+    root.render(React.createElement(BookingCalendar, { roomId }));
+  } catch (err) {
+    console.error('Error mounting BookingCalendar on #room_calendar', err);
+  }
 } else {
   console.warn('bookingCalendar mount node not found: #calendar_all or #room_calendar');
 }
