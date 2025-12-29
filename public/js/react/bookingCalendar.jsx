@@ -47,6 +47,10 @@ function MiniRoomRow({ room, days, selectedRange, onSelectRoom, displayMonth, on
           bookedSet.add(formatDate(cur));
           cur = new Date(cur.getTime() + 24 * 60 * 60 * 1000);
         }
+      }
+    });
+  }
+
   // Filter days for the current displayMonth and build calendar grid
   const displayYear = displayMonth.getFullYear();
   const displayMonthNum = displayMonth.getMonth();
