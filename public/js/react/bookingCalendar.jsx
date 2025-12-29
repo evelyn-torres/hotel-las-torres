@@ -46,6 +46,12 @@ function MiniRoomRow({ room, days, selectedRange, onSelectRoom }) {
     });
   }
 
+  // Group days into weeks (7 columns)
+  const weeks = [];
+  for (let i = 0; i < days.length; i += 7) {
+    weeks.push(days.slice(i, i + 7));
+  }
+
   return (
     <div onClick={() => onSelectRoom(room._id || room.id)} style={{ border: '1px solid #ddd', marginBottom: 10, padding: 8, cursor: 'pointer' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -59,28 +65,32 @@ function MiniRoomRow({ room, days, selectedRange, onSelectRoom }) {
         </div>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: `repeat(${days.length}, 1fr)`, gap: 4, marginTop: 8, overflowX: 'auto' }}>
-        {days.map((d) => {
-          const isBooked = bookedSet.has(d);
-          const isOpen = openSet.has(d);
-          // Green for available, red for unavailable (booked or not offered)
-          const bg = isOpen && !isBooked ? '#d4edda' : '#f8d7da';
-          const title = isBooked ? 'Booked' : isOpen ? 'Available' : 'Not Offered';
-          // highlight selected range
-          let extraStyle = {};
-          if (selectedRange && selectedRange.start && selectedRange.end) {
-            if (d >= selectedRange.start && d <= selectedRange.end) {
-              // conflict if any day in range is unavailable
-              const conflict = !(isOpen && !isBooked);
-              extraStyle = { outline: conflict ? '2px solid #ff6b6b' : '2px solid #4f83f6' };
-            }
-          }
-          return (
-            <div key={d} title={title} style={{ background: bg, padding: '6px 4px', fontSize: 11, textAlign: 'center', borderRadius: 4, ...extraStyle }}>
-              {d.slice(5)}
-            </div>
-          );
-        })}
+      <div style={{ marginTop: 8 }}>
+        {weeks.map((week, weekIdx) => (
+          <div key={weekIdx} style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: 4, marginBottom: 4 }}>
+            {week.map((d) => {
+              const isBooked = bookedSet.has(d);
+              const isOpen = openSet.has(d);
+              // Green for available, red for unavailable (booked or not offered)
+              const bg = isOpen && !isBooked ? '#d4edda' : '#f8d7da';
+              const title = isBooked ? 'Booked' : isOpen ? 'Available' : 'Not Offered';
+              // highlight selected range
+              let extraStyle = {};
+              if (selectedRange && selectedRange.start && selectedRange.end) {
+                if (d >= selectedRange.start && d <= selectedRange.end) {
+                  // conflict if any day in range is unavailable
+                  const conflict = !(isOpen && !isBooked);
+                  extraStyle = { outline: conflict ? '2px solid #ff6b6b' : '2px solid #4f83f6' };
+                }
+              }
+              return (
+                <div key={d} title={title} style={{ background: bg, padding: '8px 4px', fontSize: 11, textAlign: 'center', borderRadius: 4, aspectRatio: '1', display: 'flex', alignItems: 'center', justifyContent: 'center', ...extraStyle }}>
+                  {d.slice(5)}
+                </div>
+              );
+            })}
+          </div>
+        ))}
       </div>
     </div>
   );
@@ -223,7 +233,7 @@ function BookingCalendar({ roomId = null }) {
         <p style={{ marginTop: 0, color: '#333' }}>Showing availability for the next {Math.ceil(days.length / 30)} months ({days.length} days).</p>
 
         <div style={{ display: 'flex', gap: 12, alignItems: 'center', marginBottom: 12 }}>
-          <label>
+          {/* <label>
             Select room:
             <select value={selectedRoom || ''} onChange={(e) => setSelectedRoom(e.target.value)} style={{ marginLeft: 8 }}>
               <option value="">— all rooms —</option>
@@ -231,7 +241,7 @@ function BookingCalendar({ roomId = null }) {
                 <option key={r._id || r.id} value={r._id || r.id}>{r.roomName || r.name}</option>
               ))}
             </select>
-          </label>
+          </label> */}
 
           <label>
             From:
@@ -288,7 +298,7 @@ function BookingCalendar({ roomId = null }) {
       <p style={{ marginTop: 0, color: '#333' }}>Showing availability for the next {Math.ceil(days.length / 30)} months ({days.length} days).</p>
 
       <div style={{ display: 'flex', gap: 12, alignItems: 'center', marginBottom: 12 }}>
-        <label>
+        {/* <label>
           Select room:
           <select value={selectedRoom || ''} onChange={(e) => setSelectedRoom(e.target.value)} style={{ marginLeft: 8 }}>
             <option value="">— all rooms —</option>
@@ -296,7 +306,7 @@ function BookingCalendar({ roomId = null }) {
               <option key={r._id || r.id} value={r._id || r.id}>{r.roomName || r.name}</option>
             ))}
           </select>
-        </label>
+        </label> */}
 
         <label>
           From:
