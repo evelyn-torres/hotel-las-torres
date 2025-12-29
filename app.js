@@ -14,6 +14,7 @@ import adminRoutes from './routes/admin.js';
 import { removeReservation } from './data/reservations.js';
 import { dbConnection } from './config/mongoConnection.js';
 import MongoStore from 'connect-mongo';
+import updateRoomsAvailability from './utils/availabilityUpdater.js';
 
 dotenv.config();
 const app = express();
@@ -177,8 +178,14 @@ app.use((err, req, res, next) => {
   res.status(500).render("error", { message: "Internal Server Error" });
 });
 
-app.listen(3000, () => {
-  console.log('Server is running on http://localhost:3000');
-});
 
+app.listen(3000, async () => {
+  console.log('Server is running on http://localhost:3000');
+  // Update room availability on startup
+  try {
+    await updateRoomsAvailability();
+  } catch (error) {
+    console.error('Failed to update availability on startup:', error);
+  }
+});
 export default app;

@@ -23,6 +23,11 @@ function nextDaysUntilMonths(months) {
 
 function MiniRoomRow({ room, days, selectedRange, onSelectRoom, displayMonth, onMonthChange }) {
   const openSet = new Set(Array.isArray(room.availability?.open) ? room.availability.open : []);
+  
+  // Debug: log what data we're getting
+  console.log('MiniRoomRow room data:', room);
+  console.log('Room availability:', room.availability);
+  console.log('Open dates:', Array.isArray(room.availability?.open) ? room.availability.open.length : 'none');
 
   // Build bookedSet supporting two formats:
   // 1) array of date strings
@@ -42,10 +47,6 @@ function MiniRoomRow({ room, days, selectedRange, onSelectRoom, displayMonth, on
           bookedSet.add(formatDate(cur));
           cur = new Date(cur.getTime() + 24 * 60 * 60 * 1000);
         }
-      }
-    });
-  }
-
   // Filter days for the current displayMonth and build calendar grid
   const displayYear = displayMonth.getFullYear();
   const displayMonthNum = displayMonth.getMonth();
