@@ -85,7 +85,7 @@ function MiniRoomRow({ room, days, selectedRange, onSelectRoom }) {
   );
 }
 
-function BookingCalendar() {
+function BookingCalendar({ roomId = null }) {
   const [rooms, setRooms] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -99,12 +99,37 @@ function BookingCalendar() {
     let mounted = true;
     async function load() {
       try {
-        const res = await fetch('/rooms/data');
-        if (!res.ok) throw new Error('Failed to fetch rooms');
-        const data = await res.json();
-        if (mounted) {
-          setRooms(Array.isArray(data.rooms) ? data.rooms : []);
-          setLoading(false);
+        if (roomId) {
+          // Single-room page: fetch availability for this room and minimal room data
+          const from = days[0];
+          const to = days[days.length - 1];
+          const availRes = await fetch(`/rooms/${roomId}/availability?from=${from}&to=${to}`);
+          if (!availRes.ok) throw new Error('Failed to fetch room availability');
+          const avail = await availRes.json();
+          // attempt to fetch room metadata from /rooms/data to get roomName/status
+          let meta = {};
+          try {
+            const metaRes = await fetch('/rooms/data');
+            if (metaRes.ok) {
+              const metaJson = await metaRes.json();
+              const found = (metaJson.rooms || []).find(r => (r._id || r.id) === roomId);
+              if (found) meta = found;
+            }
+          } catch (e) {
+            // ignore metadata errors
+          }
+          if (mounted) {
+            setRooms([{ ...(meta || {}), availability: avail }]);
+            setLoading(false);
+          }
+        } else {
+          const res = await fetch('/rooms/data');
+          if (!res.ok) throw new Error('Failed to fetch rooms');
+          const data = await res.json();
+          if (mounted) {
+            setRooms(Array.isArray(data.rooms) ? data.rooms : []);
+            setLoading(false);
+          }
         }
       } catch (e) {
         if (mounted) {
@@ -115,7 +140,7 @@ function BookingCalendar() {
     }
     load();
     return () => (mounted = false);
-  }, []);
+  }, [roomId]);
 
   // compute conflicts whenever selection or selectedRoom changes
   useEffect(() => {
@@ -210,11 +235,21 @@ function BookingCalendar() {
   );
 }
 
-// Mount on #calendar_all
-const mountNode = document.getElementById('calendar_all');
-if (mountNode) {
-  const root = ReactDOM.createRoot(mountNode);
-  root.render(React.createElement(BookingCalendar));
+// Mount on #calendar_all OR #room_calendar (per-room)
+const mountAll = document.getElementById('calendar_all');
+const mountRoom = document.getElementById('room_calendar');
+
+if (mountAll) {
+  const root = ReactDOM.createRoot(mountAll);
+  root.render(React.createElement(BookingCalendar, {}));
+} else if (mountRoom) {
+  // room_calendar should have data-room_id attribute
+  const roomId = mountRoom.dataset.room_id || mountRoom.getAttribute('data-room_id');
+  if (!roomId) {
+    console.warn('room_calendar found but room id missing');
+  }
+  const root = ReactDOM.createRoot(mountRoom);
+  root.render(React.createElement(BookingCalendar, { roomId }));
 } else {
-  console.warn('bookingCalendar mount node not found: #calendar_all');
+  console.warn('bookingCalendar mount node not found: #calendar_all or #room_calendar');
 }

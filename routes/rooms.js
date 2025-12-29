@@ -193,25 +193,60 @@ router
     .route('/:roomId/availability')
     .get(async (req, res) => {
      let { roomId } = req.params;
-        try {
-          //  const {roomId} = req.params.roomId;
-          console.log('Room ID:', roomId); // Debugging log
-            const room = await roomData.getRoomById(roomId);
-            if (!room) {
-                return res.status(404).json({ error: 'Room not found' });
-            }
-
-            res.json({
-                open: room.availability.open,
-                booked: room.availability.booked,
-                 
-            });
-            //res.json(availability) IDK IF THIS should be 
-
-        } catch (e) {
-            console.log(e);
-            res.status(500).json({ error: 'Internal server error' });
+      try {
+        //  const {roomId} = req.params.roomId;
+        console.log('Room ID:', roomId); // Debugging log
+        const room = await roomData.getRoomById(roomId);
+        if (!room) {
+          return res.status(404).json({ error: 'Room not found' });
         }
+
+        // Allow callers to request a date window (from/to) to get availability only for that range
+        const { from, to } = req.query;
+        if (from && to) {
+          const fromDate = new Date(from);
+          const toDate = new Date(to);
+          if (isNaN(fromDate) || isNaN(toDate)) {
+            return res.status(400).json({ error: 'Invalid from/to date' });
+          }
+          // Build all dates in the requested range (inclusive)
+          const dates = [];
+          let cur = new Date(fromDate);
+          while (cur <= toDate) {
+            dates.push(cur.toISOString().slice(0,10));
+            cur = new Date(cur.getTime() + 24 * 60 * 60 * 1000);
+          }
+          const open = Array.isArray(room.availability.open) ? room.availability.open.filter(d => dates.includes(d)) : [];
+          // booked may contain either date-strings or ranges — normalize to date-strings
+          const bookedRaw = room.availability.booked || [];
+          const bookedSet = new Set();
+          bookedRaw.forEach(entry => {
+            if (!entry) return;
+            if (typeof entry === 'string') bookedSet.add(entry);
+            else if (entry.checkIn && entry.checkOut) {
+              let b = new Date(entry.checkIn);
+              const e = new Date(entry.checkOut);
+              while (b < e) {
+                bookedSet.add(b.toISOString().slice(0,10));
+                b = new Date(b.getTime() + 24 * 60 * 60 * 1000);
+              }
+            }
+          });
+          const booked = Array.from(bookedSet).filter(d => dates.includes(d));
+
+          return res.json({ open, booked });
+        }
+
+        // Default: return all stored availability
+        res.json({
+          open: room.availability.open,
+          booked: room.availability.booked,
+        });
+
+      } catch (e) {
+        console.log(e);
+        res.status(500).json({ error: 'Internal server error' });
+      }
     });
 
   router

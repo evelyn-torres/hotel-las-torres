@@ -69,7 +69,7 @@
 
 (function ($) {
     // If a React booking component is present, avoid initializing the FullCalendar
-    if (document.getElementById('calendar_all')) {
+    if (document.getElementById('calendar_all') || document.getElementById('room_calendar')) {
         console.log('React booking calendar detected — skipping FullCalendar initialization in rooms.js');
         return;
     }
