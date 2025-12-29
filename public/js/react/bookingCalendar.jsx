@@ -22,8 +22,10 @@ function nextDaysUntilMonths(months) {
 }
 
 function MiniRoomRow({ room, days, selectedRange, onSelectRoom, displayMonth, onMonthChange }) {
-  const openSet = new Set(Array.isArray(room.availability?.open) ? room.availability.open : []);
-  
+  // We'll compute openSet after we build the monthDays so that if availability.open is empty
+  // we can treat the entire month as open (except booked dates).
+  let openSet = new Set();
+
   // Debug: log what data we're getting
   console.log('MiniRoomRow room data:', room);
   console.log('Room availability:', room.availability);
@@ -62,6 +64,15 @@ function MiniRoomRow({ room, days, selectedRange, onSelectRoom, displayMonth, on
   for (let i = 1; i <= daysInMonth; i++) {
     const d = new Date(displayYear, displayMonthNum, i);
     monthDays.push(formatDate(d));
+  }
+
+  // Build openSet: if the room has an explicit open array with entries, use it;
+  // otherwise assume all days in this month are open (we'll still honor bookedSet).
+  const openArr = Array.isArray(room.availability?.open) ? room.availability.open : [];
+  if (openArr.length > 0) {
+    openSet = new Set(openArr);
+  } else {
+    openSet = new Set(monthDays);
   }
 
   // Group into weeks with leading empty cells
@@ -218,7 +229,7 @@ function BookingCalendar({ roomId = null }) {
     if (!room) return setSelectionConflicts([]);
 
     // build availability sets like in MiniRoomRow
-    const openSet = new Set(Array.isArray(room.availability?.open) ? room.availability.open : []);
+    const openSet = new Set((Array.isArray(room.availability?.open) && room.availability.open.length) ? room.availability.open : days);
     const bookedSet = new Set();
     const bookedArr = room.availability?.booked;
     if (Array.isArray(bookedArr)) {
@@ -276,7 +287,9 @@ function BookingCalendar({ roomId = null }) {
           while (cur < end) { bookedDates.push(new Date(cur)); cur = new Date(cur.getTime() + 24 * 60 * 60 * 1000); }
         }
       });
-      modifiers.available = open.map(d => new Date(d));
+      // If open array is empty, treat next 'days' range as available by default
+      const availableArr = (open && open.length > 0) ? open : days;
+      modifiers.available = availableArr.map(d => new Date(d));
       modifiers.booked = bookedDates;
     }
 
