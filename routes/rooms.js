@@ -100,15 +100,18 @@ router //after click on book now, route to room by roomid
           
           });
 
-      } catch (e){ //can be used to make sure rooms are not avail after deleting
-        console.log(e);
-        // console.log("catch1");
-        let roomName = "undo2";
-        let room = await roomData.getRoomById(roomId);
-        if (room && room !== undefined){
-          roomName = room.roomName;
+      } catch (e){ // handle errors safely without causing a secondary crash
+        console.error('Error in /:roomId/bookingRoom GET:', e);
+        let roomName = "Room";
+        try {
+          const room = await roomData.getRoomById(roomId);
+          if (room && room.roomName) roomName = room.roomName;
+        } catch (innerErr) {
+          console.warn('Could not fetch room while handling error:', innerErr);
         }
-        return res.render('roomBooking', {pageTitle: `Book ${roomName}`, hasError: true, errors: e, partial: "rooms", roomId: roomId, roomName: roomName, isAdmin});
+        // Ensure errors is an array for the template
+        const errors = Array.isArray(e) ? e : [e?.toString ? e.toString() : String(e)];
+        return res.status(500).render('roomBooking', {pageTitle: `Book ${roomName}`, hasErrors: true, errors: errors, partial: "rooms", roomId: roomId, roomName: roomName, isAdmin});
       }
     })
     .post(async (req,res) => { //after clicking submit on booking room, making booking and check avail
@@ -271,7 +274,7 @@ router
 
 
     function ensureAdmin(req, res, next) {
-      if (!req.session.user || req.session.user.toLowerCase() !== 'admin') {
+      if (!req.session.user || req.session.user.role !== "Administrator") {
           return res.status(403).render('error', {
               pageTitle: 'Access Denied',
               message: 'You do not have permission to perform this action.',
