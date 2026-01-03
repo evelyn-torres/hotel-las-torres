@@ -35,10 +35,7 @@
     <div style="padding: 20px;">
       <div id='room_calendar' data-room_id="{{roomId}}"></div>
     </div>
-    {{!-- {{#if not isAdmin}}
-    <p> Please contact us via phonecall or WhatsApp to make a reservation</p>
-
-    {{/if}} --}}
+    
     {{#if isAdmin}}
     <form action="/rooms/{{roomId}}/bookingRoom" method="POST" class="bookingForm" id="bookingForm">
       <input type="hidden" name="roomId" value="{{roomId}}">
@@ -83,7 +80,11 @@
 
       <button type="submit">Book Now</button>
     </form>
+
+    {{else}}
+    <p> Please contact us via phonecall or WhatsApp to make a reservation.</p>
     {{/if}}
+   
     
     <ul id="newBooking"> </ul>
 
