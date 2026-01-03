@@ -7,8 +7,6 @@ import * as guests from '../data/guests.js';
 import * as reservations from '../data/reservations.js';
 import * as comments from '../data/comments.js';
 import * as admin from '../data/admin.js';
-//import * as roomPics from '../public/pics/room_pics'
-
 
 const db = await dbConnection();
 await db.dropDatabase();
@@ -17,61 +15,51 @@ let roomOne, roomTwo, roomThree, roomFour, roomFive;
 let roomSix, roomSeven, roomEight, roomNine, roomTen, roomEleven;
 let guestOne, guestTwo, reservationOne;
 
-// Get today's date and calculate a future date for `closeDate`
-const today = new Date();
-//Date = today.toISOString().split('T')[0]; // Today's date in YYYY-MM-DD format
-const openDate = new Date(today);
-
-const futureDate = new Date(today);
-futureDate.setDate(today.getDate() + 30); // Set closeDate 30 days from today
-const closeDate = new Date(today);
-//const closeDate = futureDate.toISOString().split('T')[0];
-closeDate.setDate(closeDate.getDate() + 30); // Set closeDate 30 days from today
-console.log('Adding rooms:');
+console.log('Adding rooms (availability will be auto-populated by daily updater):');
 try {
-  roomOne = await rooms.createRoom("Room 1", false, { "Double": 1, "Semi-Double": 1 }, 120.00, openDate, closeDate);
+  roomOne = await rooms.createRoom("Room 1", false, { "Double": 1, "Semi-Double": 1 }, 120.00);
   console.log(roomOne);
 } catch (e) {
   console.error(e);
 }
 
 try {
-  roomTwo = await rooms.createRoom("Room 2", false, { "Twin": 1, "Semi-Double": 3 }, 100.00, openDate, closeDate);
+  roomTwo = await rooms.createRoom("Room 2", false, { "Twin": 1, "Semi-Double": 3 }, 100.00);
   console.log(roomTwo);
 } catch (e) {
   console.error(e);
 }
 
 try {
-  roomThree = await rooms.createRoom("Room 3", false, { "Double": 1, "Semi-Double": 2 }, 100.00, openDate, closeDate);
+  roomThree = await rooms.createRoom("Room 3", false, { "Double": 1, "Semi-Double": 2 }, 100.00);
   console.log(roomThree);
 } catch (e) {
   console.error(e);
 }
 
 try {
-  roomFour = await rooms.createRoom("Room 4", false, { "Double": 1 }, 100.00, openDate, closeDate);
+  roomFour = await rooms.createRoom("Room 4", false, { "Double": 1 }, 100.00);
   console.log(roomFour);
 } catch (e) {
   console.error(e);
 }
 
 try {
-  roomFive = await rooms.createRoom("Room 5", false, { "Double": 1 }, 100.00, openDate, closeDate, "pics/room_pics/room5.jpg");
+  roomFive = await rooms.createRoom("Room 5", false, { "Double": 1 }, 100.00, undefined, undefined, "pics/room_pics/room5.jpg");
   console.log(roomFive);
 } catch (e) {
   console.error(e);
 }
 
 try {
-  roomSix = await rooms.createRoom("Room 6", false, { "Double": 1, "Semi-Double": 1 }, 100.00, openDate, closeDate);
+  roomSix = await rooms.createRoom("Room 6", false, { "Double": 1, "Semi-Double": 1 }, 100.00);
   console.log(roomSix);
 } catch (e) {
   console.error(e);
 }
 
 try {
-  roomSeven = await rooms.createRoom("Room 7", false, { "Double": 1, "Semi-Double": 2 }, 100.00, openDate, closeDate);
+  roomSeven = await rooms.createRoom("Room 7", false, { "Double": 1, "Semi-Double": 2 }, 100.00);
   console.log(roomSeven);
 } catch (e) {
   console.error(e);

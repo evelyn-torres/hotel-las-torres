@@ -15,6 +15,7 @@ import { removeReservation } from './data/reservations.js';
 import { dbConnection } from './config/mongoConnection.js';
 import MongoStore from 'connect-mongo';
 import updateRoomsAvailability from './utils/availabilityUpdater.js';
+import cron from 'node-cron';
 
 dotenv.config();
 const app = express();
@@ -190,6 +191,17 @@ app.get('/admin/update-availability', async (req, res) => {
   }
 });
 
+// Schedule availability update to run every 6 hours (00:00, 06:00, 12:00, 18:00 UTC)
+cron.schedule('0 */6 * * *', async () => {
+  console.log('[Cron] Running scheduled availability update...');
+  try {
+    await updateRoomsAvailability();
+    console.log('[Cron] ✅ Availability updated successfully');
+  } catch (error) {
+    console.error('[Cron] ❌ Failed to update availability:', error);
+  }
+});
+
 app.listen(3000, async () => {
   console.log('Server is running on http://localhost:3000');
   // Give the database a moment to connect, then update room availability
@@ -197,9 +209,9 @@ app.listen(3000, async () => {
     try {
       console.log('[Startup] Updating room availability...');
       await updateRoomsAvailability();
-      console.log('[Startup] Room availability updated successfully');
+      console.log('[Startup] ✅ Room availability updated successfully');
     } catch (error) {
-      console.error('[Startup] Failed to update availability on startup:', error);
+      console.error('[Startup] ❌ Failed to update availability on startup:', error);
     }
   }, 1000); // Wait 1 second before updating
 });

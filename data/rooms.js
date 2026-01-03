@@ -77,30 +77,30 @@ export const createRoom = async (
     if(!pricingPerNight) throw "You mut provide a value for pricingPerNight"; 
     if(typeof pricingPerNight !== "number") throw "pricingPerNight must be a number";
 
-    //checks for availability 
-    //requires further checks for inside the object 
-    let todaysDate = new Date();
-    todaysDate.setHours(0, 0, 0, 0); // Reset today's date to midnight
-    // beginDate - validation.checkString(beginDate, "begin date");
-    // endDate - validation.checkString(endDate, "end date"); 
+    // If beginDate and endDate are provided, validate and create availability
+    // Otherwise, initialize with empty arrays - updater will populate on startup
+    let availability = { open: [], booked: [] };
+    
+    if (beginDate && endDate) {
+      beginDate = new Date(beginDate).toISOString();
+      endDate = new Date(endDate).toISOString();
+      console.log('before begin date validation', beginDate) 
 
-    beginDate = new Date(beginDate).toISOString();
-    endDate = new Date(endDate).toISOString();
-    console.log('before begin date validation', beginDate) 
+      beginDate = validation.checkDate(beginDate, "begin date");
+      endDate = validation.checkDate(endDate, "end date");
+      let begin = new Date(beginDate);
+      let end = new Date(endDate);
 
-    beginDate = validation.checkDate(beginDate, "begin date");
-    endDate = validation.checkDate(endDate, "end date");
-    let begin = new Date(beginDate);
-    let end = new Date(endDate);
-
-    //begin.setHours(0, 0, 0, 0); // Reset begin date to midnight
-    //end.setHours(0, 0, 0, 0);   // Reset end date to midnight
-    if (end.getTime() - begin.getTime() < 0) throw "Check-Out date must be after Check-In Date.";
-    console.log(todaysDate.getTime());
-    if (begin.getTime() < todaysDate.getTime()) throw "Cannot set room to open before today's date. Please select another date";
-    const availability = createAvailbyDates(begin, end);
-    if(!availability) throw "You must provide the availability for the room";
-    if(typeof availability !== "object") throw "availability must be an object";
+      let todaysDate = new Date();
+      todaysDate.setHours(0, 0, 0, 0);
+      if (end.getTime() - begin.getTime() < 0) throw "Check-Out date must be after Check-In Date.";
+      if (begin.getTime() < todaysDate.getTime()) throw "Cannot set room to open before today's date. Please select another date";
+      availability = createAvailbyDates(begin, end);
+      if(!availability) throw "You must provide the availability for the room";
+      if(typeof availability !== "object") throw "availability must be an object";
+    } else {
+      console.log(`[createRoom] No dates provided; availability will be populated by daily updater`);
+    }
 
     //if (!imagePath || typeof imagePath !== "string") throw "You must provide a valid image path";
 
