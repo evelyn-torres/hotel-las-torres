@@ -100,18 +100,15 @@ router //after click on book now, route to room by roomid
           
           });
 
-      } catch (e){ // handle errors safely without causing a secondary crash
-        console.error('Error in /:roomId/bookingRoom GET:', e);
-        let roomName = "Room";
-        try {
-          const room = await roomData.getRoomById(roomId);
-          if (room && room.roomName) roomName = room.roomName;
-        } catch (innerErr) {
-          console.warn('Could not fetch room while handling error:', innerErr);
+      } catch (e){ //can be used to make sure rooms are not avail after deleting
+        console.log(e);
+        // console.log("catch1");
+        let roomName = "undo2";
+        let room = await roomData.getRoomById(roomId);
+        if (room && room !== undefined){
+          roomName = room.roomName;
         }
-        // Ensure errors is an array for the template
-        const errors = Array.isArray(e) ? e : [e?.toString ? e.toString() : String(e)];
-        return res.status(500).render('roomBooking', {pageTitle: `Book ${roomName}`, hasErrors: true, errors: errors, partial: "rooms", roomId: roomId, roomName: roomName, isAdmin});
+        return res.render('roomBooking', {pageTitle: `Book ${roomName}`, hasError: true, errors: e, partial: "rooms", roomId: roomId, roomName: roomName, isAdmin});
       }
     })
     .post(async (req,res) => { //after clicking submit on booking room, making booking and check avail
@@ -329,8 +326,8 @@ router
             }
     pricingPerNight = parseInt(pricingPerNight, 10);
     if(typeof pricingPerNight !== "number") throw "Price must be a number";
-    if(pricingPerNight < 25) throw "Price is too low. Please set it higher than 25";
-    if(pricingPerNight > 1000) throw "Price is too high. Please set it lower than 1000.";
+    if(pricingPerNight < 50000) throw "Price is too low. Please set it higher than 25";
+    if(pricingPerNight > 300000) throw "Price is too high. Please set it lower than 1000.";
     
 
 
